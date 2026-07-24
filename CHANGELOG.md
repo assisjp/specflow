@@ -2,6 +2,12 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.1] — 2026-07-24
+
+### Fixed
+- **The second-failure gate now closes its own loop.** 0.9.0 taught step 2 to *read* the return marker but only told the second-failure section to *write* it — a section reached only on the second return. So the first return (at steps 2, 4, or 5) wrote nothing, and the gate read a marker that never existed. Marking is now required at every point where a source is handed back as defective (steps 2/4/5 and the rule itself), via a single canonical *Returning the source* action. The write half and the read half finally meet.
+- `guide`'s description was over-widened in 0.9.0 into a catch-all ("any description of a coding task", "when in doubt reach for it"), against ADR 0005's own lever ("narrow, don't broaden"). It now triggers only on an explicit *which-step* request and states that a plain coding task (e.g. "write a function that slugs a string") must not surface it — removing the noise and the three-way contention with `tdd`/`code-review`.
+
 ## [0.9.0] — 2026-07-24
 
 ### Added
@@ -116,6 +122,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.9.1]: https://github.com/assisjp/specflow/releases/tag/v0.9.1
 [0.9.0]: https://github.com/assisjp/specflow/releases/tag/v0.9.0
 [0.8.4]: https://github.com/assisjp/specflow/releases/tag/v0.8.4
 [0.8.3]: https://github.com/assisjp/specflow/releases/tag/v0.8.3

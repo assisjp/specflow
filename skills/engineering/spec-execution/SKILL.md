@@ -26,7 +26,7 @@ Read the whole source — a spec, a PRD, or a **ticket** (in no-tracker mode you
 
 **First, check the source for a return marker** — a `returned` label on the issue (`gh issue view`), or a `Returns:` line in the local ticket/spec file. If it is marked, this spec has already come back once: do **not** implement — go straight to the second-failure rule below. The marker is what makes that rule a gate instead of relying on someone remembering (see the rule for why).
 
-- **Ambiguity that changes the result**: stop and ask. Do not guess.
+- **Ambiguity that changes the result**: stop and ask. Do not guess. If the answer is that the spec itself is defective and must be rewritten, **mark the source** (see *Returning the source* below) before handing it back.
 - **Minor ambiguity**: decide, record it, deliver it in the report.
 
 If the spec does not fit in one reviewable PR, say so now and propose the cut.
@@ -39,11 +39,11 @@ Implement exactly what the spec asks. Ugly code alongside, an obvious refactor, 
 
 Use `tdd` at the seams agreed in the spec. The spec's test scenarios are the initial red. Tests in the same work as the implementation — never a separate task.
 
-A spec scenario that is not testable as written: report it as a spec defect, do not write a test that verifies nothing.
+A spec scenario that is not testable as written: **mark the source** (see *Returning the source* below), then report it as a spec defect. Do not write a test that verifies nothing.
 
 ## 5. Verify
 
-Run the canonical commands. Fix. Repeat, within the attempt limit the verification block defines.
+Run the canonical commands. Fix. Repeat, within the attempt limit the verification block defines. If you hit the limit and the blocker is the spec (not the code), **mark the source** (see *Returning the source* below) before you stop and report.
 
 ## 6. Evidence
 
@@ -96,9 +96,11 @@ PR:                <link>
 
 A spec that has already come back once: **do not reimplement.** A double return is a specification defect, not an execution one. Point out which part was ambiguous or had a non-verifiable criterion, and send it back for a rewrite — preferably to a fresh `grill` session. Relaunching with more context is the most expensive way to discover the problem was the text.
 
-**Mark the source durably when you return it**, so the *next* session enforces this without anyone remembering — the rule must survive the session that dies, exactly like ADR 0006's durable artifacts:
+### Returning the source
+
+**Every time you hand a source back as defective — at step 2, 4, 5, or here — mark it durably first**, so the *next* session enforces the rule without anyone remembering. This is the write half of the gate; step 2 is the read half. The mark must survive the session that dies, exactly like ADR 0006's durable artifacts:
 
 - **Tracker** → add a `returned` label to the issue and a comment naming the non-verifiable part.
 - **Local** → add or increment a `Returns: N` line at the top of the spec/ticket file, with the reason.
 
-Step 2 reads this marker on open. Without the marker the rule is advice that depends on the human doing the very thing it exists to save them from forgetting — and advice-in-markdown versus a machine-read gate is the distinction this whole flow is built on.
+Marking is not optional and not only for the second return — the *first* return is what the second session reads. Skip it and the gate reads a marker nothing wrote, and the rule collapses back to advice that depends on the human doing the very thing it exists to save them from forgetting. Advice-in-markdown versus a machine-read gate is the distinction this whole flow is built on.
