@@ -82,7 +82,7 @@ The hook is bypassable; CI is the real gate. Both must exist.
 Turning on strict mode in an old repo spews thousands of errors and the user quits on day one.
 
 - **Formatter**: apply across the whole repo in **one isolated commit**, mixed with nothing. Confirm first.
-- **Linter and types**: generate a baseline, or restrict scope to the folders where work will happen. Record that scope is partial.
+- **Linter and types**: use the tool's own baseline/suppression mechanism **if it has one** (eslint does; many linters do), otherwise restrict scope to the folders where work will happen. A type-checker like `tsc` has **no baseline** — do not reach for one that does not exist; its only honest options are scope-restrict (include just the folders under work) or fix the errors in one isolated commit. Record that scope is partial either way.
 - **Tests**: if the suite is slow or flaky, record it as a known problem rather than masking it. A slow suite is the second-largest cost leak in agent work.
 
 Never disable a rule to make a check pass. Either it enters the baseline, or it becomes a task.
@@ -124,6 +124,8 @@ If the same check fails three times, stop and report the obstacle.
 The **Run** line is what the evidence gate depends on — `spec-execution` brings the app up with it to capture real evidence, instead of guessing a command. Detect it in Phase 1 (a `dev`/`start`/`serve` script, a documented run command); if there genuinely is no runnable surface, record `n/a` so the gate knows to fall back to test output.
 
 If the block already exists, compare it against reality and update only what diverged.
+
+**Then run the formatter over the file you just wrote** (and any config files you added). A formatter you just installed will reflow an aligned block or a hand-written config — if you skip this, the Phase 6 check fails on the very files this skill created. The skill's own output must pass the skill's own gate.
 
 ## Phase 6 — Verify
 

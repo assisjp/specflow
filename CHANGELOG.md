@@ -2,6 +2,13 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.8.1] — 2026-07-24
+
+### Fixed
+Both found by running the full flow end-to-end on a real Node/TS repo:
+- `repo-hardening` Phase 4: the "generate a baseline" advice was linter-shaped. A type-checker like `tsc` has no baseline mechanism — the skill now says so and points to scope-restrict or fix-in-an-isolated-commit instead of sending the agent to look for a baseline that does not exist.
+- `repo-hardening` Phase 5: the skill now formats the files it just wrote (the `AGENTS.md` block, any configs). A freshly-installed formatter reflows an aligned block, so without this the Phase 6 check failed on the very file the skill created — the skill's output must pass the skill's own gate.
+
 ## [0.8.0] — 2026-07-24
 
 ### Fixed
@@ -83,6 +90,7 @@ All notable changes to specflow. Format based on [Keep a Changelog](https://keep
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.8.1]: https://github.com/assisjp/specflow/releases/tag/v0.8.1
 [0.8.0]: https://github.com/assisjp/specflow/releases/tag/v0.8.0
 [0.7.0]: https://github.com/assisjp/specflow/releases/tag/v0.7.0
 [0.6.0]: https://github.com/assisjp/specflow/releases/tag/v0.6.0
