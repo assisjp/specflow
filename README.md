@@ -36,6 +36,7 @@ specflow ships in phases — each phase a closed, usable slice. See [docs/adr/00
 
 Reachable only when you type them (`disable-model-invocation: true`) — the flow is deliberate.
 
+- [guide](./skills/productivity/guide/SKILL.md) — the router: describe your task, it names the one skill to run now and why. Start here if unsure.
 - [grill](./skills/productivity/grill/SKILL.md) — relentless interview that stress-tests a plan; challenges contradictions, scores options against your priorities, and emits a decision log. Pass `docs` to also write the glossary and ADRs.
 - [domain-modeling](./skills/engineering/domain-modeling/SKILL.md) — actively build and sharpen the project's `CONTEXT.md` glossary and ADRs as you design.
 - [to-spec](./skills/engineering/to-spec/SKILL.md) — turn a settled conversation into a spec and publish it, no interview.
