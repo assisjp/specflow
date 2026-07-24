@@ -15,7 +15,7 @@ You do not need `guide` once the flow is familiar; the [README diagram](../../RE
 Reads the situation and routes to exactly one skill — the next step, not the whole chain — with the reason. It knows the flow's guard rails:
 
 - If the repo has no verification block (in `AGENTS.md` or `CLAUDE.md`) and you want to build, it sends you to `repo-hardening` first — `spec-execution` refuses to run without it.
-- If a spec has come back twice, it routes to `grill`, not `spec-execution` — a double return is a spec defect, not an execution one.
+- If the source carries a `returned` marker, it routes to `grill`, not `spec-execution` — a returned source is a spec defect that `spec-execution` will refuse until it is healed and republished.
 - If you already named a skill, it confirms rather than second-guesses.
 
 ## The flow it routes across

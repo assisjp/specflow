@@ -35,5 +35,5 @@ grill ──▶ to-spec ──▶ to-tickets ──▶ spec-execution ──▶ 
 
 - **Name exactly one skill** — the next one, not the whole chain. The flow advances one step at a time.
 - **If the repo has no verification block (in `AGENTS.md` or `CLAUDE.md`) and the user wants to build**, route to `repo-hardening` first — `spec-execution` refuses to run without it.
-- **If a spec has come back twice**, do not route to `spec-execution` again — route to `grill`. A double return is a spec defect, not an execution one.
+- **If the source carries a `returned` marker** (a `returned` label, or a `Returned:` line), do not route to `spec-execution` — it will refuse. Route to `grill`: the spec is defective and must be healed, then republished (which clears the marker) before implementation.
 - **If the user already named a skill**, don't second-guess it — just confirm it fits and let them run it.

@@ -107,4 +107,4 @@ The marker is a **state, not a counter** (ADR 0008): a source is either `returne
 
 Marking is not optional and not only for the second return — the *first* return is what the next session reads. Skip it and the gate reads a marker nothing wrote, and the rule collapses back to advice.
 
-**The exit:** `spec-execution` **sets** this marker; `to-spec` **clears** it when it republishes the rewritten spec (ADR 0008). You do not clear it here — if you cleared your own marker, healing would be back to memory-dependent. Heal the spec through `grill` → `to-spec`, and republishing is what releases the gate.
+**The exit:** `spec-execution` **sets** this marker; the **republisher clears** it when the rewritten source is published (ADR 0008) — `to-spec` for a spec, `to-tickets` for a ticket, since the frontier runs tickets and a ticket is the marked source there. You do not clear it here — if you cleared your own marker, healing would be back to memory-dependent. Heal the source through `grill` → `to-spec`/`to-tickets`, and republishing is what releases the gate.

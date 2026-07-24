@@ -2,6 +2,12 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.3] — 2026-07-24
+
+### Fixed
+- **The gate's exit now respects the ownership split.** ADR 0008 gave the clear to `to-spec`, but `spec-execution` runs *tickets* on the frontier, and `to-spec` does not own tickets (ADR 0006). The clear now belongs to the **republisher** of the source — `to-spec` for a spec, `to-tickets` for a ticket — each clearing only the source type it owns. `to-tickets` gains the clear-on-republish instruction it was missing; ADR 0008 generalised from "`to-spec` clears" to "the republisher clears", covering any future publisher without amendment.
+- `guide` no longer says "if a spec has come back **twice**" — a counter's phrasing left over from before the marker became a state. It now routes to `grill` when the source carries a `returned` marker (the gate fires on the first mark), so it stops sending work to a `spec-execution` that would refuse it. Fixed in the skill and its docs page.
+
 ## [0.9.2] — 2026-07-24
 
 ### Fixed
@@ -131,6 +137,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.9.3]: https://github.com/assisjp/specflow/releases/tag/v0.9.3
 [0.9.2]: https://github.com/assisjp/specflow/releases/tag/v0.9.2
 [0.9.1]: https://github.com/assisjp/specflow/releases/tag/v0.9.1
 [0.9.0]: https://github.com/assisjp/specflow/releases/tag/v0.9.0

@@ -52,6 +52,8 @@ Publish the approved tickets in dependency order (blockers first). How depends o
 
 Work the **frontier**: any ticket whose blockers are all done. Do not close or modify a parent issue.
 
+**Clearing a `returned` marker (the second-failure gate's exit).** `spec-execution` runs tickets on the frontier, so when it sends one back as defective, the *ticket* is what carries the `returned` marker. `to-tickets` owns tickets (ADR 0006), so `to-tickets` is the one that clears it: when you republish a rewritten ticket to the same issue/file, remove the `returned` label and add a "rewritten" comment (tracker), or delete the `Returned:` line (local). `spec-execution` sets the marker, the republisher clears it (ADR 0008) — for a ticket that republisher is you, not `to-spec`. Republish to the **same** ticket so its blocking edges survive; do not mint a new one.
+
 <local-ticket-template>
 
 # <NN> — <Ticket title>
