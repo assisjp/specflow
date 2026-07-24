@@ -31,6 +31,8 @@ Give each ticket its **blocking edges** — the tickets that must complete befor
 
 **Wide refactors are the exception.** A wide refactor is one mechanical change (rename a column, retype a shared symbol) whose blast radius fans across the whole codebase, so a single edit breaks thousands of call sites and no vertical slice can land green. Sequence it as **expand → migrate → contract**: first add the new form beside the old so nothing breaks; then migrate call sites in batches sized by blast radius (per package, per directory), each batch a ticket blocked by the expand, CI green batch to batch because the old form still exists; finally delete the old form in a ticket blocked by every migrate batch. If even the batches cannot stay green alone, share an integration branch that all block a final integrate-and-verify ticket — green is promised only there.
 
+Two things keep the batches actually green, both learned the hard way: **tests are call sites too** — a test that reads the old field must migrate before contract, or contract goes red on the test suite; and expand is only non-breaking if the existing tests assert *behaviour, not exact object shape* (`tdd`'s rule) — a full-object `deepEqual` breaks on a merely additive field, so prefactor those into behaviour assertions first ("make the change easy, then make the easy change").
+
 ### 4. Quiz the user
 
 Present the breakdown as a numbered list. Per ticket show: **Title**, **Blocked by**, **What it delivers** (the end-to-end behaviour it makes work). Ask:

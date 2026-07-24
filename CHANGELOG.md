@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.8.4] — 2026-07-24
+
+### Fixed
+- `to-tickets` expand→migrate→contract now states the two things that actually keep the batches green, both found running a real wide refactor: **tests are call sites** (a test reading the old field must migrate before contract), and expand is only non-breaking if tests assert behaviour not object shape — prefactor full-object assertions first.
+
 ## [0.8.3] — 2026-07-24
 
 ### Fixed
@@ -102,6 +107,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.8.4]: https://github.com/assisjp/specflow/releases/tag/v0.8.4
 [0.8.3]: https://github.com/assisjp/specflow/releases/tag/v0.8.3
 [0.8.2]: https://github.com/assisjp/specflow/releases/tag/v0.8.2
 [0.8.1]: https://github.com/assisjp/specflow/releases/tag/v0.8.1
