@@ -101,6 +101,10 @@ A spec that has already come back once: **do not reimplement.** A double return 
 **Every time you hand a source back as defective — at step 2, 4, 5, or here — mark it durably first**, so the *next* session enforces the rule without anyone remembering. This is the write half of the gate; step 2 is the read half. The mark must survive the session that dies, exactly like ADR 0006's durable artifacts:
 
 - **Tracker** → add a `returned` label to the issue and a comment naming the non-verifiable part.
-- **Local** → add or increment a `Returns: N` line at the top of the spec/ticket file, with the reason.
+- **Local** → add a `Returned: spec-defect — <reason>` line at the top of the spec/ticket file.
 
-Marking is not optional and not only for the second return — the *first* return is what the second session reads. Skip it and the gate reads a marker nothing wrote, and the rule collapses back to advice that depends on the human doing the very thing it exists to save them from forgetting. Advice-in-markdown versus a machine-read gate is the distinction this whole flow is built on.
+The marker is a **state, not a counter** (ADR 0008): a source is either `returned` (sent back as a spec defect, not yet rewritten) or it is not. It is written only when the blocker is the *spec*, not the code, so step 2 refusing on its mere presence is correct — retrying against an unchanged spec is pointless.
+
+Marking is not optional and not only for the second return — the *first* return is what the next session reads. Skip it and the gate reads a marker nothing wrote, and the rule collapses back to advice.
+
+**The exit:** `spec-execution` **sets** this marker; `to-spec` **clears** it when it republishes the rewritten spec (ADR 0008). You do not clear it here — if you cleared your own marker, healing would be back to memory-dependent. Heal the spec through `grill` → `to-spec`, and republishing is what releases the gate.

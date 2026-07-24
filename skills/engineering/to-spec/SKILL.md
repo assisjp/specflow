@@ -31,6 +31,8 @@ Write the spec using the template below, then publish it. Where it goes depends 
 
 If you cannot tell which the project uses, ask — it is a one-line decision, not an interview.
 
+**Clearing a `returned` marker (the second-failure gate's exit).** If you are republishing a spec that a previous `spec-execution` sent back as defective — the source carries a `returned` label, or a `Returned: spec-defect` line — this rewrite heals it, and the rewritten spec is the *same* entity, not a new one (ADR 0008). So republish to the **same** source and clear the marker: remove the `returned` label and add a brief "rewritten" comment (tracker), or delete the `Returned:` line (local). `spec-execution` sets that marker; clearing it is yours, and it is the only thing that lets the gate release. Do not open a new issue for the rewrite — that would strip the blocking edges of every ticket pointing at the old one.
+
 <spec-template>
 
 ## Problem Statement

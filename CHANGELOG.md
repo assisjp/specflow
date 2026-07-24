@@ -2,6 +2,15 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.2] — 2026-07-24
+
+### Fixed
+- **The second-failure gate now has an exit.** 0.9.1 closed write→read but nothing ever removed the marker, so a spec healed via `grill` still carried `returned` and step 2 refused it forever — the fix could not unblock the work. Confirmed live on a real issue (rewrite the criterion, gate still refused). Now `to-spec` clears the marker when it republishes the rewritten spec to the same source, and that is the only clear path — `spec-execution` sets, `to-spec` clears, one owner per transition (ADR 0008). Proven end-to-end on real GitHub state: set → refuse → heal+clear → release.
+- The marker is named for what it is: a **state** (`Returned: spec-defect`), not a `Returns: N` counter — it is written only when the spec is the blocker, and step 2 fires on its presence, so a count was never compared to anything (ADR 0008).
+
+### Added
+- ADR 0008 (a returned spec is the same entity; `to-spec` clears the marker on republish).
+
 ## [0.9.1] — 2026-07-24
 
 ### Fixed
@@ -122,6 +131,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.9.2]: https://github.com/assisjp/specflow/releases/tag/v0.9.2
 [0.9.1]: https://github.com/assisjp/specflow/releases/tag/v0.9.1
 [0.9.0]: https://github.com/assisjp/specflow/releases/tag/v0.9.0
 [0.8.4]: https://github.com/assisjp/specflow/releases/tag/v0.8.4
