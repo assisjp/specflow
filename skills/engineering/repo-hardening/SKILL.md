@@ -125,7 +125,7 @@ The **Run** line is what the evidence gate depends on — `spec-execution` bring
 
 If the block already exists, compare it against reality and update only what diverged.
 
-**Then run the formatter over the file you just wrote** (and any config files you added). A formatter you just installed will reflow an aligned block or a hand-written config — if you skip this, the Phase 6 check fails on the very files this skill created. The skill's own output must pass the skill's own gate.
+**Then run the repo's formatter — whether you installed it or adopted an existing one — over the file you just wrote** (and any config files you added). Any formatter will reflow an aligned block or a hand-written config, so this bites just as hard in a repo that already had one as in a fresh install — if you skip it, the Phase 6 check fails on the very files this skill created. The skill's own output must pass the skill's own gate.
 
 ## Phase 6 — Verify
 

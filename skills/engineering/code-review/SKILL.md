@@ -24,7 +24,7 @@ Confirm the ref resolves (`git rev-parse <fixed-point>`) and the diff is non-emp
 
 ### 2. Find the spec source
 
-In order: (1) issue references in the commit messages (`#123`, `Closes #45`) — fetch with `gh issue view` where available; (2) a path the caller passed — `spec-execution` passes the exact spec or ticket file it implemented, so prefer this; (3) a spec under `docs/specs/` **or a ticket under `docs/tickets/<slug>/`** matching the branch or feature — in no-tracker mode the ticket *is* the per-PR spec (see ADR 0006); (4) if nothing, ask. If the user says there is no spec, the Spec axis reports "no spec available" and is skipped. (Durable specs/tickets live under `docs/`, never `.scratch/`.)
+In order: (1) **a path the caller passed** — `spec-execution` passes the exact spec or ticket file it implemented; use it directly, never refetch over it; (2) issue references in the commit messages (`#123`, `Closes #45`) — fetch with `gh issue view` where available; (3) a spec under `docs/specs/` **or a ticket under `docs/tickets/<slug>/`** matching the branch or feature — in no-tracker mode the ticket *is* the per-PR spec (see ADR 0006); (4) if nothing, ask. If the user says there is no spec, the Spec axis reports "no spec available" and is skipped. (Durable specs/tickets live under `docs/`, never `.scratch/`.) The caller-passed path is first because guessing a source that was handed to you is the exact class of error the flow eliminates elsewhere — a commit's `Closes #45` must not send the review refetching an issue when `spec-execution` already gave it the file.
 
 ### 3. Assemble the standards sources
 

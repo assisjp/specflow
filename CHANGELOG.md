@@ -2,6 +2,12 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.8.2] — 2026-07-24
+
+### Fixed
+- `code-review` §2 no longer contradicts itself. The source-finding list said "In order:" but ranked a caller-passed path second while telling you to "prefer this". The caller-passed path (which `spec-execution` always provides) is now #1, so a commit's `Closes #45` cannot send the review refetching an issue when the exact file was already handed to it — the same guessing class 0.8.0 removed.
+- `repo-hardening`'s "format your own output" rule now covers the class, not just the instance: it says the **repo's formatter, installed or adopted**, so it also applies in a repo that already had a formatter (where Phase 3 installs nothing) — the aligned `AGENTS.md` block breaks Phase 6 there too.
+
 ## [0.8.1] — 2026-07-24
 
 ### Fixed
@@ -90,6 +96,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.8.2]: https://github.com/assisjp/specflow/releases/tag/v0.8.2
 [0.8.1]: https://github.com/assisjp/specflow/releases/tag/v0.8.1
 [0.8.0]: https://github.com/assisjp/specflow/releases/tag/v0.8.0
 [0.7.0]: https://github.com/assisjp/specflow/releases/tag/v0.7.0
