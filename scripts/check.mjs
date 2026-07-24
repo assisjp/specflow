@@ -96,6 +96,38 @@ if (guide) {
       fail(`guide does not route to promoted skill "${s.name}" (add it to guide/SKILL.md)`);
 }
 
+// 7b. No orphan docs pages — every docs/<bucket>/<name>.md must map to a promoted skill.
+const promotedNames = new Set(onDisk.map((s) => `${s.bucket}/${s.name}`));
+for (const bucket of PROMOTED) {
+  const dir = join(ROOT, "docs", bucket);
+  if (!existsSync(dir)) continue;
+  for (const f of readdirSync(dir)) {
+    if (!f.endsWith(".md")) continue;
+    const key = `${bucket}/${f.replace(/\.md$/, "")}`;
+    if (!promotedNames.has(key)) fail(`orphan docs page docs/${bucket}/${f} — no promoted skill "${key}"`);
+  }
+}
+
+// 9. ADR citations resolve — any "ADR NNNN" in a skill or doc must exist.
+const adrDir = join(ROOT, "docs/adr");
+const adrNums = new Set(
+  existsSync(adrDir) ? readdirSync(adrDir).filter((f) => /^\d{4}-/.test(f)).map((f) => f.slice(0, 4)) : []
+);
+const citingFiles = [
+  ...onDisk.map((s) => s.skillMd),
+  ...["README.md", "CLAUDE.md", "CONTEXT.md"].map((f) => join(ROOT, f)),
+];
+for (const bucket of PROMOTED) {
+  const dir = join(ROOT, "docs", bucket);
+  if (existsSync(dir)) for (const f of readdirSync(dir)) if (f.endsWith(".md")) citingFiles.push(join(dir, f));
+}
+for (const file of citingFiles) {
+  if (!existsSync(file)) continue;
+  for (const m of readFileSync(file, "utf8").matchAll(/ADR (\d{4})/g))
+    if (!adrNums.has(m[1]))
+      fail(`${file.replace(ROOT + "/", "")} cites ADR ${m[1]}, which does not exist`);
+}
+
 // 8. Release hygiene: the current version must have a CHANGELOG entry.
 if (plugin) {
   const changelog = existsSync(join(ROOT, "CHANGELOG.md"))

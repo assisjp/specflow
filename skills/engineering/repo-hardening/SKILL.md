@@ -130,4 +130,5 @@ If the block already exists, compare it against reality and update only what div
 1. Run the "All" command and confirm it passes.
 2. Test commit: did the hook fire?
 3. Do CI and the hook run the same commands? Divergence is the classic source of "passes local, breaks in the PR".
-4. Report what was installed, what was kept, and what is still pending.
+4. **If `Run` is not `n/a`, execute it** — confirm the app actually comes up, then tear it down. The `Run` line is the evidence gate's contract, and an untested run command breaks that gate in `spec-execution`'s evidence step, at the worst possible time (the work is already done, and the gate fails on infrastructure, not quality). This is the same rule as the rest of Phase 6: don't trust what you just wrote — run it.
+5. Report what was installed, what was kept, and what is still pending.

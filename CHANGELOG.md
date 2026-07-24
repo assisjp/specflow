@@ -2,6 +2,16 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.7.0] — 2026-07-24
+
+### Changed
+- **Evidence is produced before review, not after.** `spec-execution` reorders its steps so the evidence artifact exists before `code-review` runs — giving it a reader other than the human at merge. The review's Spec axis now checks the evidence against the acceptance criteria (a green test is not that proof). Previously the implementer was the only one to see the evidence until merge.
+- `repo-hardening` Phase 6 now **executes the `Run` command** (unless `n/a`) to confirm the app comes up — the evidence gate's contract was the one line in the block that was never tested, and it would first run mid-`spec-execution` at the worst time.
+
+### Added
+- `scripts/check.mjs` guard #7b: no orphan docs pages (every `docs/<bucket>/<name>.md` maps to a promoted skill) — the reverse direction of the existing docs check.
+- `scripts/check.mjs` guard #9: every `ADR NNNN` cited in a skill or doc must resolve to a file in `docs/adr/`.
+
 ## [0.6.0] — 2026-07-24
 
 ### Changed
@@ -62,6 +72,7 @@ All notable changes to specflow. Format based on [Keep a Changelog](https://keep
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.7.0]: https://github.com/assisjp/specflow/releases/tag/v0.7.0
 [0.6.0]: https://github.com/assisjp/specflow/releases/tag/v0.6.0
 [0.5.0]: https://github.com/assisjp/specflow/releases/tag/v0.5.0
 [0.4.1]: https://github.com/assisjp/specflow/releases/tag/v0.4.1

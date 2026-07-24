@@ -59,7 +59,7 @@ Either way, give each axis only its own inputs:
 
 **Standards sub-agent** — give it the diff command + commit list, the standards-source files from step 3, **and the full smell baseline pasted in** (it has no other access to it). Brief: "Report, per file/hunk: (a) every place the diff violates a documented standard — cite the file + rule; (b) any baseline smell — name it and quote the hunk. Distinguish hard violations from judgement calls; documented standards can be hard, baseline smells are always judgement calls and the repo overrides the baseline. Skip anything tooling enforces. Under 400 words."
 
-**Spec sub-agent** — give it the diff command + commit list and the spec path/contents. Brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff nobody asked for (scope creep); (c) requirements that look implemented but wrong. Quote the spec line per finding. Under 400 words."
+**Spec sub-agent** — give it the diff command + commit list, the spec path/contents, and any **evidence artifact** (screenshot/output) the caller produced. Brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff nobody asked for (scope creep); (c) requirements that look implemented but wrong; (d) if an evidence artifact is provided, whether it actually shows the acceptance criteria met — a green test is not that proof. Quote the spec line per finding. Under 400 words."
 
 Skip the Spec sub-agent if there is no spec, and note it.
 

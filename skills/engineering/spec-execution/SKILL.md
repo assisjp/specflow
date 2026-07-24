@@ -43,9 +43,17 @@ A spec scenario that is not testable as written: report it as a spec defect, do 
 
 Run the canonical commands. Fix. Repeat, within the attempt limit the verification block defines.
 
-## 6. Automated review
+## 6. Evidence
 
-Run `code-review` over the diff, before the PR.
+Produce the evidence **before** the review — so someone other than the implementer looks at it. That someone is the review in step 7, not just the human at merge; capturing evidence after review would leave the human as its only reader, which is the moment you wanted it caught before.
+
+A change with an observable effect (UI, endpoint, flow, CLI): bring the app up **with the canonical `Run` command from step 1** — do not guess a command; guessing is exactly what step 1 exists to prevent. Walk the spec's flow, capture a screenshot or real output, save it where the PR can reference it.
+
+A green test does not prove the feature appears — that is the class of error code review does not catch. If the `Run` command is `n/a` (no runnable surface), the test output is the evidence.
+
+## 7. Automated review
+
+Run `code-review` over the diff. The evidence artifact from step 6 now exists, so the review's **Spec axis checks it against the acceptance criteria** — the artifact is a second pair of eyes on the observable behaviour, not just a green check.
 
 A finding is a **hypothesis, not a task**. Confirm each against the code before fixing — an automated reviewer errs with confidence, and fixing a non-existent bug costs a whole round. A false positive: do not fix it, record it with the justification.
 
@@ -56,17 +64,11 @@ A finding is a **hypothesis, not a task**. Confirm each against the code before 
 
 The line is the diff boundary, not the file. Without this rule a smell in new code falls in a gap — fixing it looks like a §3 scope violation, not fixing it drops TDD's third beat.
 
-## 7. One diff, one concern
+## 8. One diff, one concern
 
 - mechanical change (rename, move, format) separated from behavioural change — two clean commits or two PRs
 - a non-trivial diff over ~400 lines: flag it and propose the cut
 - re-read your own diff hunting for anything that entered without being in the spec, and remove it
-
-## 8. Evidence
-
-A change with an observable effect (UI, endpoint, flow, CLI): bring the app up **with the canonical `Run` command from step 1** — do not guess a command; guessing is exactly what step 1 exists to prevent. Walk the spec's flow, capture a screenshot or real output, attach it to the PR.
-
-A green test does not prove the feature appears — that is the class of error code review does not catch. If the `Run` command is `n/a` (no runnable surface), the test output is the evidence.
 
 ## 9. Deliver
 

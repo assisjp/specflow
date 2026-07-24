@@ -19,7 +19,7 @@ Idempotent — re-run any time to re-verify and correct drift.
 3. **Install what's missing** — ecosystem defaults, in order: formatter, linter, types, hooks, CI. The hook is bypassable; CI is the real gate; both must exist.
 4. **Don't break an old repo** — formatter applied in one isolated commit; linter/types baselined or scoped; a slow suite recorded, not masked.
 5. **Write to the agent-context file** (`AGENTS.md` or `CLAUDE.md`, whichever the harness auto-loads; ADR 0003) — the canonical commands and prohibitions, only between its own markers.
-6. **Verify** — the "all" command passes, the hook fires, CI and hook run the same commands.
+6. **Verify** — the "all" command passes, the hook fires, CI and hook run the same commands, and (if not `n/a`) the `Run` command actually brings the app up — so the evidence gate's contract is tested here, not discovered broken mid-`spec-execution`.
 
 ## Ownership
 
