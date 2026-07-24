@@ -28,7 +28,7 @@ specflow ships in phases — each phase a closed, usable slice. See [docs/adr/00
 |---|---|---|
 | **1 — Spec pipeline** | `grill`, `domain-modeling`, `to-spec` | **shipped** |
 | **2 — Execution** | `repo-hardening`, `spec-execution`, `tdd`, `code-review` | **shipped** |
-| 3 — Scale & continuity | `to-tickets`, `session-handoff` | planned |
+| **3 — Scale & continuity** | `to-tickets`, `session-handoff` | **shipped** |
 
 ## Skills
 
@@ -41,6 +41,8 @@ Reachable only when you type them (`disable-model-invocation: true`) — the flo
 - [to-spec](./skills/engineering/to-spec/SKILL.md) — turn a settled conversation into a spec and publish it, no interview.
 - [repo-hardening](./skills/engineering/repo-hardening/SKILL.md) — install the deterministic verification layer (formatter, linter, types, tests, hooks, CI) without breaking what exists, and record the canonical commands in `AGENTS.md`.
 - [spec-execution](./skills/engineering/spec-execution/SKILL.md) — turn one spec/issue into one reviewable PR: closed scope, evidence attached, reviewed once.
+- [to-tickets](./skills/engineering/to-tickets/SKILL.md) — break a spec too big for one PR into dependency-ordered tracer-bullet tickets, published to the tracker.
+- [session-handoff](./skills/productivity/session-handoff/SKILL.md) — compact a session into an ephemeral handoff (with git state) for another session or tool to resume.
 
 ### Model-invoked
 
