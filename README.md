@@ -27,18 +27,27 @@ specflow ships in phases — each phase a closed, usable slice. See [docs/adr/00
 | Phase | Skills | State |
 |---|---|---|
 | **1 — Spec pipeline** | `grill`, `domain-modeling`, `to-spec` | **shipped** |
-| 2 — Execution | `repo-hardening`, `spec-execution`, `tdd`, `code-review` | planned |
+| **2 — Execution** | `repo-hardening`, `spec-execution`, `tdd`, `code-review` | **shipped** |
 | 3 — Scale & continuity | `to-tickets`, `session-handoff` | planned |
 
 ## Skills
 
 ### User-invoked
 
-Reachable only when you type them (`disable-model-invocation: true`).
+Reachable only when you type them (`disable-model-invocation: true`) — the flow is deliberate.
 
 - [grill](./skills/productivity/grill/SKILL.md) — relentless interview that stress-tests a plan; challenges contradictions, scores options against your priorities, and emits a decision log. Pass `docs` to also write the glossary and ADRs.
 - [domain-modeling](./skills/engineering/domain-modeling/SKILL.md) — actively build and sharpen the project's `CONTEXT.md` glossary and ADRs as you design.
 - [to-spec](./skills/engineering/to-spec/SKILL.md) — turn a settled conversation into a spec and publish it, no interview.
+- [repo-hardening](./skills/engineering/repo-hardening/SKILL.md) — install the deterministic verification layer (formatter, linter, types, tests, hooks, CI) without breaking what exists, and record the canonical commands in `AGENTS.md`.
+- [spec-execution](./skills/engineering/spec-execution/SKILL.md) — turn one spec/issue into one reviewable PR: closed scope, evidence attached, reviewed once.
+
+### Model-invoked
+
+The utility layer — invokable directly or mid-flow by `spec-execution`.
+
+- [tdd](./skills/engineering/tdd/SKILL.md) — the red → green loop, done so the tests are worth keeping.
+- [code-review](./skills/engineering/code-review/SKILL.md) — two-axis review (Standards + Spec) in parallel sub-agents, reported side by side.
 
 ## Install
 
