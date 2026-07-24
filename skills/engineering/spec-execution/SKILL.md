@@ -16,9 +16,9 @@ Human review happens **once**, on the final diff.
 
 ## 1. Contract
 
-Read the verification block in `AGENTS.md` and extract the canonical commands.
+Read the verification block from the repo's agent-context file — `AGENTS.md`, or `CLAUDE.md` if that is where the harness loads it and the block lives there. Extract the canonical commands, including the **Run** command for the evidence gate.
 
-**If it does not exist**: stop. Suggest running `repo-hardening` first. Do not improvise commands, install tooling, or continue.
+**If no block exists**: stop. Suggest running `repo-hardening` first. Do not improvise commands, install tooling, or continue.
 
 ## 2. Read before writing
 
@@ -57,9 +57,9 @@ A finding is a **hypothesis, not a task**. Confirm each against the code before 
 
 ## 8. Evidence
 
-A change with an observable effect (UI, endpoint, flow, CLI): bring the app up for real, walk the spec's flow, capture a screenshot or real output, attach it to the PR.
+A change with an observable effect (UI, endpoint, flow, CLI): bring the app up **with the canonical `Run` command from step 1** — do not guess a command; guessing is exactly what step 1 exists to prevent. Walk the spec's flow, capture a screenshot or real output, attach it to the PR.
 
-A green test does not prove the feature appears — that is the class of error code review does not catch. With no observable effect, the test output is the evidence.
+A green test does not prove the feature appears — that is the class of error code review does not catch. If the `Run` command is `n/a` (no runnable surface), the test output is the evidence.
 
 ## 9. Deliver
 

@@ -38,7 +38,6 @@ Reachable only when you type them (`disable-model-invocation: true`) — the flo
 
 - [guide](./skills/productivity/guide/SKILL.md) — the router: describe your task, it names the one skill to run now and why. Start here if unsure.
 - [grill](./skills/productivity/grill/SKILL.md) — relentless interview that stress-tests a plan; challenges contradictions, scores options against your priorities, and emits a decision log. Pass `docs` to also write the glossary and ADRs.
-- [domain-modeling](./skills/engineering/domain-modeling/SKILL.md) — actively build and sharpen the project's `CONTEXT.md` glossary and ADRs as you design.
 - [to-spec](./skills/engineering/to-spec/SKILL.md) — turn a settled conversation into a spec and publish it, no interview.
 - [repo-hardening](./skills/engineering/repo-hardening/SKILL.md) — install the deterministic verification layer (formatter, linter, types, tests, hooks, CI) without breaking what exists, and record the canonical commands in `AGENTS.md`.
 - [spec-execution](./skills/engineering/spec-execution/SKILL.md) — turn one spec/issue into one reviewable PR: closed scope, evidence attached, reviewed once.
@@ -47,10 +46,11 @@ Reachable only when you type them (`disable-model-invocation: true`) — the flo
 
 ### Model-invoked
 
-The utility layer — invokable directly or mid-flow by `spec-execution`.
+The utility layer — invokable directly, or mid-flow by another skill.
 
-- [tdd](./skills/engineering/tdd/SKILL.md) — the red → green loop, done so the tests are worth keeping.
-- [code-review](./skills/engineering/code-review/SKILL.md) — two-axis review (Standards + Spec) in parallel sub-agents, reported side by side.
+- [domain-modeling](./skills/engineering/domain-modeling/SKILL.md) — actively build and sharpen the project's `CONTEXT.md` glossary and ADRs; invoked by `grill docs`.
+- [tdd](./skills/engineering/tdd/SKILL.md) — the red → green loop, done so the tests are worth keeping; invoked by `spec-execution`.
+- [code-review](./skills/engineering/code-review/SKILL.md) — two-axis review (Standards + Spec) in parallel sub-agents; invoked by `spec-execution`.
 
 ## Install
 

@@ -2,6 +2,19 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.4.1] — 2026-07-24
+
+### Fixed
+- `link-skills.sh` no longer destroys a real directory or file at a target path — it refuses to overwrite anything that is not its own symlink, and reports skips. Prevents data loss for users who already have a real `tdd`/`code-review` skill dir.
+- `domain-modeling` is now model-invoked, so `grill docs` can actually reach it (it was user-invoked and unreachable by another skill). See ADR 0004.
+
+### Changed
+- `repo-hardening` writes the verification block to the harness's auto-loaded context file (`AGENTS.md` or `CLAUDE.md`), with a pointer when both exist, instead of hard-coding `AGENTS.md`. See ADR 0003.
+- The verification block gains a `Run:` command so the evidence gate has a contract; `spec-execution` uses it instead of guessing a dev-server command.
+
+### Added
+- ADR 0003 (agent-context file selection) and ADR 0004 (utility skills model-invoked, ambient triggering accepted).
+
 ## [0.4.0] — 2026-07-24
 
 ### Added
@@ -26,6 +39,7 @@ All notable changes to specflow. Format based on [Keep a Changelog](https://keep
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.4.1]: https://github.com/assisjp/specflow/releases/tag/v0.4.1
 [0.4.0]: https://github.com/assisjp/specflow/releases/tag/v0.4.0
 [0.3.0]: https://github.com/assisjp/specflow/releases/tag/v0.3.0
 [0.2.0]: https://github.com/assisjp/specflow/releases/tag/v0.2.0

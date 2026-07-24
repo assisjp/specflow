@@ -48,7 +48,8 @@ Multiple manifests or a monorepo: list them all and ask which is in scope.
 - test runner and where tests live
 - CI: `.github/workflows/`, `.gitlab-ci.yml`
 - scripts in the manifest, Makefile, justfile
-- `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` — and whether a `repo-hardening` block is already inside
+- **run/dev command** for the evidence gate — a `dev`/`start`/`serve` script, a documented run command, or none (a library with no runnable surface)
+- `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` — which one the harness auto-loads, and whether a `repo-hardening` block is already inside
 
 **Health of what exists** — run the checks you found and count the failures. A linter configured but unrun for two years is not a verification layer, it is a liability.
 
@@ -86,9 +87,16 @@ Turning on strict mode in an old repo spews thousands of errors and the user qui
 
 Never disable a rule to make a check pass. Either it enters the baseline, or it becomes a task.
 
-## Phase 5 — Write to AGENTS.md
+## Phase 5 — Write to the agent-context file
 
-Create the file if missing. If it exists, **edit only between the markers below**; if there are no markers, append the block at the end without touching anything else.
+The block must land in the file the harness **auto-loads into every session**, or the prohibitions do not hold. That file is not the same everywhere: Claude Code loads `CLAUDE.md`; many other agent harnesses load `AGENTS.md`; some load both. Pick the target this way:
+
+1. If `AGENTS.md` exists, write the block there — it is the cross-harness standard.
+2. Else if `CLAUDE.md` exists (e.g. a Claude Code repo), write the block there.
+3. Else create `AGENTS.md`.
+4. **If you wrote to `AGENTS.md` but `CLAUDE.md` also exists**, add a one-line pointer inside `CLAUDE.md`, between your markers, so the block is discoverable from whichever file the harness loads: `<!-- repo-hardening:start --> See the Verification block in AGENTS.md. <!-- repo-hardening:end -->`.
+
+In the target file: create it if missing; if it exists, **edit only between the markers below**; if there are no markers, append the block at the end without touching anything else.
 
 This block enters context in every session in the repo. Keep it lean — only what must hold even with no skill invoked. Procedure does not go here.
 
@@ -100,7 +108,8 @@ This block enters context in every session in the repo. Keep it lean — only wh
 - Lint:   <command>
 - Types:  <command>
 - Tests:  <command>
-- All:    <single command>
+- Run:    <dev server / run command, for the evidence gate — or "n/a" if the project has no runnable surface>
+- All:    <single command chaining format+lint+types+tests>
 
 Lint/type scope: <full | folders X, Y>
 
@@ -111,6 +120,8 @@ Do not change an existing test to accommodate a change.
 If the same check fails three times, stop and report the obstacle.
 <!-- repo-hardening:end -->
 ```
+
+The **Run** line is what the evidence gate depends on — `spec-execution` brings the app up with it to capture real evidence, instead of guessing a command. Detect it in Phase 1 (a `dev`/`start`/`serve` script, a documented run command); if there genuinely is no runnable surface, record `n/a` so the gate knows to fall back to test output.
 
 If the block already exists, compare it against reality and update only what diverged.
 

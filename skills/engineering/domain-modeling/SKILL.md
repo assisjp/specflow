@@ -1,7 +1,6 @@
 ---
 name: domain-modeling
 description: Actively build and sharpen a project's domain model as you design — challenge fuzzy terms, invent edge-case scenarios, and write the glossary and architectural decisions down the moment they crystallise. Use when the user wants to pin down domain terminology or a ubiquitous language, record an architectural decision, or when another skill (such as grill in docs mode) needs to maintain the domain model. This is the active discipline of *changing* the model — merely reading CONTEXT.md for vocabulary is a one-line habit, not this skill.
-disable-model-invocation: true
 ---
 
 # Domain Modeling
