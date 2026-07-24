@@ -137,6 +137,18 @@ if (plugin) {
     fail(`CHANGELOG.md has no entry for version ${plugin.version}`);
 }
 
+// 11. Marker protocol: the second-failure marker's setter, reader, clearers and
+// router must all use the same tokens. A local reader once drifted to `Returns:`
+// while everything else wrote `Returned:`, silently breaking the no-tracker gate.
+const GATE_SKILLS = ["spec-execution", "to-spec", "to-tickets", "guide"];
+for (const token of ["Returned:", "`returned`"]) {
+  for (const n of GATE_SKILLS) {
+    const s = onDisk.find((x) => x.name === n);
+    if (s && !readFileSync(s.skillMd, "utf8").includes(token))
+      fail(`${n} is missing the canonical second-failure marker token ${token}`);
+  }
+}
+
 if (errors.length) {
   console.error(`✗ ${errors.length} consistency error(s):`);
   for (const e of errors) console.error(`  - ${e}`);

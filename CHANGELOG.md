@@ -2,6 +2,15 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.4] — 2026-07-24
+
+### Fixed
+- **The local (no-tracker) second-failure gate never closed.** `spec-execution` wrote the marker as a `Returned:` line but step 2 read for a `Returns:` line — the old counter name's residue. So off a tracker it marked the source and then failed to recognise its own mark, and the gate silently did nothing. The 4-attempt live run missed it because it was in tracker mode, where both ends use the `returned` label; the marker had two backends and only one was exercised. Reader aligned to `Returned:`, and the local backend's full lifecycle (set → refuse → refuse-while-uncleared → clear → release) is now run and passing.
+- Counter-era phrasing ("come back once", "a double return", "comes back twice") replaced with the state framing ADR 0008 fixed, in `spec-execution` and its docs page.
+
+### Added
+- `scripts/check.mjs` guard #11: the second-failure marker's tokens (`Returned:`, `returned`) must be identical across every skill in the protocol — setter, reader, clearers, router. The specific check for the one cross-skill protocol that exists, exactly the divergence that had already bitten; it generalises when a second protocol appears.
+
 ## [0.9.3] — 2026-07-24
 
 ### Fixed
@@ -137,6 +146,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.9.4]: https://github.com/assisjp/specflow/releases/tag/v0.9.4
 [0.9.3]: https://github.com/assisjp/specflow/releases/tag/v0.9.3
 [0.9.2]: https://github.com/assisjp/specflow/releases/tag/v0.9.2
 [0.9.1]: https://github.com/assisjp/specflow/releases/tag/v0.9.1

@@ -24,7 +24,7 @@ Read the verification block from the repo's agent-context file — `AGENTS.md`, 
 
 Read the whole source — a spec, a PRD, or a **ticket** (in no-tracker mode you are run once per ticket from `docs/tickets/<slug>/`, and that ticket is the spec for this PR) — every file it names, the files those import, and `CONTEXT.md` if it exists, before editing a single line. Note the source's path; step 7 hands it to `code-review`.
 
-**First, check the source for a return marker** — a `returned` label on the issue (`gh issue view`), or a `Returns:` line in the local ticket/spec file. If it is marked, this spec has already come back once: do **not** implement — go straight to the second-failure rule below. The marker is what makes that rule a gate instead of relying on someone remembering (see the rule for why).
+**First, check the source for a return marker** — a `returned` label on the issue (`gh issue view`), or a `Returned:` line in the local ticket/spec file. If the source is marked, it was already sent back as a spec defect and not yet healed: do **not** implement — go straight to the second-failure rule below. The marker is what makes that rule a gate instead of relying on someone remembering (see the rule for why).
 
 - **Ambiguity that changes the result**: stop and ask. Do not guess. If the answer is that the spec itself is defective and must be rewritten, **mark the source** (see *Returning the source* below) before handing it back.
 - **Minor ambiguity**: decide, record it, deliver it in the report.
@@ -94,7 +94,7 @@ PR:                <link>
 
 ## The second-failure rule
 
-A spec that has already come back once: **do not reimplement.** A double return is a specification defect, not an execution one. Point out which part was ambiguous or had a non-verifiable criterion, and send it back for a rewrite — preferably to a fresh `grill` session. Relaunching with more context is the most expensive way to discover the problem was the text.
+A source that carries a `returned` marker: **do not reimplement.** A returned source is a specification defect, not an execution one. Point out which part was ambiguous or had a non-verifiable criterion, and send it back for a rewrite — preferably to a fresh `grill` session. Relaunching against the unchanged text is the most expensive way to discover the problem was the text.
 
 ### Returning the source
 

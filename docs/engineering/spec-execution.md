@@ -24,7 +24,7 @@ This is where specflow spends its reliability budget. The agent delivers a singl
 
 ## The second-failure rule
 
-A spec that comes back twice is a specification defect, not an execution one. `spec-execution` refuses to reimplement — it names the ambiguous or non-verifiable part and sends it back to a fresh `grill` session.
+A source that carries a `returned` marker is a specification defect, not an execution one. `spec-execution` refuses to reimplement — it names the ambiguous or non-verifiable part and sends it back to a fresh `grill` session; healing and republishing (which clears the marker) is what lets it proceed.
 
 ## Related
 
