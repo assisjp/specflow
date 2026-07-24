@@ -2,10 +2,21 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.8.0] — 2026-07-24
+
+### Fixed
+- **`code-review` now finds the ticket as the spec.** ADR 0006 made tickets a durable per-PR spec under `docs/tickets/`, but `code-review` only searched `docs/specs/` — so in no-tracker mode the Spec axis silently skipped every locally-ticketed PR. It now also searches `docs/tickets/<slug>/`, and `spec-execution` passes the exact spec/ticket path to `code-review` so the source is never guessed. `spec-execution` step 2 acknowledges the source may be a ticket.
+
+### Added
+- ADR 0007 (evidence before review) — moves the reasoning that was in the 0.7.0 CHANGELOG entry into a proper decision record, per the "decisions go in an ADR" boundary. The 0.7.0 entry now points to it.
+
+### Changed
+- `scripts/check.mjs` steps renumbered sequentially (was `… 7, 7b, 9, 8`). Cosmetic, but drift is drift.
+
 ## [0.7.0] — 2026-07-24
 
 ### Changed
-- **Evidence is produced before review, not after.** `spec-execution` reorders its steps so the evidence artifact exists before `code-review` runs — giving it a reader other than the human at merge. The review's Spec axis now checks the evidence against the acceptance criteria (a green test is not that proof). Previously the implementer was the only one to see the evidence until merge.
+- **Evidence is produced before review, not after.** `spec-execution` reorders its steps so the evidence artifact exists before `code-review` runs, and the review's Spec axis checks it against the acceptance criteria. Rationale in ADR 0007.
 - `repo-hardening` Phase 6 now **executes the `Run` command** (unless `n/a`) to confirm the app comes up — the evidence gate's contract was the one line in the block that was never tested, and it would first run mid-`spec-execution` at the worst time.
 
 ### Added
@@ -72,6 +83,7 @@ All notable changes to specflow. Format based on [Keep a Changelog](https://keep
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.8.0]: https://github.com/assisjp/specflow/releases/tag/v0.8.0
 [0.7.0]: https://github.com/assisjp/specflow/releases/tag/v0.7.0
 [0.6.0]: https://github.com/assisjp/specflow/releases/tag/v0.6.0
 [0.5.0]: https://github.com/assisjp/specflow/releases/tag/v0.5.0

@@ -24,7 +24,7 @@ Confirm the ref resolves (`git rev-parse <fixed-point>`) and the diff is non-emp
 
 ### 2. Find the spec source
 
-In order: (1) issue references in the commit messages (`#123`, `Closes #45`) — fetch with `gh issue view` where available; (2) a path the user passed; (3) a spec file under `docs/specs/` matching the branch or feature; (4) if nothing, ask. If the user says there is no spec, the Spec axis reports "no spec available" and is skipped. (Specs are versioned under `docs/specs/`, never `.scratch/` — see ADR 0006.)
+In order: (1) issue references in the commit messages (`#123`, `Closes #45`) — fetch with `gh issue view` where available; (2) a path the caller passed — `spec-execution` passes the exact spec or ticket file it implemented, so prefer this; (3) a spec under `docs/specs/` **or a ticket under `docs/tickets/<slug>/`** matching the branch or feature — in no-tracker mode the ticket *is* the per-PR spec (see ADR 0006); (4) if nothing, ask. If the user says there is no spec, the Spec axis reports "no spec available" and is skipped. (Durable specs/tickets live under `docs/`, never `.scratch/`.)
 
 ### 3. Assemble the standards sources
 

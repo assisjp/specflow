@@ -22,7 +22,7 @@ Read the verification block from the repo's agent-context file — `AGENTS.md`, 
 
 ## 2. Read before writing
 
-Read the whole spec, every file it names, the files those import, and `CONTEXT.md` if it exists — before editing a single line.
+Read the whole source — a spec, a PRD, or a **ticket** (in no-tracker mode you are run once per ticket from `docs/tickets/<slug>/`, and that ticket is the spec for this PR) — every file it names, the files those import, and `CONTEXT.md` if it exists, before editing a single line. Note the source's path; step 7 hands it to `code-review`.
 
 - **Ambiguity that changes the result**: stop and ask. Do not guess.
 - **Minor ambiguity**: decide, record it, deliver it in the report.
@@ -53,7 +53,7 @@ A green test does not prove the feature appears — that is the class of error c
 
 ## 7. Automated review
 
-Run `code-review` over the diff. The evidence artifact from step 6 now exists, so the review's **Spec axis checks it against the acceptance criteria** — the artifact is a second pair of eyes on the observable behaviour, not just a green check.
+Run `code-review` over the diff, **passing it the source path from step 2** (the spec or ticket) and the evidence artifact from step 6 — so its Spec axis never has to guess the source and cannot silently skip. It then **checks the evidence against the acceptance criteria** — a second pair of eyes on the observable behaviour, not just a green check.
 
 A finding is a **hypothesis, not a task**. Confirm each against the code before fixing — an automated reviewer errs with confidence, and fixing a non-existent bug costs a whole round. A false positive: do not fix it, record it with the justification.
 

@@ -96,7 +96,7 @@ if (guide) {
       fail(`guide does not route to promoted skill "${s.name}" (add it to guide/SKILL.md)`);
 }
 
-// 7b. No orphan docs pages — every docs/<bucket>/<name>.md must map to a promoted skill.
+// 8. No orphan docs pages — every docs/<bucket>/<name>.md must map to a promoted skill.
 const promotedNames = new Set(onDisk.map((s) => `${s.bucket}/${s.name}`));
 for (const bucket of PROMOTED) {
   const dir = join(ROOT, "docs", bucket);
@@ -128,7 +128,7 @@ for (const file of citingFiles) {
       fail(`${file.replace(ROOT + "/", "")} cites ADR ${m[1]}, which does not exist`);
 }
 
-// 8. Release hygiene: the current version must have a CHANGELOG entry.
+// 10. Release hygiene: the current version must have a CHANGELOG entry.
 if (plugin) {
   const changelog = existsSync(join(ROOT, "CHANGELOG.md"))
     ? readFileSync(join(ROOT, "CHANGELOG.md"), "utf8")
