@@ -16,7 +16,7 @@ The dependency graph is explicit and declared — never inferred from titles. It
 2. **Explore (optional)** — use the glossary vocabulary, respect ADRs, look for prefactoring ("make the change easy, then make the easy change").
 3. **Draft vertical slices** — each cuts a narrow but complete path through every layer, is demoable on its own, and fits one fresh context window. Each declares its blocking edges. Wide mechanical refactors are the exception, sequenced expand → migrate → contract to keep CI green.
 4. **Quiz you** — presents the breakdown (title, blocked-by, what it delivers) and iterates on granularity and edges until you approve.
-5. **Publish** — native blocking links on a real tracker (GitHub `gh issue create`, Linear), or one file per ticket under `.scratch/<slug>/issues/`, numbered in dependency order.
+5. **Publish** — native blocking links on a real tracker (GitHub `gh issue create`, Linear), or one committed file per ticket under `docs/tickets/<slug>/`, numbered in dependency order. Tickets are durable, so local ones are versioned, never left in `.scratch/` (ADR 0006).
 
 ## Related
 

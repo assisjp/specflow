@@ -13,7 +13,7 @@ Turn a settled conversation — ideally a [`grill`](../productivity/grill.md) de
 
 1. **Understands the code** — explores the repo, and uses the `CONTEXT.md` glossary vocabulary and respects existing ADRs.
 2. **Sketches the test seams** — prefers existing, high seams; the ideal is one. This is the single point where it pauses to check with you.
-3. **Writes and publishes** — fills a spec template (problem, solution, user stories, implementation decisions, testing decisions, out of scope) and publishes it: a GitHub/Linear issue if the project has a tracker, otherwise `.scratch/specs/<slug>.md`.
+3. **Writes and publishes** — fills a spec template (problem, solution, user stories, implementation decisions, testing decisions, out of scope) and publishes it: a GitHub/Linear issue if the project has a tracker, otherwise a committed `docs/specs/<slug>.md`. A spec is durable, so the local form is versioned, never left in `.scratch/` (ADR 0006).
 
 ## Traceability
 

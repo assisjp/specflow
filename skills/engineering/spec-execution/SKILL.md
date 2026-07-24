@@ -49,6 +49,13 @@ Run `code-review` over the diff, before the PR.
 
 A finding is a **hypothesis, not a task**. Confirm each against the code before fixing — an automated reviewer errs with confidence, and fixing a non-existent bug costs a whole round. A false positive: do not fix it, record it with the justification.
 
+**Where a smell falls decides who owns it** — this is the refactor beat that `tdd` defers to review:
+
+- A smell **inside the diff** (code this work introduced or touched) is *in scope* — clean it up here. This is the "refactor" of red-green-refactor; it is not scope creep, it is finishing your own change.
+- A smell **outside the diff** (pre-existing code you did not touch) is *out of scope* — do not fix it. Add it to the out-of-scope findings list from step 3 and deliver it in the report.
+
+The line is the diff boundary, not the file. Without this rule a smell in new code falls in a gap — fixing it looks like a §3 scope violation, not fixing it drops TDD's third beat.
+
 ## 7. One diff, one concern
 
 - mechanical change (rename, move, format) separated from behavioural change — two clean commits or two PRs

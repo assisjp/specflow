@@ -96,6 +96,15 @@ if (guide) {
       fail(`guide does not route to promoted skill "${s.name}" (add it to guide/SKILL.md)`);
 }
 
+// 8. Release hygiene: the current version must have a CHANGELOG entry.
+if (plugin) {
+  const changelog = existsSync(join(ROOT, "CHANGELOG.md"))
+    ? readFileSync(join(ROOT, "CHANGELOG.md"), "utf8")
+    : "";
+  if (!changelog.includes(`## [${plugin.version}]`))
+    fail(`CHANGELOG.md has no entry for version ${plugin.version}`);
+}
+
 if (errors.length) {
   console.error(`✗ ${errors.length} consistency error(s):`);
   for (const e of errors) console.error(`  - ${e}`);

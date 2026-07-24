@@ -27,7 +27,7 @@ Check with the user that these seams match their expectations before writing the
 Write the spec using the template below, then publish it. Where it goes depends on what the project has:
 
 - **A real issue tracker** (GitHub, Linear, …) — publish as one issue. On GitHub use `gh issue create`. Apply a `ready-for-agent` label if the project uses one.
-- **No tracker** — write it to `.scratch/specs/<feature-slug>.md`. Ensure `.scratch/` is in `.gitignore` so the spec is not swept into a later commit.
+- **No tracker** — write it to `docs/specs/<feature-slug>.md` and **commit it**. A spec is durable, not scratch: `spec-execution` reads it in a later session, the second-failure rule assumes it survives, and a fresh clone must still find it. Never write a spec to `.scratch/` — that directory is ephemeral and git-ignored (ADR 0002, 0006).
 
 If you cannot tell which the project uses, ask — it is a one-line decision, not an interview.
 

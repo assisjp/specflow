@@ -1,6 +1,6 @@
 {
   "name": "specflow",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "description": "A self-contained, reliability-first agent development flow, shipped as a Claude Code plugin.",
   "repository": {

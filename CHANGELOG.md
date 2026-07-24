@@ -2,6 +2,17 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.6.0] — 2026-07-24
+
+### Changed
+- **Durable local artifacts are versioned, not scratch.** With no tracker, `to-spec` writes the spec to `docs/specs/<slug>.md` and `to-tickets` writes tickets to `docs/tickets/<slug>/`, both committed — instead of `.scratch/`, which was ephemeral and git-ignored, so specs/tickets vanished on a fresh clone. `.scratch/` is now exclusively `session-handoff`'s. `code-review` looks for the spec in one place (`docs/specs/`). See ADR 0006.
+- `code-review` now degrades gracefully across harnesses: parallel sub-agents where available, otherwise the two axes run sequentially with clean context between them — the isolation guarantee no longer depends on a Claude Code-specific feature (consistent with ADR 0003's portability stance).
+
+### Added
+- `spec-execution` now assigns the refactor beat an owner: a code smell **inside the diff** is in scope (clean it up — this is red-green-**refactor**'s third beat); a smell **outside the diff** is out of scope (record it, don't fix it). Closes the gap where a smell in new code belonged to no one.
+- `scripts/check.mjs` guard #8: the current plugin version must have a `CHANGELOG.md` entry.
+- ADR 0006 (durable artifacts versioned under `docs/`, not `.scratch/`).
+
 ## [0.5.0] — 2026-07-24
 
 ### Changed
@@ -51,6 +62,7 @@ All notable changes to specflow. Format based on [Keep a Changelog](https://keep
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.6.0]: https://github.com/assisjp/specflow/releases/tag/v0.6.0
 [0.5.0]: https://github.com/assisjp/specflow/releases/tag/v0.5.0
 [0.4.1]: https://github.com/assisjp/specflow/releases/tag/v0.4.1
 [0.4.0]: https://github.com/assisjp/specflow/releases/tag/v0.4.0

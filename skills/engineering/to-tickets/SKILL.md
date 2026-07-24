@@ -45,7 +45,7 @@ Iterate until the user approves.
 
 Publish the approved tickets in dependency order (blockers first). How depends on the tracker:
 
-- **Local files** → one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order. Ensure `.scratch/` is git-ignored. Use the local template below — one ticket per file, never a combined file.
+- **Local files** → one file per ticket under `docs/tickets/<feature-slug>/<NN>-<slug>.md`, numbered from `01` in dependency order, and **commit them**. Tickets are the durable dependency graph a later session works from — they belong in version control, never in the ephemeral `.scratch/` (ADR 0006). Use the local template below — one ticket per file, never a combined file.
 - **A real tracker (GitHub, Linear)** → one issue per ticket in dependency order so blocking edges reference real identifiers. Use the platform's native blocking / sub-issue relationship; otherwise set each ticket's "Blocked by" to the blocking issues. On GitHub, `gh issue create`; apply a `ready-for-agent` label if the project uses one.
 
 Work the **frontier**: any ticket whose blockers are all done. Do not close or modify a parent issue.

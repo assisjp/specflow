@@ -24,7 +24,7 @@ Confirm the ref resolves (`git rev-parse <fixed-point>`) and the diff is non-emp
 
 ### 2. Find the spec source
 
-In order: (1) issue references in the commit messages (`#123`, `Closes #45`) — fetch with `gh issue view` where available; (2) a path the user passed; (3) a spec file under `docs/`, `specs/`, or `.scratch/` matching the branch or feature; (4) if nothing, ask. If the user says there is no spec, the Spec axis reports "no spec available" and is skipped.
+In order: (1) issue references in the commit messages (`#123`, `Closes #45`) — fetch with `gh issue view` where available; (2) a path the user passed; (3) a spec file under `docs/specs/` matching the branch or feature; (4) if nothing, ask. If the user says there is no spec, the Spec axis reports "no spec available" and is skipped. (Specs are versioned under `docs/specs/`, never `.scratch/` — see ADR 0006.)
 
 ### 3. Assemble the standards sources
 
@@ -48,9 +48,14 @@ Smell baseline (Fowler, *Refactoring* ch.3), each *what it is* → *fix*:
 - **Middle Man** — a unit that mostly just delegates → cut it, call the target direct.
 - **Refused Bequest** — a subclass ignoring most of what it inherits → composition over inheritance.
 
-### 4. Spawn both sub-agents in parallel
+### 4. Run both axes with clean, separate context
 
-One message, two `general-purpose` Agent calls.
+The two axes must not share context — cross-contamination is exactly what the separation exists to prevent. How you achieve that depends on the harness:
+
+- **If it has parallel sub-agents** (e.g. Claude Code: one message, two `general-purpose` Agent calls) — spawn both at once. Fastest, and their contexts are isolated by construction.
+- **If it does not** — run the two axes **sequentially, with a clean context between them**: complete the Standards pass, clear or set aside its working context, then run the Spec pass so the second axis is not primed by the first's findings. Slower, same guarantee.
+
+Either way, give each axis only its own inputs:
 
 **Standards sub-agent** — give it the diff command + commit list, the standards-source files from step 3, **and the full smell baseline pasted in** (it has no other access to it). Brief: "Report, per file/hunk: (a) every place the diff violates a documented standard — cite the file + rule; (b) any baseline smell — name it and quote the hunk. Distinguish hard violations from judgement calls; documented standards can be hard, baseline smells are always judgement calls and the repo overrides the baseline. Skip anything tooling enforces. Under 400 words."
 
