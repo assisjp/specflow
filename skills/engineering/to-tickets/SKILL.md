@@ -46,7 +46,7 @@ Iterate until the user approves.
 Publish the approved tickets in dependency order (blockers first). How depends on the tracker:
 
 - **Local files** → one file per ticket under `docs/tickets/<feature-slug>/<NN>-<slug>.md`, numbered from `01` in dependency order, and **commit them**. Tickets are the durable dependency graph a later session works from — they belong in version control, never in the ephemeral `.scratch/` (ADR 0006). Use the local template below — one ticket per file, never a combined file.
-- **A real tracker (GitHub, Linear)** → one issue per ticket in dependency order so blocking edges reference real identifiers. Use the platform's native blocking / sub-issue relationship; otherwise set each ticket's "Blocked by" to the blocking issues. On GitHub, `gh issue create`; apply a `ready-for-agent` label if the project uses one.
+- **A real tracker (GitHub, Linear)** → one issue per ticket in dependency order so blocking edges reference real identifiers. Use the platform's native blocking / sub-issue relationship **where the CLI actually exposes one** — Linear does; **GitHub via `gh` does not** (issue dependencies are a Projects/preview feature `gh issue` cannot set), so on GitHub the `Blocked by #N` text form in the body is the norm, not a degraded fallback. On GitHub, `gh issue create`; apply a `ready-for-agent` label if the project uses one. Right after bulk creation, verify with a per-issue `--json` query rather than a `--label` filter — GitHub's label index lags a few seconds behind creation.
 
 Work the **frontier**: any ticket whose blockers are all done. Do not close or modify a parent issue.
 

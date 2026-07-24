@@ -2,6 +2,12 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.8.3] — 2026-07-24
+
+### Fixed
+Found by running the flow in **tracker mode** on a real GitHub repo (notes-api):
+- `to-tickets` no longer implies GitHub has native issue-blocking. `gh issue` cannot set issue dependencies (a Projects/preview feature), so on GitHub the `Blocked by #N` text form is the norm, not a degraded fallback — the skill now says so, and reserves "native blocking" for CLIs that actually expose it (e.g. Linear). It also warns that GitHub's label index lags creation by a few seconds, so verify freshly-created issues with a per-issue `--json` query, not a `--label` filter.
+
 ## [0.8.2] — 2026-07-24
 
 ### Fixed
@@ -96,6 +102,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.8.3]: https://github.com/assisjp/specflow/releases/tag/v0.8.3
 [0.8.2]: https://github.com/assisjp/specflow/releases/tag/v0.8.2
 [0.8.1]: https://github.com/assisjp/specflow/releases/tag/v0.8.1
 [0.8.0]: https://github.com/assisjp/specflow/releases/tag/v0.8.0
