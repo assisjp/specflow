@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.5] — 2026-07-24
+
+### Added
+- `scripts/check.mjs` guard #11 is now bidirectional: besides requiring the current marker tokens in every protocol skill, it fails if the retired `Returns:` token survives in any of them — catching the class (old token lingering beside new) that caused the 0.9.4 bug, not just the instance. Same shape as the other bidirectional guards (#3, #6, #8).
+
 ## [0.9.4] — 2026-07-24
 
 ### Fixed
@@ -146,6 +151,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.9.5]: https://github.com/assisjp/specflow/releases/tag/v0.9.5
 [0.9.4]: https://github.com/assisjp/specflow/releases/tag/v0.9.4
 [0.9.3]: https://github.com/assisjp/specflow/releases/tag/v0.9.3
 [0.9.2]: https://github.com/assisjp/specflow/releases/tag/v0.9.2

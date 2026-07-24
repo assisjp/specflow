@@ -141,12 +141,14 @@ if (plugin) {
 // router must all use the same tokens. A local reader once drifted to `Returns:`
 // while everything else wrote `Returned:`, silently breaking the no-tracker gate.
 const GATE_SKILLS = ["spec-execution", "to-spec", "to-tickets", "guide"];
-for (const token of ["Returned:", "`returned`"]) {
-  for (const n of GATE_SKILLS) {
-    const s = onDisk.find((x) => x.name === n);
-    if (s && !readFileSync(s.skillMd, "utf8").includes(token))
-      fail(`${n} is missing the canonical second-failure marker token ${token}`);
-  }
+for (const n of GATE_SKILLS) {
+  const s = onDisk.find((x) => x.name === n);
+  if (!s) continue;
+  const body = readFileSync(s.skillMd, "utf8");
+  for (const token of ["Returned:", "`returned`"])
+    if (!body.includes(token)) fail(`${n} is missing the canonical second-failure marker token ${token}`);
+  // Reverse direction: the retired counter token must not survive alongside the new one.
+  if (body.includes("Returns:")) fail(`${n} still contains the retired token "Returns:" (use "Returned:")`);
 }
 
 if (errors.length) {
