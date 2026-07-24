@@ -71,8 +71,11 @@ Only what the inventory found missing, in this order:
 
 1. **Formatter** — the ecosystem's default config, zero customisation.
 2. **Linter** — the recommended default ruleset. Do not invent custom rules now.
-3. **Type checker** — where the language supports it.
-4. **Hooks** — if a manager exists, **add a step to it**; otherwise install the ecosystem default. `pre-commit` = formatter + lint + types on staged files. `pre-push` = the test suite.
+
+   Formatter and linter may be **one tool or two** — do not force two. Node splits them (prettier + eslint); modern Python is a single tool (`ruff format` + `ruff check`), as is Biome for JS/TS. Install or adopt whatever the ecosystem's default is; if one tool covers both roles, that is one install with two commands, not a gap to fill with a second tool.
+
+3. **Type checker** — where the language supports it (`tsc`, `mypy`, …).
+4. **Hooks** — if a manager exists, **add a step to it**; otherwise install the ecosystem default (husky for Node, the `pre-commit` framework for Python, …). `pre-commit` hook = formatter + lint + types on staged files. `pre-push` = the test suite.
 5. **CI** — a job running **exactly the same commands**. If a workflow exists, add a new job rather than editing existing ones.
 
 The hook is bypassable; CI is the real gate. Both must exist.

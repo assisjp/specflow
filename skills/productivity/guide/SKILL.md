@@ -1,6 +1,6 @@
 ---
 name: guide
-description: The specflow router — map what the user is trying to do to the right specflow skill and the right point in the flow. Use when the user asks "which skill do I use", "where do I start", "what's next", or describes a specflow-shaped task without naming a skill. Reads the situation, names the one skill to run now, and says why.
+description: The specflow router — map what the user is trying to do to the right specflow skill and the right point in the flow. Use whenever the user is unsure which step to take: "which skill do I use", "where do I start", "how do I begin", "what's next", "I want to add/build/implement X — where do I begin", "I have a spec/idea, now what", or any description of a coding task (a feature, a fix, setting up a repo, breaking down work) where they have NOT named a specflow skill themselves. Reads the situation, names the one skill to run now, and says why. When in doubt about which specflow skill applies, this is the one to reach for.
 ---
 
 # specflow guide

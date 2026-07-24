@@ -2,6 +2,15 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.0] — 2026-07-24
+
+### Added
+- **The second-failure rule is now a gate, not advice.** When `spec-execution` returns a spec for a defect it marks the source durably — a `returned` label + comment on the issue, or a `Returns: N` line in the local ticket/spec — and step 2 reads that marker on open and refuses to reimplement. Previously the rule relied on the human remembering there had been a first attempt, the one thing the rule exists to save them from (same durability logic as ADR 0006).
+
+### Changed
+- `repo-hardening` Phase 3 no longer assumes formatter and linter are two separate tools. Modern Python (`ruff`) and Biome (JS/TS) do both in one tool; the skill now says install one-or-two by ecosystem default rather than always reaching for a second tool. Also names ecosystem-default hook managers (husky / the `pre-commit` framework). Found running `repo-hardening` on a real Python repo, which also confirmed the "type-checkers have no baseline" fix (0.8.1) generalises from `tsc` to `mypy`.
+- `guide`'s description widened to fire on the natural phrasings of a user who does not know which skill to use ("how do I begin", "I want to add X — where do I start", "now what"), closing the model-invoked failure mode where the router stays silent because its triggers were too narrow.
+
 ## [0.8.4] — 2026-07-24
 
 ### Fixed
@@ -107,6 +116,7 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 - Phase 1 — spec pipeline: `grill` (relentless interview with contradiction rule, priority lens, structured choices, decision-log output), `domain-modeling` (glossary + ADR discipline), `to-spec` (decision log → published spec).
 - Plugin and marketplace manifests, per-skill docs, `CONTEXT.md` glossary, ADR 0001 (own self-contained rewrite) and ADR 0002 (ephemeral handoff), and `scripts/link-skills.sh`.
 
+[0.9.0]: https://github.com/assisjp/specflow/releases/tag/v0.9.0
 [0.8.4]: https://github.com/assisjp/specflow/releases/tag/v0.8.4
 [0.8.3]: https://github.com/assisjp/specflow/releases/tag/v0.8.3
 [0.8.2]: https://github.com/assisjp/specflow/releases/tag/v0.8.2

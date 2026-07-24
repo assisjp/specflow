@@ -24,6 +24,8 @@ Read the verification block from the repo's agent-context file — `AGENTS.md`, 
 
 Read the whole source — a spec, a PRD, or a **ticket** (in no-tracker mode you are run once per ticket from `docs/tickets/<slug>/`, and that ticket is the spec for this PR) — every file it names, the files those import, and `CONTEXT.md` if it exists, before editing a single line. Note the source's path; step 7 hands it to `code-review`.
 
+**First, check the source for a return marker** — a `returned` label on the issue (`gh issue view`), or a `Returns:` line in the local ticket/spec file. If it is marked, this spec has already come back once: do **not** implement — go straight to the second-failure rule below. The marker is what makes that rule a gate instead of relying on someone remembering (see the rule for why).
+
 - **Ambiguity that changes the result**: stop and ask. Do not guess.
 - **Minor ambiguity**: decide, record it, deliver it in the report.
 
@@ -93,3 +95,10 @@ PR:                <link>
 ## The second-failure rule
 
 A spec that has already come back once: **do not reimplement.** A double return is a specification defect, not an execution one. Point out which part was ambiguous or had a non-verifiable criterion, and send it back for a rewrite — preferably to a fresh `grill` session. Relaunching with more context is the most expensive way to discover the problem was the text.
+
+**Mark the source durably when you return it**, so the *next* session enforces this without anyone remembering — the rule must survive the session that dies, exactly like ADR 0006's durable artifacts:
+
+- **Tracker** → add a `returned` label to the issue and a comment naming the non-verifiable part.
+- **Local** → add or increment a `Returns: N` line at the top of the spec/ticket file, with the reason.
+
+Step 2 reads this marker on open. Without the marker the rule is advice that depends on the human doing the very thing it exists to save them from forgetting — and advice-in-markdown versus a machine-read gate is the distinction this whole flow is built on.
