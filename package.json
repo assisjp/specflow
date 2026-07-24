@@ -1,0 +1,11 @@
+{
+  "name": "specflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A self-contained, reliability-first agent development flow, shipped as a Claude Code plugin.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/assisjp/specflow"
+  },
+  "license": "MIT"
+}

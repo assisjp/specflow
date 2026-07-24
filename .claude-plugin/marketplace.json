@@ -1,0 +1,21 @@
+{
+  "name": "specflow",
+  "owner": {
+    "name": "João Paulo Assis"
+  },
+  "description": "A reliability-first agent development flow, as an installable Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "specflow",
+      "source": "./",
+      "description": "Grill a decision until it holds, turn it into a spec, and build it under deterministic gates. Self-contained skills, not vibe coding.",
+      "category": "engineering",
+      "keywords": [
+        "engineering",
+        "skills",
+        "grill",
+        "spec-driven"
+      ]
+    }
+  ]
+}

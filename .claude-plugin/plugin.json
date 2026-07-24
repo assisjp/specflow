@@ -1,0 +1,23 @@
+{
+  "name": "specflow",
+  "version": "0.1.0",
+  "description": "A self-contained, reliability-first agent development flow — grill a decision until it holds, turn it into a spec, and build it under deterministic gates. Plug-and-play skills, not vibe coding.",
+  "author": {
+    "name": "João Paulo Assis"
+  },
+  "repository": "https://github.com/assisjp/specflow",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "skills",
+    "grill",
+    "spec-driven",
+    "domain-modeling",
+    "productivity"
+  ],
+  "skills": [
+    "./skills/engineering/domain-modeling",
+    "./skills/engineering/to-spec",
+    "./skills/productivity/grill"
+  ]
+}
