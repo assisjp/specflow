@@ -38,7 +38,7 @@ Every `SKILL.md` is either **user-invoked** (`disable-model-invocation: true` �
 Several skills write to shared files. To avoid one clobbering another:
 
 - `CONTEXT.md` and `docs/adr/` are owned by `domain-modeling`. No other skill creates or edits them.
-- The `AGENTS.md` verification block is owned by `repo-hardening`, which edits only between its own `<!-- repo-hardening:start -->` / `:end -->` markers.
+- The verification block — in the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`, per ADR 0003) — is owned by `repo-hardening`, which edits only between its own `<!-- repo-hardening:start -->` / `:end -->` markers.
 - `.scratch/` is ephemeral and git-ignored. Any skill that writes there must guarantee the `.gitignore` entry exists first.
 
 ## Versioning & validation

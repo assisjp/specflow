@@ -8,7 +8,7 @@ The core bet of specflow: an error a machine can catch, a model should never hav
 
 - A fresh repo that needs its checks set up.
 - An existing repo with no verification, or partial config you want standardised.
-- When another skill (`spec-execution`) needs the canonical commands and the `AGENTS.md` block is missing.
+- When another skill (`spec-execution`) needs the canonical commands and the verification block is missing.
 
 Idempotent — re-run any time to re-verify and correct drift.
 
@@ -18,13 +18,13 @@ Idempotent — re-run any time to re-verify and correct drift.
 2. **Report & decide** — shows what is kept, what is failing, what is missing; waits for your confirmation.
 3. **Install what's missing** — ecosystem defaults, in order: formatter, linter, types, hooks, CI. The hook is bypassable; CI is the real gate; both must exist.
 4. **Don't break an old repo** — formatter applied in one isolated commit; linter/types baselined or scoped; a slow suite recorded, not masked.
-5. **Write to `AGENTS.md`** — the canonical commands and prohibitions, only between its own markers.
+5. **Write to the agent-context file** (`AGENTS.md` or `CLAUDE.md`, whichever the harness auto-loads; ADR 0003) — the canonical commands and prohibitions, only between its own markers.
 6. **Verify** — the "all" command passes, the hook fires, CI and hook run the same commands.
 
 ## Ownership
 
-`repo-hardening` owns the `<!-- repo-hardening:start -->` / `:end -->` block in `AGENTS.md` and writes nowhere else in it. It never touches `CONTEXT.md` or ADRs — those belong to `domain-modeling`.
+`repo-hardening` owns the `<!-- repo-hardening:start -->` / `:end -->` block in the agent-context file and writes nowhere else in it. It never touches `CONTEXT.md` or ADRs — those belong to `domain-modeling`.
 
 ## Related
 
-- [spec-execution](./spec-execution.md) — reads the `AGENTS.md` block this skill writes; refuses to run without it.
+- [spec-execution](./spec-execution.md) — reads the verification block this skill writes; refuses to run without it.

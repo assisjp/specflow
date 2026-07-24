@@ -9,7 +9,7 @@ argument-hint: "[what the next session will focus on]"
 
 Write an **ephemeral** handoff so a fresh agent can resume this work. The handoff is consumed once and then dies — it is session state, not a durable record.
 
-Durable truth already has owners: architectural decisions live in ADRs, vocabulary in `CONTEXT.md`, requirements in the spec, verification commands in the `AGENTS.md` block, and tasks in the tracker. The handoff does not compete with any of them. **State goes in the handoff; decisions go in an ADR.**
+Durable truth already has owners: architectural decisions live in ADRs, vocabulary in `CONTEXT.md`, requirements in the spec, verification commands in the block (`AGENTS.md` or `CLAUDE.md`), and tasks in the tracker. The handoff does not compete with any of them. **State goes in the handoff; decisions go in an ADR.**
 
 ## Where it writes
 

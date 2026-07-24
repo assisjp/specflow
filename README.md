@@ -36,18 +36,18 @@ specflow ships in phases — each phase a closed, usable slice. See [docs/adr/00
 
 Reachable only when you type them (`disable-model-invocation: true`) — the flow is deliberate.
 
-- [guide](./skills/productivity/guide/SKILL.md) — the router: describe your task, it names the one skill to run now and why. Start here if unsure.
 - [grill](./skills/productivity/grill/SKILL.md) — relentless interview that stress-tests a plan; challenges contradictions, scores options against your priorities, and emits a decision log. Pass `docs` to also write the glossary and ADRs.
 - [to-spec](./skills/engineering/to-spec/SKILL.md) — turn a settled conversation into a spec and publish it, no interview.
-- [repo-hardening](./skills/engineering/repo-hardening/SKILL.md) — install the deterministic verification layer (formatter, linter, types, tests, hooks, CI) without breaking what exists, and record the canonical commands in `AGENTS.md`.
+- [repo-hardening](./skills/engineering/repo-hardening/SKILL.md) — install the deterministic verification layer (formatter, linter, types, tests, hooks, CI) without breaking what exists, and record the canonical commands in the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`).
 - [spec-execution](./skills/engineering/spec-execution/SKILL.md) — turn one spec/issue into one reviewable PR: closed scope, evidence attached, reviewed once.
 - [to-tickets](./skills/engineering/to-tickets/SKILL.md) — break a spec too big for one PR into dependency-ordered tracer-bullet tickets, published to the tracker.
 - [session-handoff](./skills/productivity/session-handoff/SKILL.md) — compact a session into an ephemeral handoff (with git state) for another session or tool to resume.
 
 ### Model-invoked
 
-The utility layer — invokable directly, or mid-flow by another skill.
+The utility layer — invokable directly, or surfaced when you describe a task without naming a skill.
 
+- [guide](./skills/productivity/guide/SKILL.md) — the router: describe your task, it names the one skill to run now and why. Surfaces when you are unsure which skill applies.
 - [domain-modeling](./skills/engineering/domain-modeling/SKILL.md) — actively build and sharpen the project's `CONTEXT.md` glossary and ADRs; invoked by `grill docs`.
 - [tdd](./skills/engineering/tdd/SKILL.md) — the red → green loop, done so the tests are worth keeping; invoked by `spec-execution`.
 - [code-review](./skills/engineering/code-review/SKILL.md) — two-axis review (Standards + Spec) in parallel sub-agents; invoked by `spec-execution`.

@@ -1,7 +1,6 @@
 ---
 name: guide
-description: The specflow router — map what the user is trying to do to the right specflow skill and the right point in the flow. Use when the user asks "which skill do I use", "where do I start", "what's next", or describes a task without naming a skill. Reads the situation, names the one skill to run now, and says why.
-disable-model-invocation: true
+description: The specflow router — map what the user is trying to do to the right specflow skill and the right point in the flow. Use when the user asks "which skill do I use", "where do I start", "what's next", or describes a specflow-shaped task without naming a skill. Reads the situation, names the one skill to run now, and says why.
 ---
 
 # specflow guide
@@ -35,6 +34,6 @@ grill ──▶ to-spec ──▶ to-tickets ──▶ spec-execution ──▶ 
 ## Rules
 
 - **Name exactly one skill** — the next one, not the whole chain. The flow advances one step at a time.
-- **If the repo has no `AGENTS.md` verification block and the user wants to build**, route to `repo-hardening` first — `spec-execution` refuses to run without it.
+- **If the repo has no verification block (in `AGENTS.md` or `CLAUDE.md`) and the user wants to build**, route to `repo-hardening` first — `spec-execution` refuses to run without it.
 - **If a spec has come back twice**, do not route to `spec-execution` again — route to `grill`. A double return is a spec defect, not an execution one.
 - **If the user already named a skill**, don't second-guess it — just confirm it fits and let them run it.

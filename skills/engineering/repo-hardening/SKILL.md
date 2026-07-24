@@ -1,6 +1,6 @@
 ---
 name: repo-hardening
-description: Prepare a repository for agent work — install the deterministic verification layer (formatter, linter, types, tests, git hooks, CI) without breaking what already exists, and record the canonical commands and prohibitions in AGENTS.md. Use whenever the user wants to set up a linter, pre-commit, pre-push or CI, "get the repo ready for agents", standardise checks, or when another skill needs the canonical commands and the AGENTS.md block is missing. Works on a fresh repo and on an old one with partial config. Idempotent — re-run any time to re-verify.
+description: Prepare a repository for agent work — install the deterministic verification layer (formatter, linter, types, tests, git hooks, CI) without breaking what already exists, and record the canonical commands and prohibitions in the repo's agent-context file (AGENTS.md or CLAUDE.md). Use whenever the user wants to set up a linter, pre-commit, pre-push or CI, "get the repo ready for agents", standardise checks, or when another skill needs the canonical commands and the verification block is missing. Works on a fresh repo and on an old one with partial config. Idempotent — re-run any time to re-verify.
 disable-model-invocation: true
 ---
 
@@ -18,7 +18,7 @@ Principle: **an error a machine can catch, a model should never have to.** Every
 2. Never install a second hook manager. A repo has at most one.
 3. Never change an existing CI rule. Only add, and only with authorisation.
 4. Never make a bulk change without confirmation.
-5. **Never write outside your own markers in `AGENTS.md`.**
+5. **Never write outside your own markers in the agent-context file (`AGENTS.md`/`CLAUDE.md`).**
 6. **Never create or edit `CONTEXT.md`, ADRs, or domain docs.** Those have another owner (`domain-modeling`).
 7. Stop and ask whenever a choice is irreversible or opinionated.
 

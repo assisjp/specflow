@@ -48,7 +48,7 @@ The machine-checkable gate: formatter, linter, types, tests, git hooks, CI. Zero
 
 ## Canonical Commands
 
-The one agreed set of verification commands for a repo, recorded in `AGENTS.md` so every agent and human runs the same checks.
+The one agreed set of verification commands for a repo, recorded in the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`, whichever the harness auto-loads) so every agent and human runs the same checks.
 
 - **Relates to:** Deterministic Verification Layer
 

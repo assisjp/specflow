@@ -1,6 +1,6 @@
 ---
 name: spec-execution
-description: Execute one already-written specification (a .md file, PRD, or GitHub issue) into one reviewable PR, with closed scope and attached evidence. Delegates the test loop to tdd and the review to code-review, and reads the canonical commands from AGENTS.md. Use whenever the user asks to implement a spec, an issue, a ticket, or an already-written plan. Do not use to write the spec.
+description: Execute one already-written specification (a .md file, PRD, or GitHub issue) into one reviewable PR, with closed scope and attached evidence. Delegates the test loop to tdd and the review to code-review, and reads the canonical commands from the repo's agent-context file (AGENTS.md or CLAUDE.md). Use whenever the user asks to implement a spec, an issue, a ticket, or an already-written plan. Do not use to write the spec.
 disable-model-invocation: true
 ---
 
@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Turn **one** specification into **one** reviewable PR.
 
-This skill is a sequence, not a rulebook. The prohibitions (`--no-verify`, disabling lint, the attempt limit) live in the repo's `AGENTS.md` and hold always. Here is only the order of things.
+This skill is a sequence, not a rulebook. The prohibitions (`--no-verify`, disabling lint, the attempt limit) live in the repo's verification block (`AGENTS.md` or `CLAUDE.md`, per ADR 0003) and hold always. Here is only the order of things.
 
 It does **not** reimplement TDD or review — it calls `tdd` and `code-review`.
 
@@ -41,7 +41,7 @@ A spec scenario that is not testable as written: report it as a spec defect, do 
 
 ## 5. Verify
 
-Run the canonical commands. Fix. Repeat, within the attempt limit `AGENTS.md` defines.
+Run the canonical commands. Fix. Repeat, within the attempt limit the verification block defines.
 
 ## 6. Automated review
 

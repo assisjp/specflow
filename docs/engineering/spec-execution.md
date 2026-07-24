@@ -11,11 +11,11 @@ This is where specflow spends its reliability budget. The agent delivers a singl
 
 ## How it runs
 
-1. **Contract** — reads the canonical commands from `AGENTS.md`. If the block is missing, it **stops** and points you at `repo-hardening`. No improvised commands.
+1. **Contract** — reads the canonical commands from the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`). If the block is missing, it **stops** and points you at `repo-hardening`. No improvised commands.
 2. **Read before writing** — the whole spec, the files it names, their imports, `CONTEXT.md`. Result-changing ambiguity stops and asks; minor ambiguity is decided and recorded.
 3. **Closed scope** — implements exactly the spec; adjacent smells, refactors, and unrelated bugs are noted, not touched.
 4. **Implement** — calls [tdd](./tdd.md) at the agreed seams; tests in the same work, never separate.
-5. **Verify** — runs the canonical commands within the `AGENTS.md` attempt limit.
+5. **Verify** — runs the canonical commands within the verification block's attempt limit.
 6. **Automated review** — calls [code-review](./code-review.md); each finding is a hypothesis confirmed against the code before acting.
 7. **One diff, one concern** — mechanical split from behavioural; a >~400-line diff flagged for a cut.
 8. **Evidence** — an observable change is brought up for real and captured; a green test is not proof the feature appears.
@@ -28,5 +28,5 @@ A spec that comes back twice is a specification defect, not an execution one. `s
 
 ## Related
 
-- [repo-hardening](./repo-hardening.md) — provides the `AGENTS.md` contract this skill requires.
+- [repo-hardening](./repo-hardening.md) — provides the verification-block contract (in `AGENTS.md` or `CLAUDE.md`) this skill requires.
 - [tdd](./tdd.md) and [code-review](./code-review.md) — delegated to for the loop and the review.

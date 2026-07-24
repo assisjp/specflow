@@ -15,3 +15,7 @@ jobs:
           node-version: 20
       - name: Check plugin/README/docs consistency
         run: node scripts/check.mjs
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Validate plugin manifest
+        run: claude plugin validate . --strict

@@ -69,6 +69,33 @@ for (const bucket of ["in-progress", "misc", "personal", "deprecated"]) {
   }
 }
 
+// 6. Invocation contract: frontmatter invocation mode must match README grouping.
+const isModelInvoked = (s) =>
+  !readFileSync(s.skillMd, "utf8").includes("disable-model-invocation: true");
+const afterUser = readme.split("### User-invoked")[1] ?? "";
+const userSection = afterUser.split("### Model-invoked")[0] ?? "";
+const modelSection = (readme.split("### Model-invoked")[1] ?? "").split(/\n## /)[0];
+for (const s of onDisk) {
+  const linkedUser = userSection.includes(`skills/${s.bucket}/${s.name}/SKILL.md`);
+  const linkedModel = modelSection.includes(`skills/${s.bucket}/${s.name}/SKILL.md`);
+  if (isModelInvoked(s)) {
+    if (!linkedModel) fail(`${s.name} is model-invoked but not under README "### Model-invoked"`);
+    if (linkedUser) fail(`${s.name} is model-invoked but listed under README "### User-invoked"`);
+  } else {
+    if (!linkedUser) fail(`${s.name} is user-invoked but not under README "### User-invoked"`);
+    if (linkedModel) fail(`${s.name} is user-invoked but listed under README "### Model-invoked"`);
+  }
+}
+
+// 7. Router coverage: guide must route to every other promoted skill.
+const guide = onDisk.find((s) => s.name === "guide");
+if (guide) {
+  const guideText = readFileSync(guide.skillMd, "utf8");
+  for (const s of onDisk)
+    if (s.name !== "guide" && !guideText.includes(s.name))
+      fail(`guide does not route to promoted skill "${s.name}" (add it to guide/SKILL.md)`);
+}
+
 if (errors.length) {
   console.error(`✗ ${errors.length} consistency error(s):`);
   for (const e of errors) console.error(`  - ${e}`);
