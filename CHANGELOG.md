@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.9] — 2026-07-25
+
+### Fixed
+- **`repo-hardening` never committed its own work**, so the verification layer it installs leaked into the next feature PR. Phase 6 ended at "report what was installed", leaving config, hooks, CI, the test scaffold and the agent-context file loose in the tree — eleven files, on a real run. The next `spec-execution` then inherits a dirty tree and breaks its own closed scope (§3) and one-diff-one-concern rule (§8) *by construction*, while `code-review`'s Standards axis reviews the hardening config as if it were feature work. The same shape as the marker bugs: the instruction exists at one end (`spec-execution` demands closed scope) and the mechanism was missing at the other (nothing put the hardening into history). Its sibling publishers already got this right — `to-spec` commits its spec, `to-tickets` commits its tickets — and the skill that writes the most files said nothing. Phase 6 now commits the hardening as one isolated commit, with a formatter reflow of pre-existing code kept as a separate one. Found by running the real pipeline against a real repo and looking at `git status` afterwards.
+
 ## [0.9.8] — 2026-07-25
 
 ### Fixed
