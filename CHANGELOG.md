@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.8] — 2026-07-25
+
+### Fixed
+- **The tracker half of the second-failure gate never armed on a fresh repo.** *Returning the source* said "add a `returned` label to the issue" — but nothing created the label, and on a repository that has never returned a source it does not exist. `gh issue edit --add-label returned` then fails with `'returned' not found` (exit 1, nothing written), so the write half errors out, no marker is set, and the next session implements a spec already known to be defective. Every live exercise of this path so far ran on a repo where the label happened to exist already, which is exactly why four attempts missed it. Now the label is created first, idempotently — `gh label create returned --force` — with the failure mode recorded so the step is not "optimised" away. Found by running the gate against a real fresh private repo rather than reading the skill.
+
 ## [0.9.7] — 2026-07-25
 
 ### Fixed

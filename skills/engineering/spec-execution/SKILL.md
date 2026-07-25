@@ -101,7 +101,7 @@ A source that carries a `returned` marker: **do not reimplement.** A returned so
 
 **Every time you hand a source back as defective — at step 2, 4, 5, or here — mark it durably first**, so the *next* session enforces the rule without anyone remembering. This is the write half of the gate; step 2 is the read half. The mark must survive the session that dies, exactly like ADR 0006's durable artifacts:
 
-- **Tracker** → add a `returned` label to the issue and a comment naming the non-verifiable part.
+- **Tracker** → **create the label first** — `gh label create returned --force` (idempotent; `--force` is what makes the re-run safe) — then add a `returned` label to the issue and a comment naming the non-verifiable part. On a repo that has never returned a source the label does not exist, and `gh issue edit --add-label` fails with `'returned' not found`: the write half errors out and the gate never arms. Verified live.
 - **Local** → add a `Returned: spec-defect — <reason>` line at the top of the spec/ticket file.
 
 The marker is a **state, not a counter** (ADR 0008): a source is either `returned` (sent back as a spec defect, not yet rewritten) or it is not. It is written only when the blocker is the *spec*, not the code, so step 2 refusing on its mere presence is correct — retrying against an unchanged spec is pointless.

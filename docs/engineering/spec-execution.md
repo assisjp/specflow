@@ -26,6 +26,8 @@ This is where specflow spends its reliability budget. The agent delivers a singl
 
 A source that carries a `returned` marker is a specification defect, not an execution one. `spec-execution` refuses to reimplement — it names the ambiguous or non-verifiable part and sends it back to a fresh `grill` session. The exit: heal the source and republish it — `to-spec` for a spec, `to-tickets` for a ticket — because republishing is what clears the marker (ADR 0008).
 
+Setting the marker on a tracker **creates the label first** (`gh label create returned --force`, idempotent). On a repo that has never returned a source the label does not exist and `gh issue edit --add-label` fails outright, so without this the write half errors and the gate never arms.
+
 On a tracker the marker is read **per issue** (`gh issue view <n> --json labels`), never through a label filter — GitHub's label index lags writes by seconds, and a filtered read would miss a marker just set and let a defective spec through.
 
 ## Related
