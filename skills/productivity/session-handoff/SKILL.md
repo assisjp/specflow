@@ -50,7 +50,7 @@ just broke. State, not decisions.>
 
 ## Rules
 
-- **State, not decisions.** A decision that will still matter months from now is an ADR, not a handoff line. If a handoff item survives **three sessions** without becoming action, it is a decision disguised as state — promote it to an ADR (via `domain-modeling`) and drop it from the handoff.
+- **State, not decisions.** A decision that will still matter months from now is an ADR, not a handoff line. If a handoff line records a *why* rather than a *where things stand*, it is a decision disguised as state — promote it to an ADR now (via `domain-modeling`), do not carry it forward.
 - **Reference, don't duplicate.** Paths and URLs, pinned by the git state above. Copying content means it goes stale the moment the source changes.
 - **Redact secrets.** No API keys, passwords, tokens, or PII in the handoff.
 - **Keep it short.** A handoff nobody can read in a minute is one the next session skims and mistrusts.

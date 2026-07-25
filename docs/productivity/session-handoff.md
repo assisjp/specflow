@@ -21,7 +21,7 @@ A handoff is session state, not a durable record. It is consumed once and dies �
 ## The rules that keep it honest
 
 - **State, not decisions.** A decision that will matter months from now is an ADR, not a handoff line.
-- **Three-session rule.** If an item survives three sessions without becoming action, it is a decision disguised as state — promote it to an ADR and drop it.
+- **The *why* test.** If a line records a *why* rather than a *where things stand*, it is a decision disguised as state — promote it to an ADR now, do not carry it forward.
 - **Writes to `.scratch/handoffs/`** and guarantees `.scratch/` is git-ignored first, so the next implementation run cannot sweep it into a PR.
 - **Redacts secrets.**
 

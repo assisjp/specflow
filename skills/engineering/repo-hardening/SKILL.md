@@ -1,6 +1,6 @@
 ---
 name: repo-hardening
-description: Prepare a repository for agent work — install the deterministic verification layer (formatter, linter, types, tests, git hooks, CI) without breaking what already exists, and record the canonical commands and prohibitions in the repo's agent-context file (AGENTS.md or CLAUDE.md). Use whenever the user wants to set up a linter, pre-commit, pre-push or CI, "get the repo ready for agents", standardise checks, or when another skill needs the canonical commands and the verification block is missing. Works on a fresh repo and on an old one with partial config. Idempotent — re-run any time to re-verify.
+description: Prepare a repository for agent work — install the deterministic verification layer (formatter, linter, types, tests, git hooks, CI) without breaking what already exists, and record the canonical commands and prohibitions in the repo's agent-context file (AGENTS.md or CLAUDE.md). Use whenever the user wants to set up a linter, pre-commit, pre-push or CI, "get the repo ready for agents", standardise checks. Run it before `spec-execution` — that skill refuses to build without the verification block this installs. Works on a fresh repo and on an old one with partial config. Idempotent — re-run any time to re-verify.
 disable-model-invocation: true
 ---
 

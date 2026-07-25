@@ -8,7 +8,7 @@ The core bet of specflow: an error a machine can catch, a model should never hav
 
 - A fresh repo that needs its checks set up.
 - An existing repo with no verification, or partial config you want standardised.
-- When another skill (`spec-execution`) needs the canonical commands and the verification block is missing.
+- Before `spec-execution` — that skill refuses to build without the verification block this installs.
 
 Idempotent — re-run any time to re-verify and correct drift.
 

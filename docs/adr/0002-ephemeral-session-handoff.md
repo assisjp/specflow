@@ -21,9 +21,9 @@ the current session's state for the next one to consume once, then discard. It
 writes to `.scratch/` and ensures `.scratch/` is git-ignored. It records **git
 state** (branch, HEAD SHA, dirty files, unpushed commits), not file contents, and
 references durable artifacts by path rather than duplicating them. State goes in
-the handoff; decisions go in an ADR. If a handoff item survives three sessions
-without becoming action, it is a decision disguised as state — promote it to an
-ADR and drop it from the handoff.
+the handoff; decisions go in an ADR. If a handoff line records a *why* rather
+than a *where things stand*, it is a decision disguised as state — promote it to
+an ADR now; do not carry it forward.
 
 ## Alternatives considered
 
@@ -48,3 +48,14 @@ ADR and drop it from the handoff.
 - **Implementation note:** because it writes into `.scratch/`, the skill must
   guarantee the `.gitignore` entry, or the next implementation run would sweep
   the handoff file into a pull request.
+
+## Amendment (2026-07-25)
+
+The Decision originally closed with a different operational test: if a handoff
+item survived three sessions without becoming action, promote it to an ADR. That
+counter was unimplementable by this ADR's own terms — the handoff is consumed
+once and dies, so no session can observe how many sessions an item has survived;
+the count exists nowhere. It is the bug class ADR 0008 named in the
+returned-marker gate: a rule whose enforcement depends on state nobody keeps.
+The counter is replaced by the stateless *why*-test above, which any single
+session applies unaided, with only the handoff in front of it.
