@@ -52,6 +52,18 @@ Several skills write to shared files. To avoid one clobbering another:
 - After touching either manifest, run `claude plugin validate . --strict`.
 - **Docs-sync ritual.** `scripts/check.mjs` verifies a docs page *exists*, not that its content matches the `SKILL.md` — content drift is a bug class CI cannot catch. Every version bump that touches a `SKILL.md` must re-read the corresponding `docs/<bucket>/<name>.md` and re-sync it in the same commit.
 
+## Release checklist — the tracker backend (manual, once per minor)
+
+`scripts/eval-marker-protocol.mjs` covers the returned-marker gate's **local** backend end to end. The **tracker** backend is deliberately not in CI: it needs a network, `gh` auth and a real issue, and a reliability plugin whose CI fails on GitHub API rate limits is worse than an honest gap. Run this by hand in a throwaway repo instead, once per minor:
+
+1. Real issue → `spec-execution` returns it → the `returned` label is on the issue and a comment names the non-verifiable part.
+2. Re-run against the same issue → it refuses.
+3. `to-spec` republishes → the label is gone, a "rewritten" comment is there, and the issue **number is unchanged**.
+4. **Same cycle with a ticket** — the clear belongs to `to-tickets`, not `to-spec` (the 0.9.3 ownership split). This is the one tracker transition that has never been exercised live; do not skip it.
+5. `guide` with the marked issue → routes to `grill`, not `spec-execution`.
+
+What CI *does* pin on the tracker side is nomenclature, not behaviour: the eval derives the label token from prose shared by all four gate skills and checks it against the local line token, so the two backends cannot drift apart by name. Only the API round-trip is manual.
+
 ## Language
 
 All shipped artifacts — `SKILL.md`, `README.md`, docs — are written in **English**.
