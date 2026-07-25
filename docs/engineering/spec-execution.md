@@ -12,7 +12,7 @@ This is where specflow spends its reliability budget. The agent delivers a singl
 ## How it runs
 
 1. **Contract** — reads the canonical commands from the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`). If the block is missing, it **stops** and points you at `repo-hardening`. No improvised commands.
-2. **Read before writing** — the whole spec, the files it names, their imports, `CONTEXT.md`. Result-changing ambiguity stops and asks; minor ambiguity is decided and recorded.
+2. **Read before writing** — the whole spec, the files it names, their imports, `CONTEXT.md`. Result-changing ambiguity stops and asks; minor ambiguity is decided and recorded. A spec that plainly implies a diff beyond step 8's ~400 lines gets the cut proposed here — an estimate to think with, not a gate; step 8 measures the real diff.
 3. **Closed scope** — implements exactly the spec; adjacent smells, refactors, and unrelated bugs are noted, not touched.
 4. **Implement** — calls [tdd](./tdd.md) at the agreed seams; tests in the same work, never separate.
 5. **Verify** — runs the canonical commands within the verification block's attempt limit.
@@ -24,7 +24,7 @@ This is where specflow spends its reliability budget. The agent delivers a singl
 
 ## The second-failure rule
 
-A source that carries a `returned` marker is a specification defect, not an execution one. `spec-execution` refuses to reimplement — it names the ambiguous or non-verifiable part and sends it back to a fresh `grill` session; healing and republishing (which clears the marker) is what lets it proceed.
+A source that carries a `returned` marker is a specification defect, not an execution one. `spec-execution` refuses to reimplement — it names the ambiguous or non-verifiable part and sends it back to a fresh `grill` session. The exit: heal the source and republish it — `to-spec` for a spec, `to-tickets` for a ticket — because republishing is what clears the marker (ADR 0008).
 
 ## Related
 

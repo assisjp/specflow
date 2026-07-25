@@ -2,6 +2,7 @@
 name: spec-execution
 description: Execute one already-written specification (a .md file, PRD, or GitHub issue) into one reviewable PR, with closed scope and attached evidence. Delegates the test loop to tdd and the review to code-review, and reads the canonical commands from the repo's agent-context file (AGENTS.md or CLAUDE.md). Use whenever the user asks to implement a spec, an issue, a ticket, or an already-written plan. Do not use to write the spec.
 disable-model-invocation: true
+argument-hint: "[spec path or issue #]"
 ---
 
 # Spec Execution
@@ -24,12 +25,12 @@ Read the verification block from the repo's agent-context file — `AGENTS.md`, 
 
 Read the whole source — a spec, a PRD, or a **ticket** (in no-tracker mode you are run once per ticket from `docs/tickets/<slug>/`, and that ticket is the spec for this PR) — every file it names, the files those import, and `CONTEXT.md` if it exists, before editing a single line. Note the source's path; step 7 hands it to `code-review`.
 
-**First, check the source for a return marker** — a `returned` label on the issue (`gh issue view`), or a `Returned:` line in the local ticket/spec file. If the source is marked, it was already sent back as a spec defect and not yet healed: do **not** implement — go straight to the second-failure rule below. The marker is what makes that rule a gate instead of relying on someone remembering (see the rule for why).
+**First, check the source for a return marker** — a `returned` label on the issue (`gh issue view`), or a `Returned:` line in the local ticket/spec file. If the source is marked, it was already sent back as a spec defect and not yet healed: do **not** implement — go straight to the second-failure rule below. The marker is what makes that rule a gate instead of relying on someone remembering (see the rule for why). The way out is to heal the source and republish it — `to-spec` for a spec, `to-tickets` for a ticket — because republishing is what clears the marker (ADR 0008). If the source has not actually been rewritten yet, that healing starts with a fresh `grill`.
 
 - **Ambiguity that changes the result**: stop and ask. Do not guess. If the answer is that the spec itself is defective and must be rewritten, **mark the source** (see *Returning the source* below) before handing it back.
 - **Minor ambiguity**: decide, record it, deliver it in the report.
 
-If the spec does not fit in one reviewable PR, say so now and propose the cut.
+If the spec does not fit in one reviewable PR, say so now and propose the cut. Estimate the diff the spec implies against the same ~400-line figure §8 measures on the real one: plainly beyond it, propose the cut here rather than discover it there. The estimate is a prompt to think, never a refusal — pre-implementation sizing is imprecise, some specs implement small, and §8 remains the backstop.
 
 ## 3. Closed scope
 
