@@ -272,6 +272,13 @@ try {
 }
 
 if (errors.length) bail();
+// Counted apart on purpose. The guards are what DETECTS a broken protocol: they
+// read the skills' own prose, so they can disagree with it. The lifecycle steps
+// run over fixtures this file controls, with the reader and setter derived from
+// the same extracted token — they are executable documentation of the local
+// backend's semantics, and a couple (the bare re-read, the laundering check)
+// cannot fail without someone editing a fixture. Real value, but not coverage;
+// reporting one total invited reading 23 units of net where there are 15.
 console.log(
-  `✓ marker-protocol eval OK — ${transitions} lifecycle transitions and ${guards} guards on token \`${lineToken}\` / label \`${labelToken}\` (local backend only; the tracker backend stays a manual release-checklist item).`
+  `✓ marker-protocol eval OK — ${guards} contract guards (detection) on token \`${lineToken}\` / label \`${labelToken}\`, plus ${transitions} lifecycle steps run as executable documentation of the local backend. Tracker backend: manual release checklist (see CLAUDE.md).`
 );
