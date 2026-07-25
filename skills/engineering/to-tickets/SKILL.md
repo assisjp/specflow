@@ -2,6 +2,7 @@
 name: to-tickets
 description: Break a spec, plan, or settled conversation into a set of tracer-bullet tickets, each declaring the tickets that block it, published to the configured tracker — native blocking links on a real tracker, or one file per ticket locally. Use when a spec is too big for one PR and needs slicing into dependency-ordered, agent-grabbable units. Do not use to write the spec or to implement a ticket.
 disable-model-invocation: true
+argument-hint: "[spec path or issue #]"
 ---
 
 # To Tickets
@@ -9,6 +10,10 @@ disable-model-invocation: true
 Break the work into **tickets** — tracer-bullet vertical slices, each declaring the tickets that **block** it. The dependency graph is explicit and declared, never inferred from titles.
 
 ## Process
+
+### Mode: healing a returned ticket
+
+**Check the input before anything else.** If it is a single ticket carrying a `returned` marker — a `returned` label on the issue, or a `Returned:` line in the local ticket file — you are in healing mode, not slicing mode. Skip steps 1–4 entirely. Rewrite only that one ticket, republish it to the **same** issue/file, and clear its marker as the "Clearing a `returned` marker" paragraph in step 5 directs. Do not touch any neighbouring ticket and do not re-derive the graph — the blocking edges of the other tickets are not yours to move. Otherwise — a whole spec, plan, or settled conversation to slice — run steps 1–5 as written.
 
 ### 1. Gather context
 
@@ -52,7 +57,7 @@ Publish the approved tickets in dependency order (blockers first). How depends o
 
 Work the **frontier**: any ticket whose blockers are all done. Do not close or modify a parent issue.
 
-**Clearing a `returned` marker (the second-failure gate's exit).** `spec-execution` runs tickets on the frontier, so when it sends one back as defective, the *ticket* is what carries the `returned` marker. `to-tickets` owns tickets (ADR 0006), so `to-tickets` is the one that clears it: when you republish a rewritten ticket to the same issue/file, remove the `returned` label and add a "rewritten" comment (tracker), or delete the `Returned:` line (local). `spec-execution` sets the marker, the republisher clears it (ADR 0008) — for a ticket that republisher is you, not `to-spec`. Republish to the **same** ticket so its blocking edges survive; do not mint a new one.
+**Clearing a `returned` marker (the second-failure gate's exit).** `spec-execution` runs tickets on the frontier, so when it sends one back as defective, the *ticket* is what carries the `returned` marker. `to-tickets` owns tickets (ADR 0006), so `to-tickets` is the one that clears it: when you republish a rewritten ticket to the same issue/file, remove the `returned` label and add a "rewritten" comment (tracker), or delete the `Returned:` line (local). `spec-execution` sets the marker, the republisher clears it (ADR 0008) — for a ticket that republisher is you, not `to-spec`. Republish to the **same** ticket so its blocking edges survive; do not mint a new one. The mode selector at the top of this process routes you here — a marked ticket means healing that one ticket, never re-slicing the spec.
 
 <local-ticket-template>
 

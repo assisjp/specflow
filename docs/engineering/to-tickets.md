@@ -12,6 +12,8 @@ The dependency graph is explicit and declared — never inferred from titles. It
 
 ## How it runs
 
+**Two modes.** Handed a single ticket carrying a `returned` marker (sent back by `spec-execution`'s second-failure gate), the skill heals it: it rewrites just that ticket, republishes it to the same issue/file, and clears the marker — steps 1–4 are skipped, and no other ticket's blocking edges move. Handed a spec, it slices:
+
 1. **Gather context** — from the conversation, or a fetched spec/issue.
 2. **Explore (optional)** — use the glossary vocabulary, respect ADRs, look for prefactoring ("make the change easy, then make the easy change").
 3. **Draft vertical slices** — each cuts a narrow but complete path through every layer, is demoable on its own, and fits one fresh context window. Each declares its blocking edges. Wide mechanical refactors are the exception, sequenced expand → migrate → contract to keep CI green.
