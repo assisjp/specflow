@@ -33,4 +33,4 @@ Ask: "What is the public interface here, and which seams should we test?"
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. No speculative features, no anticipating future tests.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** Cleanup belongs to the review stage (see `code-review`), not the red → green cycle. Keep the loop tight; keep the diff honest.
+- **Refactoring is not part of the loop.** Cleanup happens outside the red → green cycle: running under `spec-execution`, its step 7 executes the in-diff cleanup at review; standalone, do a refactor pass over the code this loop touched after each green. Keep the loop tight; keep the diff honest.

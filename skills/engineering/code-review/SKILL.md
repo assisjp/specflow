@@ -1,6 +1,7 @@
 ---
 name: code-review
-description: Review the diff since a fixed point (commit, branch, tag, merge-base) along two independent axes — Standards (does it follow the repo's coding standards and avoid known smells?) and Spec (does it match what the originating issue/spec asked for?). Runs both as parallel sub-agents and reports them side by side. Use when reviewing a branch, a PR, work-in-progress changes, or when spec-execution reaches its review step.
+description: Review the diff since a fixed point (commit, branch, tag, merge-base) along two independent axes — Standards (does it follow the repo's coding standards and avoid known smells?) and Spec (does it match what the originating issue/spec asked for?). Runs one isolated sub-agent per axis and reports them side by side, never merged; parallelism is an optimisation, not the contract. Use when reviewing a branch, a PR, work-in-progress changes, or when spec-execution reaches its review step.
+argument-hint: "[fixed point — SHA, branch, tag, or merge-base]"
 ---
 
 # Code Review
@@ -52,10 +53,10 @@ Smell baseline (Fowler, *Refactoring* ch.3), each *what it is* → *fix*:
 
 The two axes must not share context — cross-contamination is exactly what the separation exists to prevent. How you achieve that depends on the harness:
 
-- **If it has parallel sub-agents** (e.g. Claude Code: one message, two `general-purpose` Agent calls) — spawn both at once. Fastest, and their contexts are isolated by construction.
-- **If it does not** — run the two axes **sequentially, with a clean context between them**: complete the Standards pass, clear or set aside its working context, then run the Spec pass so the second axis is not primed by the first's findings. Slower, same guarantee.
+- **If it has sub-agents at all** — one sub-agent per axis, always. In parallel where possible (e.g. Claude Code: one message, two `general-purpose` Agent calls), one after the other where not — isolation holds by construction either way; parallelism is only a speed difference.
+- **If it has no sub-agent mechanism** — do a **single combined pass** and label it honestly: the report states "single-context pass — the isolation guarantee between the two axes does not hold for this report." The output shape does not change — both `## Standards` and `## Spec` headings, still unmerged, still unranked across axes; only the isolation claim degrades. Do not promise to clear your own context mid-turn — that is not a capability the model has.
 
-Either way, give each axis only its own inputs:
+Whichever applies, each axis works to its own brief — and with sub-agents, each receives only its own inputs:
 
 **Standards sub-agent** — give it the diff command + commit list, the standards-source files from step 3, **and the full smell baseline pasted in** (it has no other access to it). Brief: "Report, per file/hunk: (a) every place the diff violates a documented standard — cite the file + rule; (b) any baseline smell — name it and quote the hunk. Distinguish hard violations from judgement calls; documented standards can be hard, baseline smells are always judgement calls and the repo overrides the baseline. Skip anything tooling enforces. Under 400 words."
 

@@ -15,9 +15,9 @@ Passing tests are cheap; *good* tests are the point. `tdd` is the reference that
 - **Behaviour through public interfaces**, never internals — a good test reads like a spec and survives refactors.
 - **Seams, agreed up front.** A seam is the public boundary you observe behaviour at. Tests live only at pre-agreed seams; the ideal is one. You cannot test everything, so effort lands on the critical paths.
 - **The anti-patterns to avoid** — implementation-coupled tests, tautological assertions (expected values must come from an independent source of truth), and horizontal slicing (write all tests then all code). Work in vertical slices instead: one test → one implementation → repeat.
-- **The rules of the loop** — red before green; one slice at a time; refactoring is not part of the loop (it belongs to review).
+- **The rules of the loop** — red before green; one slice at a time; refactoring is not part of the loop (under `spec-execution` its step 7 executes the in-diff cleanup; standalone, a refactor pass over the touched code after each green).
 
 ## Related
 
-- [spec-execution](./spec-execution.md) — drives `tdd` at the spec's seams.
-- [code-review](./code-review.md) — where the refactor step lives.
+- [spec-execution](./spec-execution.md) — drives `tdd` at the spec's seams; its step 7 executes the deferred refactor.
+- [code-review](./code-review.md) — surfaces the smells that cleanup acts on.
