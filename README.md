@@ -70,6 +70,19 @@ cd specflow
 ./scripts/link-skills.sh
 ```
 
+## First feature, start to finish
+
+The literal sequence, from fresh install to merged PR:
+
+1. `/repo-hardening` — once per repo. Installs the deterministic verification layer and writes the canonical commands into the agent-context file; `spec-execution` refuses to run without that block.
+2. `/grill docs` — interrogate the idea until it holds; `docs` also captures the glossary and ADRs. Out: a decision log.
+3. `/to-spec` — synthesise the decision log into a published spec (tracker issue, or `docs/specs/<slug>.md`).
+4. `/to-tickets` — only if the spec is too big for one PR. Slices it into dependency-ordered tickets.
+5. `/spec-execution <spec path or issue #>` — one spec/ticket → one reviewable PR: closed scope, evidence attached. Calls `tdd` and `code-review` internally.
+6. Review the PR and merge. specflow never merges.
+
+Have to stop mid-work? `/session-handoff`. Unsure which step you are on? `/guide`.
+
 ## Design principles
 
 - **Quality and throughput are separate problems.** specflow buys quality (spec contract, small PR, tests alongside, evidence gate, human merge). It deliberately does not build the coordination layer (DAG, waves, parallel worktrees) — that buys wall-clock, which is the lowest priority here.

@@ -42,10 +42,15 @@ Several skills write to shared files. To avoid one clobbering another:
 - Durable local artifacts are versioned and committed, never in `.scratch/` (ADR 0006): specs under `docs/specs/` (owned by `to-spec`), local tickets under `docs/tickets/` (owned by `to-tickets`).
 - `.scratch/` is ephemeral and git-ignored — **only `session-handoff` writes there** (`.scratch/handoffs/`), and it guarantees the `.gitignore` entry first.
 
+## Refusals
+
+**A refusal names its exit.** When a skill refuses to proceed, it must name the skill that unblocks the user, not just state the refusal. Model: `spec-execution` step 1 — "If no block exists: stop. Suggest running `repo-hardening` first."
+
 ## Versioning & validation
 
 - Keep `.claude-plugin/plugin.json`'s `version` in sync with `package.json`'s. Claude uses the plugin `version` to decide when installed users see an update.
 - After touching either manifest, run `claude plugin validate . --strict`.
+- **Docs-sync ritual.** `scripts/check.mjs` verifies a docs page *exists*, not that its content matches the `SKILL.md` — content drift is a bug class CI cannot catch. Every version bump that touches a `SKILL.md` must re-read the corresponding `docs/<bucket>/<name>.md` and re-sync it in the same commit.
 
 ## Language
 

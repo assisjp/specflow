@@ -91,8 +91,10 @@ for (const s of onDisk) {
 const guide = onDisk.find((s) => s.name === "guide");
 if (guide) {
   const guideText = readFileSync(guide.skillMd, "utf8");
+  // Word-boundary match with hyphens as part of the token — `\b` alone would let
+  // a name like "spec" falsely match inside "spec-execution".
   for (const s of onDisk)
-    if (s.name !== "guide" && !guideText.includes(s.name))
+    if (s.name !== "guide" && !new RegExp(`(^|[^\\w-])${s.name}([^\\w-]|$)`).test(guideText))
       fail(`guide does not route to promoted skill "${s.name}" (add it to guide/SKILL.md)`);
 }
 
