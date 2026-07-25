@@ -27,7 +27,7 @@ Four things a polite Q&A skips:
 
 ## `docs` mode
 
-Pass `docs` to also capture the durable record as you go: `grill docs` invokes [domain-modeling](../engineering/domain-modeling.md) to write the `CONTEXT.md` glossary inline and offer an ADR when a decision is hard to reverse, surprising, and a real trade-off. Without `docs`, the decision log stays in the conversation and nothing is written to the repo.
+Pass `docs` to also capture the durable record as you go: `grill docs` invokes [domain-modeling](../engineering/domain-modeling.md) to write the `CONTEXT.md` glossary inline and offer an ADR when a decision is hard to reverse, surprising, and a real trade-off. Without `docs`, the decision log stays in the conversation and nothing is written to the repo. Either way `grill` **never writes source or tests** — not even once the design feels settled, and not on a broad "yes, go ahead". Building belongs to `spec-execution`, after a spec exists; `docs` widens the output to `CONTEXT.md` and ADRs and no further.
 
 ## Related
 

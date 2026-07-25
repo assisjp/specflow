@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.10] — 2026-07-25
+
+### Fixed
+- **`grill` could be talked into writing the feature, skipping the entire pipeline.** Rule 5 said "Grilling produces alignment, not artifacts (unless `docs` is passed)" and, in the same breath, "get an explicit go **before building anything**" — a clause that only makes sense if building is on the table, contradicting both the rule beside it and the skill's own description ("before any code is written"). On a live run the user answered a question with "tudo", the model read it as the go, and `grill docs` committed `src/slug.ts` and `tests/slug.test.ts` — no spec, no ticket, no closed scope, no evidence, no review. The one thing specflow exists to prevent, reachable through the skill that opens the flow. Rule 5 now states the prohibition outright: `grill` never writes source or tests however broad the go sounds, `docs` widens its output to `CONTEXT.md` and ADRs and no further, and the "go" it waits for is the go to the next step, never a licence to build. A contradiction removed rather than a rule added.
+
 ## [0.9.9] — 2026-07-25
 
 ### Fixed

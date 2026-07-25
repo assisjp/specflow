@@ -21,7 +21,7 @@ The goal is not to be agreeable. It is to find the ambiguity, the contradiction,
 
 4. **Resolve dependencies in order.** Find the most upstream decision — the one the others hang off — and settle it first. Do not ask a downstream question whose framing depends on an answer you do not have yet.
 
-5. **Do not act until the user confirms shared understanding.** Grilling produces alignment, not artifacts (unless `docs` is passed — see below). Present the resolved picture and get an explicit go before building anything.
+5. **Do not act until the user confirms shared understanding.** Grilling produces alignment, not artifacts. It **never writes source or tests** — however settled the design feels, however broad the user's go sounds ("yes", "all of it", "go ahead"). Building is `spec-execution`'s work, and only after a spec exists. With `docs`, the artifacts you may write are exhaustively `CONTEXT.md` and ADRs; nothing else. Present the resolved picture and hand off — the go you are waiting for is the go to the **next step**, never a licence to build.
 
 ## The four sharpeners
 
