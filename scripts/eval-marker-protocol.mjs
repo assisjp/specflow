@@ -100,9 +100,67 @@ if (lineToken && labelToken)
 // Without an agreed line token there is no reader predicate to run Part B on.
 if (!lineToken) bail();
 
+// ── Part A2: role presence. Divergence is not the only way a gate dies — so is
+// deletion, and the checks above cannot see it. Delete step 2's reader half, or
+// the whole "Returning the source" setter, and the token still litters the rest
+// of the file: check.mjs guard #11 passes, token agreement passes, the gate is
+// dead and CI is green. That is the 0.9.1 class (the write half existed, the
+// read half never met it), which token identity alone will never catch.
+//
+// Anchored on structure — headings, and verb↔token proximity — never on a
+// particular sentence, so the prose stays free to be rewritten. Fails closed:
+// a role that cannot be found is reported as missing, because shipping a dead
+// gate is the worse error.
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const sectionOf = (text, headingRe) => {
+  const lines = text.split("\n");
+  const start = lines.findIndex((l) => headingRe.test(l));
+  if (start === -1) return null;
+  const depth = lines[start].match(/^#+/)[0].length;
+  const rest = lines.slice(start + 1);
+  const end = rest.findIndex((l) => /^#+ /.test(l) && l.match(/^#+/)[0].length <= depth);
+  return rest.slice(0, end === -1 ? rest.length : end).join("\n");
+};
+
+const readerHalf = sectionOf(texts["spec-execution"], /^## 2\. /);
+guard(
+  readerHalf !== null && readerHalf.includes(lineToken),
+  `spec-execution step 2 no longer reads the \`${lineToken}\` marker — the gate's READ half is gone while the setter still writes it, so every later session implements a source already sent back as defective. Token identity cannot see this: the token survives elsewhere in the file (the 0.9.1 class)`
+);
+// The setter is identified by what it DOES, not by where it sits or what it is
+// called: somewhere in spec-execution one passage must instruct marking on both
+// backends. Heading-agnostic, so the section can be retitled or moved freely —
+// only losing the instruction fails.
+// Word-bounded: an unbounded `mark\w*` also matches the NOUN "marker", which
+// step 2's reader paragraph is full of — the setter guard would then be
+// satisfied by the reader, and M9 (delete the setter) would sail through.
+const SET_VERB = "\\b(?:[Aa]dd|[Mm]ark|[Ww]rite)(?:s|es|ing)?\\b";
+const setsLabel = new RegExp(`${SET_VERB}[^.]{0,120}\`${esc(labelToken ?? "returned")}\` label`).test(texts["spec-execution"]);
+const setsLine = new RegExp(`${SET_VERB}[^.]{0,120}\`${esc(lineToken)}[^\`]*\` line`).test(texts["spec-execution"]);
+guard(
+  setsLabel && setsLine,
+  `spec-execution no longer instructs how to SET the marker (${setsLabel ? "" : "tracker label; "}${setsLine ? "" : "local line; "}missing) — the gate's write half is gone, so step 2 reads a marker nothing ever writes and the second-failure rule collapses back to advice (the 0.9.1 bug itself)`
+);
+// Each clearer must carry the clear INSTRUCTION for both backends, not merely a
+// section title that names the clear — a heading reading "Clearing a `returned`
+// marker" above a paragraph that no longer says how is a dead clear that reads
+// alive. Verb↔token proximity, once per backend.
+const VERB = "(?:[Cc]lear|[Rr]emove|[Dd]elete)\\w*";
+for (const n of ["to-spec", "to-tickets"]) {
+  const clearsLabel = new RegExp(`${VERB}[^.]{0,120}\`${esc(labelToken ?? "returned")}\` label`).test(texts[n]);
+  const clearsLine = new RegExp(`${VERB}[^.]{0,120}\`${esc(lineToken)}[^\`]*\` line`).test(texts[n]);
+  guard(
+    clearsLabel && clearsLine,
+    `${n} no longer instructs how to clear the marker on republish (${clearsLabel ? "" : "tracker label; "}${clearsLine ? "" : "local line; "}missing) — it owns the clear for the source type it publishes (ADR 0008), so a healed source keeps its marker and the gate never releases (the 0.9.2 bug). A heading naming the clear is not the instruction`
+  );
+}
+guard(
+  new RegExp(`(${esc(labelToken ?? "returned")}|marker)[^.]{0,160}grill`, "i").test(texts["guide"]),
+  `guide no longer routes a marked source to grill — it would hand returned work to a spec-execution that refuses it, and the user never hears where the exit is`
+);
+
 // ── Reader predicate and setter, built FROM the extracted token — never from
 // a literal typed here. ───────────────────────────────────────────────────────
-const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const isMarked = (text) => new RegExp(`^${esc(lineToken)}`, "m").test(text);
 const markerLines = (text) => text.split("\n").filter((l) => l.startsWith(lineToken)).length;
 // The setter, as spec-execution's "Returning the source" describes the local
@@ -200,10 +258,14 @@ try {
   // marked ticket without re-slicing. Without it the ticket half of the cycle
   // is unreachable in practice: slicing a whole spec again would move the
   // neighbouring tickets' blocking edges.
+  // Anchored on the mode's own heading, so a cross-reference elsewhere in the
+  // file cannot stand in for the mode actually being there.
   const tt = texts["to-tickets"];
+  const heading = tt.split("\n").find((l) => /^#{2,4} .*heal/i.test(l));
+  const mode = heading ? sectionOf(tt, new RegExp(`^${esc(heading)}$`)) : null;
   guard(
-    /healing/i.test(tt) && /one ticket/i.test(tt) && /re-slic/i.test(tt),
-    `to-tickets does not document a single-ticket healing mode (rewrite ONE marked ticket, never re-slice) — the ticket half of the gate's exit is unreachable: its only documented process would re-slice the whole spec and move neighbouring tickets' blocking edges`
+    mode !== null && /one ticket/i.test(mode) && /slic/i.test(mode),
+    `to-tickets has no single-ticket healing mode section (rewrite ONE marked ticket, never re-slice) — the ticket half of the gate's exit is unreachable: its only documented process would re-slice the whole spec and move neighbouring tickets' blocking edges. A pointer to the mode from elsewhere is not the mode`
   );
 } finally {
   rmSync(tmp, { recursive: true, force: true });
