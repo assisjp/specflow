@@ -70,6 +70,8 @@ cd specflow
 ./scripts/link-skills.sh
 ```
 
+**After updating, restart your session.** A `/plugin marketplace update` refreshes what is on disk, but a session resolves its typed slash commands once, at start — so an open session keeps running the version it began with, while skills the model reaches for internally pick up the new one. That mix is worth avoiding here in particular: the second-failure marker has a setter and a clearer in different skills, and they must agree. Update, then start a fresh session.
+
 ## First feature, start to finish
 
 The literal sequence, from fresh install to merged PR:

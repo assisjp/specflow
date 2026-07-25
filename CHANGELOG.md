@@ -2,6 +2,15 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.11] — 2026-07-25
+
+### Fixed
+- **`spec-execution` step 2 answered a result-changing ambiguity in the conversation and never wrote it back.** On a live run the frontier ticket carried an unverifiable criterion ("*Confirm the accepted behaviour for a Title such as 'Straße'*"); step 2 correctly stopped and asked, got an answer, and implemented — leaving the criterion on the issue exactly as it was, unable ever to go green, waiting to stop the next session with the same question. Step 4 already covers "a scenario not testable as written" by marking the source, but step 2 is reached first and had no such duty, so the two rules disagreed on the same input. Step 2 now says it: write the answer back into the source, and where the ambiguity *was* an unverifiable criterion, rewriting it is the fix — so mark the source and hand it to the republisher. The decision-that-evaporates is the failure ADR 0008 was written against; it had survived one skill upstream of the marker.
+- **`to-spec` ended without naming the next step**, and filled the gap wrongly on a live run: it pointed a 26-story, five-endpoint spec at `spec-execution`, which would have spent a round refusing and proposing the cut that `to-tickets` exists to make. `to-spec` is the only thing that can judge the size of what it just wrote, so it now states whether the spec fits one reviewable PR and routes accordingly — the completion-side counterpart to the house rule that a refusal names its exit.
+
+### Added
+- README: **restart your session after updating.** A `marketplace update` refreshes the disk, but a session resolves its typed slash commands once at start — so an open session keeps running the version it began with while model-invoked skills pick up the new one. Measured on a live run: three typed skills ran 0.9.8 while two internally-invoked ones ran 0.9.9, in the same session, after two updates. That mix matters here specifically, because the second-failure marker's setter and clearer live in different skills and must agree.
+
 ## [0.9.10] — 2026-07-25
 
 ### Fixed

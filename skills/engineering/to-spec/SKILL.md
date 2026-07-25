@@ -81,3 +81,7 @@ Anything else worth recording.
 ## Traceability
 
 Before you publish, re-read the spec and check every claim traces to a decision, a user statement, or a codebase fact. Anything that traces to none of those is invented — cut it or turn it into an open question for the user. A spec's job is to encode what was decided, not to quietly decide more.
+
+## Hand off to the right next step
+
+You are the only one who can judge the size of what you just wrote, so say it: after publishing, state whether the spec fits **one reviewable PR**. If it does, the next step is `spec-execution`. If it plainly does not — several endpoints, a long story list, work that lands in stages — the next step is `to-tickets`, and naming `spec-execution` instead costs the user a whole round before it refuses and proposes the cut. A completion names its next step, exactly as a refusal names its exit.

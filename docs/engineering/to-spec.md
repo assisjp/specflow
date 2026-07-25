@@ -19,6 +19,8 @@ Turn a settled conversation — ideally a [`grill`](../productivity/grill.md) de
 
 Before publishing, `to-spec` re-reads the spec and checks every claim traces to a decision, a user statement, or a codebase fact. Anything tracing to none of those is invented — it gets cut or turned into an open question. A spec encodes what was decided; it does not quietly add scope.
 
+It then names the next step, since it is the only thing that can judge the size of what it just wrote: one reviewable PR's worth goes to `spec-execution`, anything plainly larger goes to `to-tickets` first.
+
 ## Related
 
 - [grill](../productivity/grill.md) — produces the decision log this skill consumes.
