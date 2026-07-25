@@ -82,6 +82,8 @@ Anything else worth recording.
 
 Before you publish, re-read the spec and check every claim traces to a decision, a user statement, or a codebase fact. Anything that traces to none of those is invented — cut it or turn it into an open question for the user. A spec's job is to encode what was decided, not to quietly decide more.
 
+**Then weigh what the open questions cost.** One that merely records context — a rough edge, a thing to watch — is legitimate; note it and publish. One that leaves a user story with **no verifiable acceptance criterion** is different: the spec does not say what to build there, so that story cannot be implemented or tested, and recording it honestly in *Further Notes* does not make it publishable. Say so plainly instead of shipping it and calling the spec ready — the next step is `grill` to settle the decision, not `spec-execution`. Publish anyway and the execution run discovers it at step 2 and hands the spec straight back, which is the most expensive possible way to learn something you already knew when you wrote it.
+
 ## Hand off to the right next step
 
 You are the only one who can judge the size of what you just wrote, so say it: after publishing, state whether the spec fits **one reviewable PR**. If it does, the next step is `spec-execution`. If it plainly does not — several endpoints, a long story list, work that lands in stages — the next step is `to-tickets`, and naming `spec-execution` instead costs the user a whole round before it refuses and proposes the cut. A completion names its next step, exactly as a refusal names its exit.

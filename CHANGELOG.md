@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.13] — 2026-07-25
+
+### Fixed
+- **`to-spec` published a spec it already knew was not implementable.** Its traceability rule says an untraceable claim is cut or turned into an open question — and on a live run it did exactly that, recording honestly in *Further Notes* that one decision had never been made. Then it declared the spec ready and named `spec-execution` as the next step. But that open question left three of ten user stories with no verifiable acceptance criterion, so `spec-execution` read it at step 2, refused, marked the spec `Returned: spec-defect` and handed it straight back — a full execution round spent learning what the author knew while writing. The rule said what to do with an open question and nothing about what an open question *costs*. It now distinguishes the two: one that records context is publishable, one that leaves a story unbuildable and untestable means the spec is not ready, and the next step is `grill` to settle it. Found by the flow itself — `spec-execution` named the upstream cause in its own report.
+
 ## [0.9.12] — 2026-07-25
 
 ### Fixed
