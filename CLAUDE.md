@@ -56,11 +56,15 @@ Several skills write to shared files. To avoid one clobbering another:
 
 `scripts/eval-marker-protocol.mjs` covers the returned-marker gate's **local** backend end to end. The **tracker** backend is deliberately not in CI: it needs a network, `gh` auth and a real issue, and a reliability plugin whose CI fails on GitHub API rate limits is worse than an honest gap. Run this by hand in a throwaway repo instead, once per minor:
 
-1. Real issue → `spec-execution` returns it → the `returned` label is on the issue and a comment names the non-verifiable part.
-2. Re-run against the same issue → it refuses.
-3. `to-spec` republishes → the label is gone, a "rewritten" comment is there, and the issue **number is unchanged**.
-4. **Same cycle with a ticket** — the clear belongs to `to-tickets`, not `to-spec` (the 0.9.3 ownership split). This is the one tracker transition that has never been exercised live; do not skip it.
+Start from a repo that has **never** returned a source, so the `returned` label does not exist — that precondition is what hid a real bug through four earlier attempts (0.9.8).
+
+1. Real issue → `spec-execution` returns it → the label is **created**, applied, and a comment names the non-verifiable part.
+2. **Re-run against the still-marked issue → it refuses.** ⚠️ *Never yet exercised on a tracker.* It is covered on the local backend by the eval (`refuse` and `refuse-while-uncleared`), so what is untested is this branch reading `gh issue view --json labels` and finding a marker **present**. Do not skip it, and do not re-mark a healed source just to watch the refusal — run this leg between the return and the republish, or record it as not run.
+3. The republisher rewrites in place → the label is gone, a "rewritten" comment is there, and the issue **number is unchanged** so blocking edges survive.
+4. **The same cycle with a ticket**, where the clear belongs to `to-tickets` and not `to-spec` (the 0.9.3 ownership split). Note that `to-tickets` is user-invoked: the model cannot re-enter it, so in a fresh session the **human** must run the republisher. Inside one session the model may instead follow `to-tickets`' text still in context — substantively the same act, but the ownership split then holds by accident of context rather than by construction.
 5. `guide` with the marked issue → routes to `grill`, not `spec-execution`.
+
+**Last full run: 0.9.10, 2026-07-25** — legs 1, 3, 4 and 5 proven against the real API on a fresh private repo; leg 2 not exercised.
 
 What CI *does* pin on the tracker side is nomenclature, not behaviour: the eval derives the label token from prose shared by all four gate skills and checks it against the local line token, so the two backends cannot drift apart by name. Only the API round-trip is manual.
 
