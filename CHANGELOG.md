@@ -2,6 +2,19 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.7] — 2026-07-25
+
+### Fixed
+- **The eval detected a drifted token, never a deleted role.** Delete step 2's reader half, or the whole *Returning the source* setter, and the marker token still litters the rest of the file: `check.mjs` guard #11 passed, token agreement passed, the gate was dead and CI was green. That is the **0.9.1 class** — the write half existed, the read half never met it — so 0.9.6's net covered the 0.9.4 bug while leaving its predecessor open, and *looked* like it covered both, which is worse than no net. Five role-presence guards close it, anchored on role rather than phrasing: step 2 must still read the marker; `spec-execution` must instruct the SET on both backends (identified by what it does, so the section may be retitled or moved); each clearer must instruct the CLEAR on both backends; `guide` must still route a marked source to `grill`; `to-tickets`' healing mode is anchored on its own section, so a cross-reference cannot stand in for the mode. Two silent passes surfaced while building it: the clearer guard was satisfied by a section *title* naming the clear, and an unbounded `mark\w*` matched the noun "marker" throughout step 2, so the setter guard was being satisfied by the reader — the exact confusion it exists to detect. Mutation battery: 16 mutations, 14 bite; the two that pass do so correctly (a redundant token anchor in `to-spec`, and a renamed setter heading — no false positive by design).
+- **`spec-execution` step 2 could be "optimised" back into a false negative.** It read the tracker marker via `gh issue view`, which is per-issue and therefore correct — but nothing stopped a later hand from turning it into a `gh issue list --label returned` filter, and `to-tickets` already documents why that breaks: GitHub's label index lags writes by seconds. The failure is a few-second false negative — mark, read the stale index, see nothing, implement a spec already known defective. Now explicitly `gh issue view <n> --json labels`, per issue, with the reason attached so it stays shut.
+- **`guide` was the protocol's single point of failure for token extraction.** Every other gate skill anchored the marker token twice; `guide` anchored it once, so rephrasing one bullet would have failed CI. It now names both backends where it describes the clear — better prose, and the redundancy the other three already had.
+
+### Changed
+- The eval's success line counted 15 contract guards and 8 lifecycle steps as one total. The guards read the skills' own prose and can disagree with it — that is detection. The lifecycle steps run over fixtures the eval controls, with reader and setter derived from the same extracted token; a couple cannot fail without editing a fixture. Real value as executable documentation of the local backend's semantics, but not coverage, and one total invited reading 23 units of net where there are 15. Now reported apart.
+
+### Added
+- `CLAUDE.md`: the **tracker backend's manual release checklist**, once per minor in a throwaway repo. That half stays out of CI on purpose — network, `gh` auth, a real issue; a reliability plugin whose CI dies on GitHub API rate limits is worse than an honest gap. Step 4 (the same cycle with a *ticket*, where the clear belongs to `to-tickets` and not `to-spec`) is the one tracker transition never exercised live, and is marked unskippable. What CI does pin on that side is nomenclature, not behaviour: the label token is derived from prose shared by all four gate skills and checked against the local line token, so the two backends cannot drift apart by name.
+
 ## [0.9.6] — 2026-07-25
 
 ### Fixed
