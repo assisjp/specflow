@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.12] — 2026-07-25
+
+### Fixed
+- **`spec-execution` never read the blocking edges `to-tickets` writes.** Every ticket carries `Blocked by: #N`, and `to-tickets` states the rule beside it — work the **frontier**, tickets whose blockers are all done. `spec-execution` consumes those tickets and had no matching rule, so on a live run it read a ticket saying `Blocked by: #3`, with #3 still open and its PR unmerged, and implemented anyway. It handled the consequence sensibly — based the branch on the blocker's branch and reported the merge order — but the result is a PR whose base is another open PR: not independently reviewable, which is the single thing this skill promises, and whose base moves if that review changes anything. `guide` had said to wait and `to-tickets` had declared the edge; the missing half was the consumer. Step 2 now checks the edges and stops on an unfinished blocker, naming which ticket to run first. Done means merged — an open PR can still change.
+
 ## [0.9.11] — 2026-07-25
 
 ### Fixed
