@@ -122,10 +122,19 @@ const sectionOf = (text, headingRe) => {
   return rest.slice(0, end === -1 ? rest.length : end).join("\n");
 };
 
+// The reader must INSTRUCT a read, not merely mention the token. Prose that
+// says "sources sometimes carry a `Returned:` line" keeps the token in the
+// section and loses the gate — the same shape as a clearer satisfied by its own
+// heading. Word-bounded for the same reason SET_VERB is: `mark` hides in
+// `marker`, and `read` hides in `already`.
+const READ_VERB = "\\b(?:[Cc]heck|[Rr]ead|[Ll]ook|[Ii]nspect|[Ff]etch)(?:s|es|ing|ed)?\\b";
 const readerHalf = sectionOf(texts["spec-execution"], /^## 2\. /);
+const readsMarker =
+  readerHalf !== null &&
+  new RegExp(`${READ_VERB}[^.]{0,200}${esc(lineToken)}`).test(readerHalf);
 guard(
-  readerHalf !== null && readerHalf.includes(lineToken),
-  `spec-execution step 2 no longer reads the \`${lineToken}\` marker — the gate's READ half is gone while the setter still writes it, so every later session implements a source already sent back as defective. Token identity cannot see this: the token survives elsewhere in the file (the 0.9.1 class)`
+  readsMarker,
+  `spec-execution step 2 no longer instructs a READ of the \`${lineToken}\` marker — mentioning the token descriptively is not checking for it, and the gate's read half is gone while the setter still writes it. Every later session then implements a source already sent back as defective. Token identity cannot see this: the token survives elsewhere in the section (the 0.9.1 class)`
 );
 // The setter is identified by what it DOES, not by where it sits or what it is
 // called: somewhere in spec-execution one passage must instruct marking on both

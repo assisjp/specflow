@@ -2,6 +2,17 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.17] — 2026-07-26
+
+### Fixed
+- **0.9.12 installed a reader of "done" that no backend produced** — the 0.9.1 class, committed by the very fix meant to close a gap. Step 2 began requiring a blocker to be *merged*, and nothing said how that is observed: step 9 opened a PR "referencing the issue", a loose mention no query can follow back; locally there is no PR at all, and a ticket's status field and checkboxes are written once by `to-tickets` and updated by nobody. The live run passed only because the open PR was in plain sight. Step 2 now names the observable per backend — tracker: the blocker's issue closed *and* its closing PR merged; local: the blocker's behaviour passing against your base — and stops to ask when neither can be seen. Step 9 writes `Closes #N` so the linkage the reader needs is created by the writer. No new state, no new owner: both hang off observables that already exist.
+- **The write-back rule spoke for one backend only.** 0.9.11 said to write a settled ambiguity back into the source and offered "a comment recording the decision" — which exists on a tracker and nowhere else. Locally the source is a file whose body `CLAUDE.md` assigns to its publisher, so the instruction was unexecutable: either violate ownership or skip the write and lose the decision to the conversation. Ownership now governs the **body** explicitly, and `spec-execution` may *append* a dated implementation note — the local stand-in for an issue comment, since appending clobbers nothing the publisher wrote. A permission, not a new artifact.
+- **`repo-hardening` said to commit its work and not what to put in the commit.** In a repo that was already dirty — the case its own Phase 4 exists for — a blanket stage swallows the user's uncommitted work into the "isolated" hardening commit, silently. It now stages by path and reports a tree it found dirty.
+- **The eval's reader guard accepted a mention in place of an instruction.** Prose reading "sources sometimes carry a `Returned:` line" kept the token inside step 2 and passed, though nothing was being checked — the same shape as a clearer satisfied by its own heading (0.9.7). The guard now requires a reading verb near the token, word-bounded so `read` cannot hide inside `already`. Step 2 is the most-edited file in the repo, which is where this mattered.
+
+### Changed
+- §8 states that a committed evidence artifact belongs in the diff it evidences, so the Standards axis does not report it as scope creep.
+
 ## [0.9.16] — 2026-07-25
 
 ### Fixed
