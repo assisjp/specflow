@@ -1,6 +1,6 @@
 {
   "name": "specflow",
-  "version": "0.9.14",
+  "version": "0.9.15",
   "description": "A self-contained, reliability-first agent development flow — grill a decision until it holds, turn it into a spec, and build it under deterministic gates. Plug-and-play skills, not vibe coding.",
   "author": {
     "name": "João Paulo Assis"

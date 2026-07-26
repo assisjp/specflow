@@ -11,7 +11,7 @@ This is where specflow spends its reliability budget. The agent delivers a singl
 
 ## How it runs
 
-1. **Contract** — reads the canonical commands from the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`). If the block is missing, it **stops** and points you at `repo-hardening`. No improvised commands.
+1. **Contract** — reads the canonical commands from the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`). The file has to be tracked in the repository — a global or user-level `CLAUDE.md` is not this repo's contract, whatever the harness loads. If the block is missing, it **stops** and points you at `repo-hardening`. No improvised commands.
 2. **Read before writing** — the whole spec, the files it names, their imports, `CONTEXT.md`. Result-changing ambiguity stops and asks — and the answer is written back into the source, because one that lives only in the conversation dies with it and the next session asks the same question. When the ambiguity was a criterion that cannot be verified as written, rewriting it is the fix, so the source is marked and handed back. Minor ambiguity is decided and recorded. A ticket whose declared blockers are not yet merged stops here too, naming the blocker to run first — building on an unmerged blocker yields a PR based on another open PR, which is not independently reviewable. A spec that plainly implies a diff beyond step 8's ~400 lines gets the cut proposed here — an estimate to think with, not a gate; step 8 measures the real diff.
 3. **Closed scope** — implements exactly the spec; adjacent smells, refactors, and unrelated bugs are noted, not touched.
 4. **Implement** — calls [tdd](./tdd.md) at the agreed seams; tests in the same work, never separate.

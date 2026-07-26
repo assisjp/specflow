@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.15] — 2026-07-25
+
+### Fixed
+- **Step 1 could have accepted a global `CLAUDE.md` as the repo's contract.** It said to read the block from "`AGENTS.md`, or `CLAUDE.md` if that is where the harness loads it" — and a *user-level* `CLAUDE.md` is precisely where the harness loads it. Those files routinely carry generic instructions ("run `npm run lint`", "ensure `npm test` passes") for commands that do not exist in the repo under work, so extracting them yields a contract that cannot run: the improvisation step 1 exists to prevent, wearing the costume of a contract. Confirmed live on a bare repo whose only tooling was absent while the machine's global `CLAUDE.md` named all four commands; the run escaped it by judgement, not by rule, which is the gap. The block must now be **tracked in the repository** — `git ls-files` decides, not `find`.
+
 ## [0.9.14] — 2026-07-25
 
 ### Fixed

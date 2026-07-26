@@ -19,6 +19,8 @@ Human review happens **once**, on the final diff.
 
 Read the verification block from the repo's agent-context file — `AGENTS.md`, or `CLAUDE.md` if that is where the harness loads it and the block lives there. Extract the canonical commands, including the **Run** command for the evidence gate.
 
+**The file must be in the repository** — tracked by git, in this working tree. A user-level or global `CLAUDE.md` is not it, however faithfully the harness loads it: it describes its author's habits across every project, not this repo's contract, and the commands it names (`npm test`, `npm run lint`) routinely do not exist here. Borrowing them is the improvisation this step exists to prevent, wearing the costume of a contract. `git ls-files` decides what counts, not `find`.
+
 **If no block exists**: stop. Suggest running `repo-hardening` first. Do not improvise commands, install tooling, or continue.
 
 ## 2. Read before writing
