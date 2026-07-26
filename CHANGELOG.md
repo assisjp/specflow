@@ -2,6 +2,11 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.16] — 2026-07-25
+
+### Fixed
+- **Step 9 had no path for a repository with no remote** — the twin of the gap 0.9.14 closed one step earlier. Evidence got a home when there is no tracker; delivery did not, and still said "push to the spec's branch, open a PR" unconditionally. On a live run in a remote-less repo the model did the right thing (it did not push) and then justified it with a fact it had not measured: "the remote is still at 55272ec, behind local master" — there was no remote at all. It was the second such claim in that repo; the first was "master does not have the feature yet" after the branch had already been merged. Both sent the reader to do work that was impossible or already done. The improvisation is the symptom; the missing branch in the contract is the cause. Step 9 now says: `git remote -v` decides, deliver locally by naming the branch and commits, report only remote state just measured — and measure any repo state in the step 10 report at report time rather than recalling it, because the tree moved while you were working in it.
+
 ## [0.9.15] — 2026-07-25
 
 ### Fixed

@@ -83,6 +83,8 @@ The line is the diff boundary, not the file. Without this rule a smell in new co
 
 Commit describing the behavioural change, not the file touched. Push to the spec's branch. Open a PR referencing the issue, with what changed, how to verify, and the evidence.
 
+**With no remote there is no push and no PR** — `git remote -v` decides, the same way `git ls-files` decides in step 1. Deliver locally instead: name the branch, the commits on it, and where the evidence was written, and say plainly that the change is unpushed because the repository has no remote. Report only remote state you have just measured; a remote that does not exist has no state, and inventing one ("the remote is behind by N commits") sends the reader to do work that cannot be done. The same holds for any repo state in the step 10 report — measure it at report time rather than recalling it from earlier in the session, because the tree moved while you were working in it.
+
 **Do not merge.** The merge is the human's.
 
 ## 10. Report
