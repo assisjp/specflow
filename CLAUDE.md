@@ -59,12 +59,12 @@ Several skills write to shared files. To avoid one clobbering another:
 Start from a repo that has **never** returned a source, so the `returned` label does not exist — that precondition is what hid a real bug through four earlier attempts (0.9.8).
 
 1. Real issue → `spec-execution` returns it → the label is **created**, applied, and a comment names the non-verifiable part.
-2. **Re-run against the still-marked issue → it refuses.** ⚠️ *Never yet exercised on a tracker.* It is covered on the local backend by the eval (`refuse` and `refuse-while-uncleared`), so what is untested is this branch reading `gh issue view --json labels` and finding a marker **present**. Do not skip it, and do not re-mark a healed source just to watch the refusal — run this leg between the return and the republish, or record it as not run.
+2. **Re-run against the still-marked issue → it refuses**, and does not re-mark: one label, one comment, unchanged (a state, not a counter — ADR 0008). Run this leg **between** the return and the republish; do not re-mark a healed source just to watch the refusal, and if that window is missed, record it as not run rather than staging it.
 3. The republisher rewrites in place → the label is gone, a "rewritten" comment is there, and the issue **number is unchanged** so blocking edges survive.
 4. **The same cycle with a ticket**, where the clear belongs to `to-tickets` and not `to-spec` (the 0.9.3 ownership split). Note that `to-tickets` is user-invoked: the model cannot re-enter it, so in a fresh session the **human** must run the republisher. Inside one session the model may instead follow `to-tickets`' text still in context — substantively the same act, but the ownership split then holds by accident of context rather than by construction.
 5. `guide` with the marked issue → routes to `grill`, not `spec-execution`.
 
-**Last full run: 0.9.10, 2026-07-25** — legs 1, 3, 4 and 5 proven against the real API on a fresh private repo; leg 2 not exercised.
+**Last full run: 0.9.15, 2026-07-25** — all five legs proven against the real API across two fresh private repos. Leg 2 was closed last, on a second repo where the `returned` label again did not exist, so the create-then-apply path (0.9.8) was exercised twice by independent routes. The local backend's full cycle — including a refusal read by a session that had never seen the conversation — is proven separately against real files.
 
 What CI *does* pin on the tracker side is nomenclature, not behaviour: the eval derives the label token from prose shared by all four gate skills and checks it against the local line token, so the two backends cannot drift apart by name. Only the API round-trip is manual.
 
