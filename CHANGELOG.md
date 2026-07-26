@@ -2,6 +2,12 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.14] — 2026-07-25
+
+### Fixed
+- **Evidence had nowhere to live without a tracker.** Step 6 said to save it "where the PR can reference it" — and with no remote there is no PR, so the location was undefined. On a live no-tracker run the model invented `docs/evidence/<slug>.md` and committed it: a good choice, and entirely its own. The ownership list in `CLAUDE.md` names a home for specs, tickets, the glossary, ADRs, the verification block and `.scratch/`, and forgot the one artifact the evidence gate exists to produce. Now stated: with no tracker, `docs/evidence/<source-slug>.md`, committed, durable for the same reason a spec is (ADR 0006) — whoever reads the change months later wants the proof the behaviour appeared, not just the diff claiming it.
+- **Evidence could be captured through a lying instrument.** On the same run, recapturing evidence for the error paths, `wc -c` on a redirected file reported zero bytes for a file with contents — a shell filter sitting between the command and its output. The model caught it, stopped trusting shell measurement and read the child process's stdout and stderr directly. Step 6 now says to do that by default and to record the capture method in the artifact: a byte count that disagrees with the file means the instrument is lying, not the app, and evidence whose capture you cannot vouch for is not evidence.
+
 ## [0.9.13] — 2026-07-25
 
 ### Fixed

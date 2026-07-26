@@ -16,7 +16,7 @@ This is where specflow spends its reliability budget. The agent delivers a singl
 3. **Closed scope** — implements exactly the spec; adjacent smells, refactors, and unrelated bugs are noted, not touched.
 4. **Implement** — calls [tdd](./tdd.md) at the agreed seams; tests in the same work, never separate.
 5. **Verify** — runs the canonical commands within the verification block's attempt limit.
-6. **Evidence** — an observable change is brought up for real (with the block's `Run` command) and captured *before* review, so someone other than the implementer sees it; a green test is not proof the feature appears.
+6. **Evidence** — an observable change is brought up for real (with the block's `Run` command) and captured *before* review, so someone other than the implementer sees it; a green test is not proof the feature appears. With no tracker to attach it to, the artifact is committed under `docs/evidence/` — durable, like the spec. It is captured from the process itself rather than from a shell measurement of it, and the artifact says how.
 7. **Automated review** — calls [code-review](./code-review.md); each finding is a hypothesis confirmed against the code before acting, and the Spec axis checks the evidence against the acceptance criteria. A smell inside the diff is in scope, outside is not.
 8. **One diff, one concern** — mechanical split from behavioural; a >~400-line diff flagged for a cut.
 9. **Deliver** — commit, push, open a PR referencing the issue. Never merges — the merge is the human's.

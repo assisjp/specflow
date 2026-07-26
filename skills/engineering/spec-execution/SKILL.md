@@ -52,7 +52,9 @@ Run the canonical commands. Fix. Repeat, within the attempt limit the verificati
 
 Produce the evidence **before** the review — so someone other than the implementer looks at it. That someone is the review in step 7, not just the human at merge; capturing evidence after review would leave the human as its only reader, which is the moment you wanted it caught before.
 
-A change with an observable effect (UI, endpoint, flow, CLI): bring the app up **with the canonical `Run` command from step 1** — do not guess a command; guessing is exactly what step 1 exists to prevent. Walk the spec's flow, capture a screenshot or real output, save it where the PR can reference it.
+A change with an observable effect (UI, endpoint, flow, CLI): bring the app up **with the canonical `Run` command from step 1** — do not guess a command; guessing is exactly what step 1 exists to prevent. Walk the spec's flow, capture a screenshot or real output, and save it where the PR can reference it — **or, with no tracker and therefore no PR, to `docs/evidence/<source-slug>.md`, committed**. Evidence is durable for the same reason a spec is (ADR 0006): whoever reads this change months from now wants the proof the behaviour appeared, not just the diff that claims it. Never `.scratch/`.
+
+**Capture it from the process, not from a shell measurement of it.** Read the child's stdout and stderr directly rather than redirecting to a file and measuring that file: shell wrappers, pagers and output filters sit between you and the truth, and a byte count that disagrees with the file's contents means your instrument is lying, not the app. Evidence whose capture method you cannot vouch for is not evidence — say how it was captured, in the artifact.
 
 A green test does not prove the feature appears — that is the class of error code review does not catch. If the `Run` command is `n/a` (no runnable surface), the test output is the evidence.
 

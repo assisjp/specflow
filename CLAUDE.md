@@ -39,7 +39,7 @@ Several skills write to shared files. To avoid one clobbering another:
 
 - `CONTEXT.md` and `docs/adr/` are owned by `domain-modeling`. No other skill creates or edits them.
 - The verification block — in the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`, per ADR 0003) — is owned by `repo-hardening`, which edits only between its own `<!-- repo-hardening:start -->` / `:end -->` markers.
-- Durable local artifacts are versioned and committed, never in `.scratch/` (ADR 0006): specs under `docs/specs/` (owned by `to-spec`), local tickets under `docs/tickets/` (owned by `to-tickets`).
+- Durable local artifacts are versioned and committed, never in `.scratch/` (ADR 0006): specs under `docs/specs/` (owned by `to-spec`), local tickets under `docs/tickets/` (owned by `to-tickets`), evidence under `docs/evidence/` (owned by `spec-execution`, and only when there is no tracker to attach it to).
 - `.scratch/` is ephemeral and git-ignored — **only `session-handoff` writes there** (`.scratch/handoffs/`), and it guarantees the `.gitignore` entry first.
 
 ## Refusals
