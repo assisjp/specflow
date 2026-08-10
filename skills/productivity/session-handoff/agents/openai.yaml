@@ -1,0 +1,6 @@
+interface:
+  display_name: "Session Handoff"
+  short_description: "Write a concise handoff for a future agent session"
+  default_prompt: "Use $session-handoff to capture this session for the next agent."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specflow Guide"
+  short_description: "Choose the next skill in the specflow process"
+  default_prompt: "Use $guide to identify the next specflow skill for this task."

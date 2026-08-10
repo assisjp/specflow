@@ -1,6 +1,6 @@
 # specflow
 
-A self-contained, **reliability-first** agent development flow, shipped as a Claude Code plugin.
+A self-contained, **reliability-first** agent development flow for Claude Code and Codex. It ships as a Claude Code plugin and as standards-based skills that Codex discovers directly.
 
 The bet is simple: the way to get reliable code out of agents while spending less is not to parallelise harder — it is to **decide well before building, verify deterministically, and review once**. specflow is the set of skills that encode that discipline.
 
@@ -54,6 +54,31 @@ The utility layer — invokable directly, or surfaced when you describe a task w
 
 ## Install
 
+### Codex
+
+Add the public specflow marketplace and install its plugin:
+
+```bash
+codex plugin marketplace add assisjp/specflow --ref main
+codex plugin add specflow@specflow
+```
+
+Start a new Codex session, then invoke a deliberate step with `$grill`, `$to-spec`, `$repo-hardening`, and so on; model-invoked utility skills can also be selected automatically from their descriptions. To update, run `codex plugin marketplace upgrade specflow`, then reinstall with `codex plugin add specflow@specflow` and start a new session.
+
+For development, Codex also discovers local skills in `~/.agents/skills` and follows symlinks. Clone the repository, then link the promoted skills:
+
+```bash
+git clone https://github.com/assisjp/specflow
+cd specflow
+./scripts/link-skills.sh
+```
+
+Restart Codex if the skills do not appear immediately.
+
+For a repository-wide installation that the team can commit, symlink or copy the promoted skill folders under `.agents/skills/` in that repository. Codex supports both layouts.
+
+### Claude Code
+
 specflow is its own Claude Code marketplace (a single-plugin repo).
 
 ```bash
@@ -62,7 +87,7 @@ specflow is its own Claude Code marketplace (a single-plugin repo).
 /plugin install specflow@specflow
 ```
 
-Or link the skills straight into your local harness skill directory for development:
+The same development link command also links the skills into Claude Code's local directory:
 
 ```bash
 git clone https://github.com/assisjp/specflow
@@ -70,7 +95,7 @@ cd specflow
 ./scripts/link-skills.sh
 ```
 
-**After updating, run `/reload-plugins`** — or start a fresh session. A `/plugin marketplace update` refreshes what is on disk, but an open session keeps serving the typed slash commands it resolved at start, while skills the model reaches for internally pick up the new version straight away; without a reload you are running two versions at once. That mix is worth avoiding here in particular: the second-failure marker has a setter and a clearer in different skills, and they must agree.
+**After updating Claude Code, run `/reload-plugins`** — or start a fresh session. A `/plugin marketplace update` refreshes what is on disk, but an open session keeps serving the typed slash commands it resolved at start, while skills the model reaches for internally pick up the new version straight away; without a reload you are running two versions at once. That mix is worth avoiding here in particular: the second-failure marker has a setter and a clearer in different skills, and they must agree. Codex detects skill changes automatically; restart it if an update does not appear.
 
 ## First feature, start to finish
 

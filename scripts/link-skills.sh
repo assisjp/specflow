@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-# Link every promoted specflow skill into the local harness skill directories,
+# Link every promoted specflow skill into Claude Code and Codex discovery directories,
 # so a `git pull` in this repo keeps the installed skills current.
 # Re-run after adding, removing, or renaming a skill.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# ~/.agents/skills is the Codex user-level discovery directory.
 TARGETS=("$HOME/.claude/skills" "$HOME/.agents/skills")
 
 linked=0

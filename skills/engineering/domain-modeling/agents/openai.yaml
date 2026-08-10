@@ -1,0 +1,4 @@
+interface:
+  display_name: "Domain Modeling"
+  short_description: "Sharpen domain language and record architecture decisions"
+  default_prompt: "Use $domain-modeling to refine this project's domain model."

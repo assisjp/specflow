@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// specflow consistency check — enforces the invariants in CLAUDE.md with zero
-// dependencies. Run in CI and locally: `node scripts/check.mjs`.
+// specflow consistency check — enforces the cross-harness invariants in
+// CLAUDE.md and AGENTS.md with zero dependencies. Run in CI and locally:
+// `node scripts/check.mjs`.
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,18 +14,30 @@ const fail = (m) => errors.push(m);
 const readJson = (p) => JSON.parse(readFileSync(join(ROOT, p), "utf8"));
 
 // 1. Manifests parse and versions are in sync.
-let plugin, pkg, market;
+let plugin, pkg, market, codexPlugin, codexMarket;
 try {
   plugin = readJson(".claude-plugin/plugin.json");
   pkg = readJson("package.json");
   market = readJson(".claude-plugin/marketplace.json");
+  codexPlugin = readJson(".codex-plugin/plugin.json");
+  codexMarket = readJson(".agents/plugins/marketplace.json");
 } catch (e) {
   fail(`manifest JSON invalid: ${e.message}`);
 }
 if (plugin && pkg && plugin.version !== pkg.version)
   fail(`version mismatch: plugin.json ${plugin.version} vs package.json ${pkg.version}`);
+if (codexPlugin && pkg && codexPlugin.version !== pkg.version)
+  fail(`version mismatch: .codex-plugin/plugin.json ${codexPlugin.version} vs package.json ${pkg.version}`);
 if (plugin && market && market.plugins?.[0]?.name !== plugin.name)
   fail(`marketplace plugin name ${market?.plugins?.[0]?.name} != plugin name ${plugin?.name}`);
+if (codexPlugin && codexMarket) {
+  const entry = codexMarket.plugins?.find((x) => x.name === codexPlugin.name);
+  if (!entry) fail(`Codex marketplace has no entry for ${codexPlugin.name}`);
+  if (entry?.source?.source !== "url" || entry.source.url !== "https://github.com/assisjp/specflow.git")
+    fail("Codex marketplace must expose specflow from its GitHub repository URL");
+  if (!entry?.policy?.installation || !entry.policy.authentication || !entry.category)
+    fail("Codex marketplace entry is missing policy or category metadata");
+}
 
 // 2. Discover promoted skills on disk.
 const onDisk = [];
@@ -37,8 +50,14 @@ for (const bucket of PROMOTED) {
     onDisk.push({ bucket, name, skillMd, entry: `./skills/${bucket}/${name}` });
     // 2a. frontmatter name == folder name
     const fm = readFileSync(skillMd, "utf8").match(/^---\n([\s\S]*?)\n---/);
+    const fields = fm?.[1]
+      .split("\n")
+      .filter((line) => line.trim())
+      .map((line) => line.match(/^([A-Za-z0-9_-]+):/)?.[1]);
     const declared = fm && fm[1].match(/^name:\s*(.+)$/m)?.[1].trim();
     if (declared !== name) fail(`${bucket}/${name}: frontmatter name "${declared}" != folder "${name}"`);
+    if (!fields || !fields.includes("name") || !fields.includes("description"))
+      fail(`${bucket}/${name}: SKILL.md frontmatter must contain name and description`);
   }
 }
 
@@ -69,9 +88,15 @@ for (const bucket of ["in-progress", "misc", "personal", "deprecated"]) {
   }
 }
 
-// 6. Invocation contract: frontmatter invocation mode must match README grouping.
-const isModelInvoked = (s) =>
-  !readFileSync(s.skillMd, "utf8").includes("disable-model-invocation: true");
+// 6. Invocation contract: Codex policy must match README grouping.
+const isModelInvoked = (s) => {
+  const policy = join(dirname(s.skillMd), "agents", "openai.yaml");
+  if (!existsSync(policy)) {
+    fail(`${s.bucket}/${s.name}: missing agents/openai.yaml`);
+    return false;
+  }
+  return !readFileSync(policy, "utf8").includes("allow_implicit_invocation: false");
+};
 const afterUser = readme.split("### User-invoked")[1] ?? "";
 const userSection = afterUser.split("### Model-invoked")[0] ?? "";
 const modelSection = (readme.split("### Model-invoked")[1] ?? "").split(/\n## /)[0];

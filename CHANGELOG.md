@@ -2,6 +2,20 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.9.19] — 2026-08-09
+
+### Added
+- **Public Codex plugin marketplace.** Anyone can install specflow from GitHub with `codex plugin marketplace add assisjp/specflow --ref main` followed by `codex plugin add specflow@specflow`. The plugin packages the existing skills from the repository root, so there is one source of truth for Codex and Claude Code.
+
+## [0.9.18] — 2026-08-09
+
+### Added
+- **Codex compatibility.** Promoted skills now include portable `agents/openai.yaml` metadata, with the deliberate flow steps explicitly invoked in Codex and utility skills still eligible for implicit invocation. Codex can discover the same source through `.agents/skills` or `~/.agents/skills`; `scripts/link-skills.sh` links the latter alongside the existing Claude Code directory.
+- `AGENTS.md` as the Codex repository entry point, with the shared conventions maintained in `CLAUDE.md`.
+
+### Changed
+- Existing Claude-specific `SKILL.md` frontmatter remains intact. Codex-compatible metadata mirrors its invocation behavior, so both harnesses preserve their native invocation experience.
+
 ## [0.9.17] — 2026-07-26
 
 ### Fixed

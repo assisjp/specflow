@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Review a diff against standards and its spec"
+  default_prompt: "Use $code-review to review this diff from its merge base."

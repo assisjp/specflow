@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grill"
+  short_description: "Stress-test a decision before any code is written"
+  default_prompt: "Use $grill to pressure-test this plan before implementation."
+policy:
+  allow_implicit_invocation: false

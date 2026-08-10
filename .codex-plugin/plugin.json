@@ -1,0 +1,32 @@
+{
+  "name": "specflow",
+  "version": "0.9.19",
+  "description": "A reliability-first development flow: decide, specify, verify, and review before merge.",
+  "author": {
+    "name": "João Paulo Assis",
+    "url": "https://github.com/assisjp"
+  },
+  "homepage": "https://github.com/assisjp/specflow#readme",
+  "repository": "https://github.com/assisjp/specflow",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "spec-driven",
+    "code-review",
+    "productivity"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "specflow",
+    "shortDescription": "Reliability-first spec-driven development flow.",
+    "longDescription": "Turn decisions into specifications, implementation tickets, evidenced changes, and one focused human review.",
+    "developerName": "João Paulo Assis",
+    "category": "Productivity",
+    "capabilities": ["Write"],
+    "defaultPrompt": [
+      "Use $guide to choose the next specflow step.",
+      "Use $grill to pressure-test this plan.",
+      "Use $repo-hardening to prepare this repository."
+    ]
+  }
+}

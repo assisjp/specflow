@@ -1,0 +1,6 @@
+interface:
+  display_name: "Spec Execution"
+  short_description: "Implement one spec as a reviewable, evidenced change"
+  default_prompt: "Use $spec-execution to implement this spec or ticket."
+policy:
+  allow_implicit_invocation: false

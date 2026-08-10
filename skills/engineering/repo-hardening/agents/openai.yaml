@@ -1,0 +1,6 @@
+interface:
+  display_name: "Repo Hardening"
+  short_description: "Set up deterministic checks for agent work"
+  default_prompt: "Use $repo-hardening to prepare this repository for agent work."
+policy:
+  allow_implicit_invocation: false

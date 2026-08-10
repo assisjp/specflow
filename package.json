@@ -1,8 +1,8 @@
 {
   "name": "specflow",
-  "version": "0.9.17",
+  "version": "0.9.19",
   "private": true,
-  "description": "A self-contained, reliability-first agent development flow, shipped as a Claude Code plugin.",
+  "description": "A self-contained, reliability-first agent development flow for Claude Code and Codex.",
   "repository": {
     "type": "git",
     "url": "https://github.com/assisjp/specflow"

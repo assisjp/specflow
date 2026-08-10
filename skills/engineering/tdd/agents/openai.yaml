@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test-Driven Development"
+  short_description: "Build a feature through disciplined red-green cycles"
+  default_prompt: "Use $tdd to implement this change test-first."

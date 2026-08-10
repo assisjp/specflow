@@ -1,6 +1,6 @@
 # specflow — repository conventions
 
-specflow is a single-plugin Claude Code marketplace. These rules keep it consistent as skills are added. IMPORTANT: follow them exactly.
+specflow supports Claude Code and Codex from one skill source. Claude Code ships it as a single-plugin marketplace; Codex discovers the same skills directly. These rules keep both integrations consistent as skills are added. IMPORTANT: follow them exactly. `AGENTS.md` is the Codex entry point and directs Codex here for the full shared rules.
 
 ## Buckets
 
@@ -22,6 +22,7 @@ A skill in `engineering/` or `productivity/` MUST have all three, kept in sync:
 1. A folder `skills/<bucket>/<name>/` containing `SKILL.md`, where the folder name equals the `name:` in the frontmatter.
 2. An entry in the top-level `README.md`, with the skill name linked to its `SKILL.md`, grouped under **User-invoked** or **Model-invoked**.
 3. An entry in `.claude-plugin/plugin.json`'s `skills` array (`./skills/<bucket>/<name>`).
+4. An `agents/openai.yaml` with Codex UI metadata. User-invoked skills set `policy.allow_implicit_invocation: false`; model-invoked skills leave it enabled.
 
 Skills in `in-progress/`, `misc/`, `personal/`, and `deprecated/` MUST NOT appear in `README.md` or `plugin.json`.
 
@@ -31,7 +32,7 @@ Every promoted skill also gets a human-facing page at `docs/<bucket>/<name>.md`,
 
 ## Invocation
 
-Every `SKILL.md` is either **user-invoked** (`disable-model-invocation: true` — reachable only when typed) or **model-invoked**. specflow's skills are user-invoked by default: the flow is deliberate, and each step is chosen, not triggered.
+Every `SKILL.md` is either **user-invoked** or **model-invoked**. Retain Claude Code's existing `disable-model-invocation: true` field for user-invoked skills. Mirror it in Codex's `agents/openai.yaml` policy: `allow_implicit_invocation: false` is user-invoked (still explicitly available as `$skill-name` in Codex), while the default `true` is model-invoked. Keep the shared required frontmatter (`name` and `description`) present in every skill; do not remove Claude-specific fields from an existing skill. specflow's skills are user-invoked by default: the flow is deliberate, and each step is chosen, not triggered.
 
 ## Ownership of shared files
 
@@ -48,8 +49,10 @@ Several skills write to shared files. To avoid one clobbering another:
 
 ## Versioning & validation
 
-- Keep `.claude-plugin/plugin.json`'s `version` in sync with `package.json`'s. Claude uses the plugin `version` to decide when installed users see an update.
+- Keep `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` versions in sync with `package.json`. Claude uses its plugin version to decide when installed users see an update; the Codex plugin manifest uses the same release version.
 - After touching either manifest, run `claude plugin validate . --strict`.
+- After touching the Codex manifest or marketplace, run `python3 /Users/joaopauloassis/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .` when PyYAML is available.
+- After changing a promoted skill, run `node scripts/check.mjs`; it validates the Claude manifest wiring, Codex's portable skill metadata, and the Codex plugin/marketplace manifests.
 - **Docs-sync ritual.** `scripts/check.mjs` verifies a docs page *exists*, not that its content matches the `SKILL.md` — content drift is a bug class CI cannot catch. Every version bump that touches a `SKILL.md` must re-read the corresponding `docs/<bucket>/<name>.md` and re-sync it in the same commit.
 
 ## Release checklist — the tracker backend (manual, once per minor)

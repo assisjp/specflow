@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Spec"
+  short_description: "Turn settled decisions into a publishable specification"
+  default_prompt: "Use $to-spec to turn this settled discussion into a spec."
+policy:
+  allow_implicit_invocation: false
