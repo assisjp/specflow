@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// specflow marker-protocol eval — runs the second-failure ("returned") gate's
+// specflow marker-protocol eval — checks the unresolved-spec ("returned") gate's
 // LOCAL file backend over a real temp filesystem, deterministically. Zero
 // dependencies, zero network: `node scripts/eval-marker-protocol.mjs`.
 //
@@ -37,7 +37,8 @@ const bail = () => {
 };
 
 // ── Part A: extract the marker contract from the skills' own prose. ──────────
-// setter+reader: spec-execution. clearers: to-spec (spec), to-tickets (ticket).
+// setter+reader: spec-execution. clearers: the publishers and an authorized
+// spec-execution after a verified in-place correction (ADR 0009).
 // router: guide.
 const GATE = [
   ["spec-execution", "engineering/spec-execution/SKILL.md"],
@@ -148,24 +149,24 @@ const setsLabel = new RegExp(`${SET_VERB}[^.]{0,120}\`${esc(labelToken ?? "retur
 const setsLine = new RegExp(`${SET_VERB}[^.]{0,120}\`${esc(lineToken)}[^\`]*\` line`).test(texts["spec-execution"]);
 guard(
   setsLabel && setsLine,
-  `spec-execution no longer instructs how to SET the marker (${setsLabel ? "" : "tracker label; "}${setsLine ? "" : "local line; "}missing) — the gate's write half is gone, so step 2 reads a marker nothing ever writes and the second-failure rule collapses back to advice (the 0.9.1 bug itself)`
+  `spec-execution no longer instructs how to SET the marker (${setsLabel ? "" : "tracker label; "}${setsLine ? "" : "local line; "}missing) — the gate's write half is gone, so step 2 reads a marker nothing ever writes (the 0.9.1 bug itself)`
 );
 // Each clearer must carry the clear INSTRUCTION for both backends, not merely a
 // section title that names the clear — a heading reading "Clearing a `returned`
 // marker" above a paragraph that no longer says how is a dead clear that reads
 // alive. Verb↔token proximity, once per backend.
 const VERB = "(?:[Cc]lear|[Rr]emove|[Dd]elete)\\w*";
-for (const n of ["to-spec", "to-tickets"]) {
+for (const n of ["to-spec", "to-tickets", "spec-execution"]) {
   const clearsLabel = new RegExp(`${VERB}[^.]{0,120}\`${esc(labelToken ?? "returned")}\` label`).test(texts[n]);
   const clearsLine = new RegExp(`${VERB}[^.]{0,120}\`${esc(lineToken)}[^\`]*\` line`).test(texts[n]);
   guard(
     clearsLabel && clearsLine,
-    `${n} no longer instructs how to clear the marker on republish (${clearsLabel ? "" : "tracker label; "}${clearsLine ? "" : "local line; "}missing) — it owns the clear for the source type it publishes (ADR 0008), so a healed source keeps its marker and the gate never releases (the 0.9.2 bug). A heading naming the clear is not the instruction`
+    `${n} no longer instructs how to clear the marker after an authorized verified correction (${clearsLabel ? "" : "tracker label; "}${clearsLine ? "" : "local line; "}missing) — ADR 0009 permits this transition, so a healed source must have a documented exit. A heading naming the clear is not the instruction`
   );
 }
 guard(
-  new RegExp(`(${esc(labelToken ?? "returned")}|marker)[^.]{0,160}grill`, "i").test(texts["guide"]),
-  `guide no longer routes a marked source to grill — it would hand returned work to a spec-execution that refuses it, and the user never hears where the exit is`
+  /unresolved[\s\S]{0,240}(?:focused question|grill)/i.test(texts["guide"]),
+  "guide no longer identifies a clarification path for an unresolved specification defect"
 );
 
 // ── Reader predicate and setter, built FROM the extracted token — never from
@@ -248,7 +249,7 @@ try {
     isMarked(`# spec\n\nbody\n\n${lineToken} spec-defect — pushed down by a later edit\n\nmore body\n`),
     `a \`${lineToken}\` line below line 1 does not read as marked — a first-line-only reader misses a marker an edit pushed down, and the gate silently opens`
   );
-  // C3 (ADR 0008): setting twice is idempotent — state, not counter.
+  // C3 (retained from ADR 0008): setting twice is idempotent — state, not counter.
   const twice = join(tmp, "docs/specs", "set-twice.md");
   writeFileSync(twice, "# set twice\n\nbody\n");
   setMarker(twice, "first return");
@@ -289,5 +290,5 @@ if (errors.length) bail();
 // cannot fail without someone editing a fixture. Real value, but not coverage;
 // reporting one total invited reading 23 units of net where there are 15.
 console.log(
-  `✓ marker-protocol eval OK — ${guards} contract guards (detection) on token \`${lineToken}\` / label \`${labelToken}\`, plus ${transitions} lifecycle steps run as executable documentation of the local backend. Tracker backend: manual release checklist (see CLAUDE.md).`
+  `✓ marker-protocol eval OK — ${guards} contract guards (detection) on token \`${lineToken}\` / label \`${labelToken}\`, plus ${transitions} lifecycle steps run as executable documentation of the local backend. Tracker backend: manual release checklist (see AGENTS.md).`
 );

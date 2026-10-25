@@ -20,3 +20,7 @@
 
 - **Easier:** the router does what it claims — it appears when someone is lost, without them needing to know it exists.
 - **Accepted — ambient triggering:** as with ADR 0004, a model-invoked skill with a situational description may fire when unwanted. `guide` only routes and stops, so the cost of a stray firing is a one-line suggestion, not wasted work. If it becomes noisy, the lever is to narrow the description (as ADR 0004 established), not to re-disable invocation — which would reintroduce the paradox.
+
+## Amendment (2026-10-25)
+
+The invocation mode remains model-invoked. The trigger is now explicitly a user asking which step to take, as corrected in 0.9.1. Merely describing a coding task does not trigger routing; it proceeds under the task authorization. This narrows discovery without requiring users to know the router name.

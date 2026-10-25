@@ -1,6 +1,6 @@
 # 0008 — A returned spec is the same entity, and `to-spec` clears its marker on republish
 
-- **Status:** Accepted
+- **Status:** Superseded by [0009](./0009-adaptive-execution-policy.md)
 - **Date:** 2026-07-24
 
 ## Context

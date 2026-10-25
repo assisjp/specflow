@@ -1,140 +1,66 @@
 ---
 name: repo-hardening
-description: Prepare a repository for agent work — install the deterministic verification layer (formatter, linter, types, tests, git hooks, CI) without breaking what already exists, and record the canonical commands and prohibitions in the repo's agent-context file (AGENTS.md or CLAUDE.md). Use whenever the user wants to set up a linter, pre-commit, pre-push or CI, "get the repo ready for agents", standardise checks. Run it before `spec-execution` — that skill refuses to build without the verification block this installs. Works on a fresh repo and on an old one with partial config. Idempotent — re-run any time to re-verify.
+description: Prepare a repository verification layer by adopting existing tooling, repairing requested gaps and recording scoped commands and execution policy. Use when the user asks to set up or improve lint, types, tests, hooks or CI; not as a prerequisite merely because a Specflow marker is absent.
 disable-model-invocation: true
 ---
 
 # Repo Hardening
 
-Ensure a **deterministic** verification layer exists in the repository, and that it is recorded where agents read.
+Prepare the verification layer the repository actually needs. Adopt healthy existing tooling, repair relevant gaps, and record the commands and execution environment. User instructions and repository policy take precedence over these defaults (ADR 0009).
 
-Principle: **an error a machine can catch, a model should never have to.** Every check here is an agent cycle and a human review saved.
+## 1. Inventory before changing anything
 
-**Idempotent.** Re-running re-verifies and corrects drift — it never duplicates.
+Inspect manifests, scripts, CI, formatter/linter/types/test configuration, hook managers, applicable `AGENTS.md`/`CLAUDE.md`, and the dirty tree. Detect the run command only if a runnable surface needs verification. In a monorepo, infer scope from the request and affected consumers; ask only when a consequential scope choice remains unresolved.
 
-## Inviolable rules
+Run existing checks only in the authorized environment and within the agreed resource budget. Local execution, browser access, remote access and production operations are separate capabilities: a request to prepare a repo does not grant all of them. If execution is unavailable, inventory the commands and clearly report that their health is unverified.
 
-1. Never overwrite existing config. If it exists, adopt it and record it.
-2. Never install a second hook manager. A repo has at most one.
-3. Never change an existing CI rule. Only add, and only with authorisation.
-4. Never make a bulk change without confirmation.
-5. **Never write outside your own markers in the agent-context file (`AGENTS.md`/`CLAUDE.md`).**
-6. **Never create or edit `CONTEXT.md`, ADRs, or domain docs.** Those have another owner (`domain-modeling`).
-7. Stop and ask whenever a choice is irreversible or opinionated.
+## 2. Choose the smallest useful change
 
-## Phase 1 — Inventory
+Report what is healthy, what fails, and what is missing. Reuse decisions and authorization already given. Ask before material unrequested policy/dependency changes or broad formatting; do not ask again for the same approved scope.
 
-Write nothing in this phase.
+- Adopt existing config and the existing hook manager; never silently replace them or install a second manager.
+- Add a formatter, linter, type checker or test runner only where it contributes to this repo's requested verification. One tool may cover several roles.
+- Respect the repository's enforcement policy. Hooks and CI are options with different costs, not a mandatory pair for every repo. Reuse existing jobs and hooks; an authorized adjustment may modify them instead of adding duplicate jobs.
+- Hooks and CI should enforce the same relevant contracts, but may use different scopes: quick staged-file checks, affected-package checks, and a broader release gate need not be identical commands.
+- Do not format the whole repo as an incidental step. If explicitly wanted, keep that mechanical change separate.
+- Do not hide failures with disabled rules or blanket ignores. Existing debt may use a documented tool-supported baseline or a clearly bounded scope, without claiming a full green gate. Fix new failures in the affected scope; report unrelated debt separately.
 
-**Ecosystem** — detect from the manifest:
+## 3. Record the project contract
 
-| File | Ecosystem |
-|---|---|
-| `package.json` | Node/TS |
-| `pyproject.toml`, `requirements.txt`, `setup.py` | Python |
-| `go.mod` | Go |
-| `Cargo.toml` | Rust |
-| `mix.exs` | Elixir |
-| `Gemfile` | Ruby |
-| `composer.json` | PHP |
-| `pom.xml`, `build.gradle` | JVM |
+Prefer an existing `AGENTS.md`, otherwise an existing `CLAUDE.md`, otherwise create `AGENTS.md`. If both exist, keep one canonical block and a pointer in the other (ADR 0003). Edit only your `<!-- repo-hardening:start -->` / `:end -->` region, or append it if absent. Preserve project-specific restrictions and work by others. Do not overwrite a customized block with generic defaults.
 
-Multiple manifests or a monorepo: list them all and ask which is in scope.
-
-**What already exists:**
-
-- hook manager: `.husky/`, `lefthook.yml`, `.pre-commit-config.yaml`, `.githooks/`, `core.hooksPath`, a `.git/hooks/` with real content
-- formatter, linter, type-checker config
-- test runner and where tests live
-- CI: `.github/workflows/`, `.gitlab-ci.yml`
-- scripts in the manifest, Makefile, justfile
-- **run/dev command** for the evidence gate — a `dev`/`start`/`serve` script, a documented run command, or none (a library with no runnable surface)
-- `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` — which one the harness auto-loads, and whether a `repo-hardening` block is already inside
-
-**Health of what exists** — run the checks you found and count the failures. A linter configured but unrun for two years is not a verification layer, it is a liability.
-
-## Phase 2 — Report and decide
-
-Present, briefly:
-
-- ecosystem detected
-- what exists and is healthy → **kept**
-- what exists and is failing → how many failures, and a proposal
-- what is missing → a proposal
-- whether any bulk change is involved
-
-**Wait for confirmation.** If the user wants only part, do only that part.
-
-## Phase 3 — Install what is missing
-
-Only what the inventory found missing, in this order:
-
-1. **Formatter** — the ecosystem's default config, zero customisation.
-2. **Linter** — the recommended default ruleset. Do not invent custom rules now.
-
-   Formatter and linter may be **one tool or two** — do not force two. Node splits them (prettier + eslint); modern Python is a single tool (`ruff format` + `ruff check`), as is Biome for JS/TS. Install or adopt whatever the ecosystem's default is; if one tool covers both roles, that is one install with two commands, not a gap to fill with a second tool.
-
-3. **Type checker** — where the language supports it (`tsc`, `mypy`, …).
-4. **Hooks** — if a manager exists, **add a step to it**; otherwise install the ecosystem default (husky for Node, the `pre-commit` framework for Python, …). `pre-commit` hook = formatter + lint + types on staged files. `pre-push` = the test suite.
-5. **CI** — a job running **exactly the same commands**. If a workflow exists, add a new job rather than editing existing ones.
-
-The hook is bypassable; CI is the real gate. Both must exist.
-
-## Phase 4 — Existing repo: don't break everything
-
-Turning on strict mode in an old repo spews thousands of errors and the user quits on day one.
-
-- **Formatter**: apply across the whole repo in **one isolated commit**, mixed with nothing. Confirm first.
-- **Linter and types**: use the tool's own baseline/suppression mechanism **if it has one** (eslint does; many linters do), otherwise restrict scope to the folders where work will happen. A type-checker like `tsc` has **no baseline** — do not reach for one that does not exist; its only honest options are scope-restrict (include just the folders under work) or fix the errors in one isolated commit. Record that scope is partial either way.
-- **Tests**: if the suite is slow or flaky, record it as a known problem rather than masking it. A slow suite is the second-largest cost leak in agent work.
-
-Never disable a rule to make a check pass. Either it enters the baseline, or it becomes a task.
-
-## Phase 5 — Write to the agent-context file
-
-The block must land in the file the harness **auto-loads into every session**, or the prohibitions do not hold. That file is not the same everywhere: Claude Code loads `CLAUDE.md`; many other agent harnesses load `AGENTS.md`; some load both. Pick the target this way:
-
-1. If `AGENTS.md` exists, write the block there — it is the cross-harness standard.
-2. Else if `CLAUDE.md` exists (e.g. a Claude Code repo), write the block there.
-3. Else create `AGENTS.md`.
-4. **If you wrote to `AGENTS.md` but `CLAUDE.md` also exists**, add a one-line pointer inside `CLAUDE.md`, between your markers, so the block is discoverable from whichever file the harness loads: `<!-- repo-hardening:start --> See the Verification block in AGENTS.md. <!-- repo-hardening:end -->`.
-
-In the target file: create it if missing; if it exists, **edit only between the markers below**; if there are no markers, append the block at the end without touching anything else.
-
-This block enters context in every session in the repo. Keep it lean — only what must hold even with no skill invoked. Procedure does not go here.
+The block is a concise project contract, not a mandatory Specflow installation marker. Discover commands from the repo's scripts and CI, not from global examples. Use this shape, omitting inapplicable commands:
 
 ```markdown
 <!-- repo-hardening:start -->
 ## Verification
 
-- Format: <command>
-- Lint:   <command>
-- Types:  <command>
-- Tests:  <command>
-- Run:    <dev server / run command, for the evidence gate — or "n/a" if the project has no runnable surface>
-- All:    <single command chaining format+lint+types+tests>
+- Environment: <local / CI / isolated remote checkout; authorization and resource limits>
+- Format: <command and scope>
+- Lint: <command and scope>
+- Types: <command and affected consumers>
+- Tests: <focused regression command; broader gate when warranted>
+- Run/evidence: <authorized command or existing evidence source; n/a when inapplicable>
+- Full gate: <optional command; when it is required>
 
-Lint/type scope: <full | folders X, Y>
-
-Work is only done when every check is green.
-Do not disable a lint rule, or add ignore/noqa/any, to make a check pass.
-Do not use `--no-verify`.
-Do not change an existing test to accommodate a change.
-If the same check fails three times, stop and report the obstacle.
+Run checks required by the change and affected consumers. Documentation-only work
+normally needs diff/link review, not application suites. Reuse passing results
+for unchanged source, dependencies and relevant environment; report each check's
+scope and any check not run. A build or deployment is a separate result.
+Do not bypass required hooks. Do not disable checks or weaken assertions to hide a failure.
+Existing tests may change for an accepted behavior change or an incorrect/coupled
+test; explain why and preserve the still-required behavioral coverage.
+After a failure, diagnose before retrying. Repeat only with a changed hypothesis,
+input or environment. Expected TDD reds are not repair failures. If the same
+cause repeats without progress, report the obstacle and continue independent work;
+respect any explicit project attempt or resource budget.
 <!-- repo-hardening:end -->
 ```
 
-The **Run** line is what the evidence gate depends on — `spec-execution` brings the app up with it to capture real evidence, instead of guessing a command. Detect it in Phase 1 (a `dev`/`start`/`serve` script, a documented run command); if there genuinely is no runnable surface, record `n/a` so the gate knows to fall back to test output.
+Old blocks remain valid project policy until an authorized migration. Updating the plugin does not rewrite them. Present the scoped policy diff when migrating; do not silently relax local release limits, security gates or execution restrictions.
 
-If the block already exists, compare it against reality and update only what diverged.
+## 4. Verify and deliver
 
-**Then run the repo's formatter — whether you installed it or adopted an existing one — over the file you just wrote** (and any config files you added). Any formatter will reflow an aligned block or a hand-written config, so this bites just as hard in a repo that already had one as in a fresh install — if you skip it, the Phase 6 check fails on the very files this skill created. The skill's own output must pass the skill's own gate.
+Format the files you changed with the adopted formatter in the permitted environment. Run checks affected by the tooling/policy change; verify a hook or run command when that behavior changed and execution is authorized. Do not repeatedly run a green full suite for unchanged inputs.
 
-## Phase 6 — Verify
-
-1. Run the "All" command and confirm it passes.
-2. Test commit: did the hook fire?
-3. Do CI and the hook run the same commands? Divergence is the classic source of "passes local, breaks in the PR".
-4. **If `Run` is not `n/a`, execute it** — confirm the app actually comes up, then tear it down. The `Run` line is the evidence gate's contract, and an untested run command breaks that gate in `spec-execution`'s evidence step, at the worst possible time (the work is already done, and the gate fails on infrastructure, not quality). This is the same rule as the rest of Phase 6: don't trust what you just wrote — run it.
-5. **Commit the hardening — one isolated commit, mixed with no feature work.** This layer is durable repo state, exactly like a spec or a ticket (`to-spec` and `to-tickets` commit theirs for the same reason). Leave it uncommitted and the next `spec-execution` run inherits a dirty tree: config, hooks, CI and the agent-context file land inside a feature PR, breaking its closed scope (§3) and its one-diff-one-concern rule (§8) by construction, and `code-review`'s Standards axis reviews your config as if it were the feature. If a formatter pass reflowed pre-existing code, that is a *second* isolated commit (see *Working on an old repo*) — never folded into this one. **Stage by path — only the files you installed or edited.** Phase 1 told you whether the tree was already dirty; if it was, a blanket `git add -A` swallows the user's uncommitted work into "your" commit and the isolation is gone without anyone noticing. Leave what is not yours untouched and say in the report that you found it dirty.
-6. Report what was installed, what was kept, and what is still pending.
+Keep hardening separate from feature work. Stage only your paths, and commit/publish according to the task's delivery authorization and repo conventions. Preserve pre-existing dirty files. Report installed/adopted tooling, exact checks and environment, what remains unverified, and any required next action. A missing capability is a concrete limitation, not a reason to invent a green result.

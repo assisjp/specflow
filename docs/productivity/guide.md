@@ -1,27 +1,18 @@
 # guide
 
-The specflow **router**. Describe what you are trying to do, and it names the one skill to run now — and where you are in the flow.
-
-You do not need `guide` once the flow is familiar; the [README diagram](../../README.md) shows the same map. It exists for the moment you are staring at a task and unsure which door to open.
+Choose the smallest useful next step when the user asks which step to take.
 
 ## When to use it
 
-- "Which skill do I use for this?"
-- "Where do I start?" / "What's next?"
-- You describe a task without naming a skill.
+Use for explicit routing questions; merely describing a coding task does not trigger this router.
 
-## What it does
+## Behavior
 
-Reads the situation and routes to exactly one skill — the next step, not the whole chain — with the reason. It knows the flow's guard rails:
+- Route to grill, domain-modeling, to-spec, to-tickets, repo-hardening, spec-execution, tdd, code-review or session-handoff according to the actual need.
+- A healthy repo without a marker can proceed using existing commands. Already accepted requirements do not need another interview or document.
+- A returned marker denotes an unresolved specification defect. Resolve missing decisions; otherwise an authorized correction can heal the same source and clear the state after verification.
+- Reuse scope and authorization. If continuing was requested, continue rather than requiring the user to invoke the whole chain.
 
-- If the repo has no verification block (in `AGENTS.md` or `CLAUDE.md`) and you want to build, it sends you to `repo-hardening` first — `spec-execution` refuses to run without it.
-- If the source carries a `returned` marker, it routes by state: defect not yet resolved → `grill`; already rewritten → `to-spec` (spec) or `to-tickets` (ticket) to republish, which clears the marker. Either way `spec-execution` waits — only republishing releases the gate.
-- If you already named a skill, it confirms rather than second-guesses.
+## Source
 
-## The flow it routes across
-
-`grill` → `to-spec` → `to-tickets` (if too big for one PR) → `spec-execution` (calls `tdd` + `code-review`, under `repo-hardening`'s gates) → human review → merge. `domain-modeling` runs alongside `grill docs`; `session-handoff` catches you when you must stop mid-work.
-
-## Related
-
-Every specflow skill — `guide` is the index to all of them.
+The [skill instructions](../../skills/productivity/guide/SKILL.md) define the full contract. Repository policy and the user's authorization take precedence over the defaults.

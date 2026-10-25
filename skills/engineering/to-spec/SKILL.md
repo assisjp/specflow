@@ -6,84 +6,34 @@ disable-model-invocation: true
 
 # To Spec
 
-Take the current conversation and codebase understanding and produce a spec. Do **not** interview the user — that is grill's job, and it should already have happened. This skill only synthesises what is already decided.
+Synthesize accepted decisions and codebase facts into the smallest useful specification. A settled request can be enough; a `grill` session is not a prerequisite. Do not invent requirements or restart an interview already resolved.
 
-If a grill decision log exists in the conversation, it is your primary source: every decision in the spec should trace back to a log entry or to something the user explicitly said. Do not invent requirements the grilling did not settle.
+## 1. Reuse context and decisions
 
-## Process
+Read the relevant request, existing source, glossary and architectural decisions. Inspect implementation boundaries only where needed to establish the contract. Reuse approved test seams; otherwise select conventional seams proportional to risk. Ask only if an unresolved choice changes behavior, scope or material cost. Do not pause for routine test placement.
 
-### 1. Understand the code
+## 2. Write a bounded contract
 
-Explore the repo to understand its current state, if you have not already. Use the project's domain glossary (`CONTEXT.md`) vocabulary throughout the spec, and respect any ADRs in the area you are touching. If a term in the conversation conflicts with the glossary, resolve it before writing — a spec that uses words loosely produces code that does the wrong thing precisely.
+Use the project's established format or this short shape:
 
-### 2. Sketch the test seams
+- **Problem and outcome:** what changes for the user and why.
+- **Acceptance criteria:** concrete observable examples, including important failure paths.
+- **Decisions and constraints:** accepted interfaces, relevant architecture and compatibility requirements.
+- **Verification:** useful existing/new coverage, affected consumers and authorized environment.
+- **Out of scope/open questions:** excluded work and genuinely unresolved decisions.
 
-Sketch the seams at which the feature will be tested. Prefer existing seams to new ones, and prefer the highest seam possible — the fewer seams across the codebase, the better, and the ideal is one. If a new seam is needed, propose it at the highest point you can.
+Scale detail with risk and uncertainty; do not generate a long user-story list by default. Paths or short snippets are useful when they precisely locate a contract; qualify mutable references with the relevant source version rather than banning them. Reuse durable decisions by reference instead of duplicating their full text.
 
-Check with the user that these seams match their expectations before writing the spec. This is the one place to pause — everything else is synthesis.
+Check each claim against an accepted decision, user statement or codebase fact. If an open question leaves a criterion unbuildable, resolve that question before calling the source ready; publish a clearly labeled draft if that is what the user requested. Harmless contextual uncertainties need not block the whole task.
 
-### 3. Write and publish
+## 3. Save or publish as authorized
 
-Write the spec using the template below, then publish it. Where it goes depends on what the project has:
+Use the existing tracker or repository convention. With no chosen location, infer from the project or ask only if publishing scope is ambiguous. A local default is `docs/specs/<feature-slug>.md`; durable specs should be versioned according to the repo's delivery workflow, not hidden in scratch. Do not create an issue or commit merely because a template mentions one if the user requested only a draft.
 
-- **A real issue tracker** (GitHub, Linear, …) — publish as one issue. On GitHub use `gh issue create`. Apply a `ready-for-agent` label if the project uses one.
-- **No tracker** — write it to `docs/specs/<feature-slug>.md` and **commit it**. A spec is durable, not scratch: `spec-execution` reads it in a later session, the second-failure rule assumes it survives, and a fresh clone must still find it. Never write a spec to `.scratch/` — that directory is ephemeral and git-ignored (ADR 0002, 0006).
+### Healing a returned spec
 
-If you cannot tell which the project uses, ask — it is a one-line decision, not an interview.
+Read a `returned` label or `Returned:` line as an unresolved source defect. Correct the same source, preserving identity, edges and other contributors' work. Apply the accepted clarification, record its reason and verify that the particular criterion is observable before clearing. Remove the `returned` label and record the correction on the tracker, or delete the `Returned:` line after saving the corrected local source. Do not clear merely because some text changed. An authorized implementer may perform the same bounded correction under `spec-execution` (ADR 0009); another skill invocation is not required.
 
-**Clearing a `returned` marker (the second-failure gate's exit).** If you are republishing a spec that a previous `spec-execution` sent back as defective — the source carries a `returned` label, or a `Returned: spec-defect` line — this rewrite heals it, and the rewritten spec is the *same* entity, not a new one (ADR 0008). So republish to the **same** source and clear the marker: remove the `returned` label and add a brief "rewritten" comment (tracker), or delete the `Returned:` line (local). `spec-execution` sets that marker; the republisher clears it. You clear it for a **spec** (the source `to-spec` owns); a marked **ticket** is cleared by `to-tickets`, the source it owns (ADR 0006/0008) — do not clear across the ownership line. Clearing is the only thing that lets the gate release. Do not open a new issue for the rewrite — that would strip the blocking edges of every ticket pointing at the old one.
+## 4. Deliver
 
-<spec-template>
-
-## Problem Statement
-
-The problem the user faces, from the user's perspective.
-
-## Solution
-
-The solution to that problem, from the user's perspective.
-
-## User Stories
-
-A long, numbered list of user stories, each in the form:
-
-1. As an `<actor>`, I want `<capability>`, so that `<benefit>`.
-
-Cover every aspect of the feature. Be extensive — a thin story list is a spec that will grow surprises during implementation.
-
-## Implementation Decisions
-
-The decisions that were actually made — trace each to the grill decision log where possible:
-
-- Modules built or modified, and the interfaces that change
-- Architectural decisions and technical clarifications
-- Schema changes and API contracts
-- Specific interactions
-
-Do **not** include file paths or code snippets — they go stale fast. Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (a state machine, reducer, schema, or type shape), inline just the decision-rich part and note it came from a prototype.
-
-## Testing Decisions
-
-- What makes a good test here: exercise external behaviour, not implementation details
-- Which modules will be tested
-- Prior art — similar tests already in the codebase
-
-## Out of Scope
-
-What this spec deliberately does not cover. Pull straight from the "out of scope" items the grilling surfaced.
-
-## Further Notes
-
-Anything else worth recording.
-
-</spec-template>
-
-## Traceability
-
-Before you publish, re-read the spec and check every claim traces to a decision, a user statement, or a codebase fact. Anything that traces to none of those is invented — cut it or turn it into an open question for the user. A spec's job is to encode what was decided, not to quietly decide more.
-
-**Then weigh what the open questions cost.** One that merely records context — a rough edge, a thing to watch — is legitimate; note it and publish. One that leaves a user story with **no verifiable acceptance criterion** is different: the spec does not say what to build there, so that story cannot be implemented or tested, and recording it honestly in *Further Notes* does not make it publishable. Say so plainly instead of shipping it and calling the spec ready — the next step is `grill` to settle the decision, not `spec-execution`. Publish anyway and the execution run discovers it at step 2 and hands the spec straight back, which is the most expensive possible way to learn something you already knew when you wrote it.
-
-## Hand off to the right next step
-
-You are the only one who can judge the size of what you just wrote, so say it: after publishing, state whether the spec fits **one reviewable PR**. If it does, the next step is `spec-execution`. If it plainly does not — several endpoints, a long story list, work that lands in stages — the next step is `to-tickets`, and naming `spec-execution` instead costs the user a whole round before it refuses and proposes the cut. A completion names its next step, exactly as a refusal names its exit.
+State what was saved/published and any unresolved requirements. A source that fits one coherent change can proceed to `spec-execution`; use `to-tickets` only when independent deliverables or substantial size warrant it. Reuse the user's authorization to continue rather than adding a ceremonial approval round.

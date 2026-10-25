@@ -8,7 +8,7 @@
     {
       "name": "specflow",
       "source": "./",
-      "description": "Grill a decision until it holds, turn it into a spec, and build it under deterministic gates. Self-contained skills, not vibe coding.",
+      "description": "Clarify decisions, implement bounded changes, verify behavior and review the actual candidate. Self-contained skills that respect repository policy.",
       "category": "engineering",
       "keywords": [
         "engineering",

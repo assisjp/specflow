@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // specflow consistency check — enforces the cross-harness invariants in
-// CLAUDE.md and AGENTS.md with zero dependencies. Run in CI and locally:
+// AGENTS.md with zero dependencies. Run in CI and locally:
 // `node scripts/check.mjs`.
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -142,7 +142,7 @@ const adrNums = new Set(
 );
 const citingFiles = [
   ...onDisk.map((s) => s.skillMd),
-  ...["README.md", "CLAUDE.md", "CONTEXT.md"].map((f) => join(ROOT, f)),
+  ...["README.md", "AGENTS.md", "CONTEXT.md"].map((f) => join(ROOT, f)),
 ];
 for (const bucket of PROMOTED) {
   const dir = join(ROOT, "docs", bucket);
@@ -164,7 +164,7 @@ if (plugin) {
     fail(`CHANGELOG.md has no entry for version ${plugin.version}`);
 }
 
-// 11. Marker protocol: the second-failure marker's setter, reader, clearers and
+// 11. Marker protocol: the unresolved-spec marker's setter, reader, clearers and
 // router must all use the same tokens. A local reader once drifted to `Returns:`
 // while everything else wrote `Returned:`, silently breaking the no-tracker gate.
 const GATE_SKILLS = ["spec-execution", "to-spec", "to-tickets", "guide"];
@@ -173,7 +173,7 @@ for (const n of GATE_SKILLS) {
   if (!s) continue;
   const body = readFileSync(s.skillMd, "utf8");
   for (const token of ["Returned:", "`returned`"])
-    if (!body.includes(token)) fail(`${n} is missing the canonical second-failure marker token ${token}`);
+    if (!body.includes(token)) fail(`${n} is missing the canonical returned-source marker token ${token}`);
   // Reverse direction: the retired counter token must not survive alongside the new one.
   if (body.includes("Returns:")) fail(`${n} still contains the retired token "Returns:" (use "Returned:")`);
 }

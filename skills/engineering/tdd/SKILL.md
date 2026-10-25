@@ -5,32 +5,27 @@ description: Test-driven development — the red-green loop, done so the tests a
 
 # Test-Driven Development
 
-TDD is the red → green loop. This skill is the reference that makes the loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns to avoid, and the rules of the loop. Every section applies on every cycle — consult them during the loop, not after.
+Use red → green → refactor to build confidence in behavior, not to maximize test count. Apply the repository's execution and verification policy; accepted testing decisions do not need repeated approval.
 
-When exploring the code, read `CONTEXT.md` if it exists so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you touch.
+## Choose a useful boundary
 
-## What a good test is
+Prefer stable public behavior over private structure. Reuse existing tests and seams, and the glossary/ADRs relevant to the change. Infer conventional seams when the task is clear; ask only when the choice materially changes scope, cost or the promised behavior. There is no universal ideal of one highest seam.
 
-A good test verifies **behaviour through a public interface**, not implementation details. The internals can change entirely; the test should not. It reads like a specification — `"user can checkout with a valid cart"` tells you exactly what capability exists — and it survives refactors because it does not care about internal structure.
+Use the smallest combination that covers the risk: a focused rule test, a repository integration test, an API or workflow test. Persisted state is an observable contract for a repository. Real database/transaction/lock behavior needs real integration evidence when that is the claim. Mock external boundaries for isolation where useful, but do not claim a mocked dependency proves its implementation.
 
-The value of a test is the bugs it catches minus the refactors it obstructs. A test coupled to internals has that subtraction come out negative.
+## Tests worth keeping
 
-## Seams — where tests go
+A test's value is the bugs it catches minus the refactors it obstructs. Expected results should come from an independent source: a known example, a specified rule or an accepted contract. Avoid assertions that duplicate the implementation, internal call choreography without a contract, and snapshots maintained without examining their meaning. Exact output/object assertions are valid when exact shape is the contract.
 
-A **seam** is the public boundary you test at: the interface where you observe behaviour without reaching inside. Tests live at seams, never against internals.
+Existing tests may evolve when the requested behavior changes or the old test was incorrect or coupled to internals. Explain why and retain coverage of invariants that remain required. Do not change expectations, delete tests or add ignores merely to hide a regression. Do not add new tests for documentation or trivial changes already adequately covered unless a concrete risk warrants them.
 
-**Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them with the user. No test at an unconfirmed seam. You cannot test everything — agreeing seams up front is how effort lands on the critical paths and the complex logic instead of on every trivial edge case. Prefer the fewest, highest seams; the ideal is one.
+## The loop
 
-Ask: "What is the public interface here, and which seams should we test?"
+1. Select one behavioral increment and a test capable of failing for the intended reason.
+2. Observe red in the authorized environment; distinguish a meaningful failing assertion from an import/setup/infrastructure failure. If execution is unavailable, say the red was not observed.
+3. Implement enough to satisfy that behavior; avoid speculative features or anticipatory abstractions.
+4. Observe green, then simplify touched code under those tests where useful. Repeat with the next increment.
 
-## Anti-patterns
+An expected red is not a repair failure. For unexpected failures, diagnose before retrying and change a relevant hypothesis/input; do not repeat an unchanged failing command without new evidence. Report repeated lack of progress and continue independent work. Explicit project resource/attempt budgets still apply.
 
-- **Implementation-coupled** — mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks on a refactor when behaviour did not change.
-- **Tautological** — the assertion recomputes the expected value the same way the code does (`expect(add(a, b)).toBe(a + b)`, a hand-derived snapshot, a constant equal to itself). It passes by construction and can never disagree with the code. Expected values must come from an independent source of truth — a known-good literal, a worked example, the spec.
-- **Horizontal slicing** — writing all the tests first, then all the implementation. Bulk tests verify *imagined* behaviour, go insensitive to real changes, and lock in test structure before the implementation is understood. Work in **vertical slices**: one test → one implementation → repeat, each test a tracer bullet responding to what the last cycle taught you.
-
-## Rules of the loop
-
-- **Red before green.** Write the failing test first, then only enough code to pass it. No speculative features, no anticipating future tests.
-- **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** Cleanup happens outside the red → green cycle: running under `spec-execution`, its step 7 executes the in-diff cleanup at review; standalone, do a refactor pass over the code this loop touched after each green. Keep the loop tight; keep the diff honest.
+Prefer short vertical feedback cycles over a large suite written against imagined internals. This does not forbid agreed examples or parameterized cases prepared together. Reuse passing checks for unchanged inputs; broaden only for affected consumers or concrete concerns. Inside `spec-execution`, pass the evidence and remaining limitations to its review step.

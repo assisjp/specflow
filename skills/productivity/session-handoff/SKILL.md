@@ -1,56 +1,45 @@
 ---
 name: session-handoff
-description: Compact the current session into an ephemeral handoff document so another session or tool can pick the work up once and continue. Records session state and git state, references durable artifacts by path instead of duplicating them, and suggests which skills to run next. Use when you have to stop mid-work and hand off, or the user asks for a handoff. Not for durable project state — that lives in ADRs, the glossary, the spec, and the tracker.
+description: Save a concise session checkpoint so another session or tool can resume after the user closes the chat. Record scope, authorization, source state, checks and next action; retain the last usable checkpoint until safely superseded.
 disable-model-invocation: true
 argument-hint: "[what the next session will focus on]"
 ---
 
 # Session Handoff
 
-Write an **ephemeral** handoff so a fresh agent can resume this work. The handoff is consumed once and then dies — it is session state, not a durable record.
+Save a concise checkpoint so the user can close this chat and another session can resume. Do not require another interview to summarize known state. Retain the last usable checkpoint until it is superseded or the receiving session confirms a durable continuation (ADR 0010).
 
-Durable truth already has owners: architectural decisions live in ADRs, vocabulary in `CONTEXT.md`, requirements in the spec, verification commands in the block (`AGENTS.md` or `CLAUDE.md`), and tasks in the tracker. The handoff does not compete with any of them. **State goes in the handoff; decisions go in an ADR.**
+## Save safely
 
-## Where it writes
+Use the project's handoff location; otherwise `.scratch/handoffs/<short-slug>.md`. Ensure that default is ignored before writing sensitive session state. If changing `.gitignore` is outside scope, use an authorized task-local location and report it. Exclude secrets and unnecessary personal data. Never delete another session's checkpoint or assume reading it authorizes deletion.
 
-Write to `.scratch/handoffs/<short-slug>.md`. **First, guarantee `.scratch/` is in `.gitignore`** — if it is not, add it before writing. A handoff swept into a PR by the next `spec-execution` run is a leak, not a handoff.
+Reference durable specs, tickets, glossary and ADRs rather than copying them. Short reasons and temporary debugging hypotheses can remain in a handoff; promote only decisions that satisfy `domain-modeling`'s ADR criteria. Do not create an ADR for every “why”.
 
-## What goes in it
-
-Reference durable artifacts by path or URL — never duplicate a spec, ADR, or issue body. But a path only resolves if the receiving session sees the same version of the tree, so record the **git state** that pins it:
+## Contents
 
 ```markdown
-# Handoff — <one-line topic>
+# Handoff — <topic>
 
-## Focus of the next session
-<If the user passed an argument, this is it: what the next session should do.>
-
-## Git state
-- Branch: <branch>
-- HEAD: <short SHA>
-- Dirty files: <list, or "clean">
-- Unpushed commits: <count, or "none">
-
-## Where things stand
-<2-6 lines of session state: what was being done, what is half-done, what
-just broke. State, not decisions.>
-
-## Artifacts (by reference, not copied)
-- Spec: <path or issue URL>
-- ADRs touched: <paths>
-- Relevant files: <paths>
-
-## Open threads
-<What is unresolved and needs a decision or a next step.>
-
-## Suggested skills
-<Which skills the next session should invoke, e.g. `spec-execution <issue>`,
-`grill` to resolve an open decision.>
+- Recorded: <date/time>
+- State: active checkpoint; supersedes <path, if any>
+- Objective and accepted scope: <including later corrections>
+- Authorization/constraints: <execution environment, browser, publication, production>
+- Checkout/worktree: <exact path>
+- Git: <branch, measured HEAD, dirty paths, measured upstream state or unknown>
+- Unsaved/uncommitted work: <where its actual contents survive; patch/commit if available>
+- Completed: <outcomes, not a transcript>
+- Remaining/blockers: <facts, uncertainties and temporary hypotheses>
+- Checks/evidence: <command, result, source identity and environment; unrun items>
+- Owned active processes/remote actions: <IDs, state, pending migrations/deploys,
+  temporary recovery controls, or none>
+- Sources: <spec/ticket/decision/evidence paths or URLs>
+- Next action: <one concrete continuation and dependencies>
 ```
 
-## Rules
+A dirty-file list and HEAD do not preserve the dirty contents on another machine. Say whether the handoff requires the same checkout; reference a saved patch/commit only if it actually exists. Do not claim source portability from path references alone. Record remote state only when measured, otherwise mark it unknown.
 
-- **State, not decisions.** A decision that will still matter months from now is an ADR, not a handoff line. If a handoff line records a *why* rather than a *where things stand*, it is a decision disguised as state — promote it to an ADR now (via `domain-modeling`), do not carry it forward.
-- **Reference, don't duplicate.** Paths and URLs, pinned by the git state above. Copying content means it goes stale the moment the source changes.
-- **Redact secrets.** No API keys, passwords, tokens, or PII in the handoff.
-- **Keep it short.** A handoff nobody can read in a minute is one the next session skims and mistrusts.
+## Resume and retention
+
+The receiving session first verifies checkout/source state and constraints, then reuses still-valid decisions and checks. Stale status must be reconciled with reality; a checkpoint is not authority to repeat a deployment or widen permissions. Do not rerun green checks for unchanged inputs merely because the session changed.
+
+Report the saved path and the next action so the user can close the chat. Mark a checkpoint superseded only when a successor exists or continuation is durably recorded. Deletion/retention follows the user's or project's policy; never remove the last usable checkpoint merely because it was read. Default to retaining it without placing transient state in a feature PR.

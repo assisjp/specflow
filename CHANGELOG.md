@@ -2,6 +2,26 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.10.0] — 2026-10-25
+
+### Changed
+- Contributor rules now have one canonical `AGENTS.md` with a Claude project-rule pointer. The obsolete root `CLAUDE.md` is removed; it was repository context, never loaded as installed plugin context.
+- Verification follows the change, affected consumers, authorized environment and repository policy. Healthy repos no longer require a Specflow marker; tooling setup remains an explicit task.
+- Accepted decisions and authorization persist between steps. Specs and tickets scale with risk; routine seam choices, long story lists and repeated approvals are no longer mandatory.
+- Tests may evolve with accepted behavior changes without masking regressions. Expected TDD reds are distinct from repair failures; diagnosis and progress replace the generic three-failure counter.
+- Reviews cover explicit committed, staged or working-tree candidates, including relevant new files, with fixed snapshots and affected revalidation after edits. Reviewer count and parallel work follow risk and ownership instead of fixed rules.
+- Authorized implementers can correct an accepted specification defect in place and clear its marker after verification. Existing `returned` / `Returned:` tokens and source identities remain compatible.
+- Handoffs retain the last usable checkpoint until superseded, preserving authorization, dirty-work limitations, evidence and the next action. Ordinary temporary reasoning no longer requires an ADR.
+- Existing generated project instructions remain authoritative until explicitly migrated; the update does not rewrite them or install global skills.
+
+### Fixed
+- Development linking preserves foreign and dangling symlinks as well as real files/directories; links to the current checkout remain untouched. Explicit target directories support isolated use and verification.
+- Documentation drift around router triggers, tracker capabilities, review scope and artifact ownership; removed a personal absolute validator path.
+
+### Added
+- ADR 0009 and ADR 0010, superseding rigid returned-source ownership and disposable handoff policy while retaining their history.
+- Focused regression checks for the actual link helper and a bounded behavioral validation guide. Structural/protocol checks remain distinct from live agent/tracker evidence.
+
 ## [0.9.19] — 2026-08-09
 
 ### Added
@@ -279,3 +299,5 @@ Both found by running the full flow end-to-end on a real Node/TS repo:
 [0.3.0]: https://github.com/assisjp/specflow/releases/tag/v0.3.0
 [0.2.0]: https://github.com/assisjp/specflow/releases/tag/v0.2.0
 [0.1.0]: https://github.com/assisjp/specflow/releases/tag/v0.1.0
+
+[0.10.0]: https://github.com/assisjp/specflow/releases/tag/v0.10.0

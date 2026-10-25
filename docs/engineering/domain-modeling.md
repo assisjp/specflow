@@ -20,7 +20,7 @@ This is the *active* discipline. Reading `CONTEXT.md` to reuse a term is a one-l
 
 ## Ownership
 
-`domain-modeling` owns `CONTEXT.md` and `docs/adr/`. No other specflow skill creates or edits them. It offers an ADR **only** when a decision is hard to reverse, surprising without context, *and* a real trade-off — otherwise it skips it.
+`domain-modeling` provides the discipline for `CONTEXT.md` and `docs/adr/`. An authorized task may make a bounded correction without invoking another skill solely for permission, while preserving history and concurrent edits (ADR 0009). Offer an ADR **only** when a decision is hard to reverse, surprising without context, *and* a real trade-off — otherwise skip it.
 
 ## Related
 

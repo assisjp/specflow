@@ -1,31 +1,19 @@
 # code-review
 
-Review the diff since a fixed point along **two independent axes**, run as parallel sub-agents and reported side by side.
-
-- **Standards** — does the code follow the repo's documented standards and avoid known code smells?
-- **Spec** — does the code faithfully implement what the originating issue/spec asked for?
-
-A change can pass one and fail the other — code that follows every convention but builds the wrong thing, or does exactly what was asked while breaking conventions. Keeping the axes separate stops one from masking the other.
+Review requested behavior and repository contracts against one fixed candidate.
 
 ## When to use it
 
-- Reviewing a branch, a PR, or work-in-progress changes.
-- "Review since `<X>`" for any commit, branch, tag, or merge-base.
-- Invoked by [spec-execution](./spec-execution.md) before the PR.
+Use for committed, staged or work-in-progress changes, including before the feature is committed.
 
-## How it runs
+## Behavior
 
-1. **Pin the fixed point** — a SHA, branch, tag, `main`, `HEAD~5`. Confirms it resolves and the diff is non-empty before spawning anything.
-2. **Find the spec** — a path the caller passed (`spec-execution` passes the exact spec/ticket), commit issue references, or a spec under `docs/specs/` or a ticket under `docs/tickets/<slug>/` (in no-tracker mode the ticket is the per-PR spec).
-3. **Assemble standards** — the repo's documented standards, plus a fixed **smell baseline** (Fowler's code smells) that applies even when the repo documents nothing. The repo always overrides; baseline smells are always judgement calls; anything tooling enforces is skipped.
-4. **Two sub-agents** — Standards and Spec, each with its own brief, so their contexts stay clean; in parallel where the harness allows, sequentially where not. With no sub-agents at all, a single combined pass — same report shape, labelled so the reader knows the isolation guarantee does not hold.
-5. **Aggregate** — both reports under separate headings, never merged or reranked.
+- Resolve a base and choose commits, staged or working-tree mode. Capture tracked changes and relevant untracked files without staging user work. Record candidate identity, paths and content hashes.
+- Give reviewers the same immutable patch/evidence; do not substitute moving HEAD for the actual candidate. Reconcile concurrent changes and report surfaces a textual patch cannot represent.
+- Use the supplied spec first and obtain only missing context. Standards and Spec are separate questions, not fixed agent quotas.
+- Delegate independent review where risk warrants it; label shared-context review honestly. Inherit the session model. Smells require concrete consequences, not mandatory abstraction or refactoring.
+- Confirm findings, merge duplicates and prioritize by impact while retaining their sources. After fixes, reassess changed hunks and checks/evidence invalidated by them; compare the delivered content with the reviewed snapshot.
 
-## A finding is a hypothesis
+## Source
 
-Especially when consumed by `spec-execution`: an automated finding is confident and sometimes wrong. Confirm each against the code before acting — fixing a phantom bug costs a whole round.
-
-## Related
-
-- [spec-execution](./spec-execution.md) — runs `code-review` on the final diff and reconciles the findings.
-- [tdd](./tdd.md) — the loop that defers its cleanup to the review stage.
+The [skill instructions](../../skills/engineering/code-review/SKILL.md) define the full contract. Repository policy and the user's authorization take precedence over the defaults.

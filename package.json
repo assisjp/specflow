@@ -1,6 +1,6 @@
 {
   "name": "specflow",
-  "version": "0.9.19",
+  "version": "0.10.0",
   "private": true,
   "description": "A self-contained, reliability-first agent development flow for Claude Code and Codex.",
   "repository": {
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "check": "node scripts/check.mjs",
-    "eval": "node scripts/eval-marker-protocol.mjs"
+    "eval": "node scripts/eval-marker-protocol.mjs",
+    "test:links": "node scripts/test-link-skills.mjs"
   },
   "license": "MIT"
 }

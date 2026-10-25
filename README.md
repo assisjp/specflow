@@ -1,93 +1,58 @@
 # specflow
 
-A self-contained, **reliability-first** agent development flow for Claude Code and Codex. It ships as a Claude Code plugin and as standards-based skills that Codex discovers directly.
-
-The bet is simple: the way to get reliable code out of agents while spending less is not to parallelise harder — it is to **decide well before building, verify deterministically, and review once**. specflow is the set of skills that encode that discipline.
+A self-contained development workflow for Claude Code and Codex: clarify what matters, implement a bounded change, and verify the behavior with evidence. Process follows risk and the repository's policy; an accepted request does not need every stage.
 
 ## The flow
 
-```
-grill ──▶ to-spec ──▶ to-tickets ──▶ spec-execution ──▶ human review ──▶ merge
-  │            │                          │
-  └ domain-modeling (docs)                └ calls tdd + code-review, under repo-hardening's gates
-```
+Use `grill` for unresolved decisions, `to-spec` for a durable specification, and `to-tickets` only when multiple deliverables help. `spec-execution` builds the accepted work with appropriate tests and `code-review`. `repo-hardening` improves verification when requested; its marker is not required to implement in an already healthy repo. `session-handoff` preserves a checkpoint when work must continue elsewhere.
 
-1. **grill** — interrogate the plan until every decision holds. Emits a decision log.
-2. **to-spec** — synthesise that log into a spec, published to your tracker.
-3. **to-tickets** — break a large spec into dependency-ordered tickets.
-4. **spec-execution** — turn one spec/ticket into one reviewable PR, with closed scope and attached evidence.
-5. **session-handoff** — carry session state to the next session or tool when you have to stop.
-
-Underneath: **repo-hardening** installs the deterministic verification layer (formatter, linter, types, tests, hooks, CI) so machines catch what agents should never have to.
-
-## Status
-
-specflow ships in phases — each phase a closed, usable slice. See [docs/adr/0001](./docs/adr/0001-own-self-contained-rewrite.md) for why.
-
-| Phase | Skills | State |
-|---|---|---|
-| **1 — Spec pipeline** | `grill`, `domain-modeling`, `to-spec` | **shipped** |
-| **2 — Execution** | `repo-hardening`, `spec-execution`, `tdd`, `code-review` | **shipped** |
-| **3 — Scale & continuity** | `to-tickets`, `session-handoff` | **shipped** |
+Existing decisions and authorization carry forward. Routine reversible choices do not need repeated approval. Publication, merge, deployment and access to restricted environments remain governed by the user's request and repository policy.
 
 ## Skills
 
 ### User-invoked
 
-Reachable only when you type them (`disable-model-invocation: true`) — the flow is deliberate.
+These deliberate entry points retain their existing Claude/Codex invocation policy:
 
-- [grill](./skills/productivity/grill/SKILL.md) — relentless interview that stress-tests a plan; challenges contradictions, scores options against your priorities, and emits a decision log. Pass `docs` to also write the glossary and ADRs.
-- [to-spec](./skills/engineering/to-spec/SKILL.md) — turn a settled conversation into a spec and publish it, no interview.
-- [repo-hardening](./skills/engineering/repo-hardening/SKILL.md) — install the deterministic verification layer (formatter, linter, types, tests, hooks, CI) without breaking what exists, and record the canonical commands in the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`).
-- [spec-execution](./skills/engineering/spec-execution/SKILL.md) — turn one spec/issue into one reviewable PR: closed scope, evidence attached, reviewed once.
-- [to-tickets](./skills/engineering/to-tickets/SKILL.md) — break a spec too big for one PR into dependency-ordered tracer-bullet tickets, published to the tracker.
-- [session-handoff](./skills/productivity/session-handoff/SKILL.md) — compact a session into an ephemeral handoff (with git state) for another session or tool to resume.
+- [grill](./skills/productivity/grill/SKILL.md) — resolve consequential uncertainty and record accepted decisions; `docs` also uses domain modeling.
+- [to-spec](./skills/engineering/to-spec/SKILL.md) — save a specification proportional to the change, without inventing requirements.
+- [repo-hardening](./skills/engineering/repo-hardening/SKILL.md) — adopt or improve scoped checks and record where/how they may run.
+- [spec-execution](./skills/engineering/spec-execution/SKILL.md) — implement accepted work, verify affected behavior and review the actual candidate.
+- [to-tickets](./skills/engineering/to-tickets/SKILL.md) — create coherent deliverables and explicit dependencies only when needed.
+- [session-handoff](./skills/productivity/session-handoff/SKILL.md) — save scope, source state, authorization, evidence and the next action before closing a session.
 
 ### Model-invoked
 
-The utility layer — invokable directly, or surfaced when you describe a task without naming a skill.
+These utilities can be requested directly or selected for their documented task:
 
-- [guide](./skills/productivity/guide/SKILL.md) — the router: describe your task, it names the one skill to run now and why. Surfaces when you are unsure which skill applies.
-- [domain-modeling](./skills/engineering/domain-modeling/SKILL.md) — actively build and sharpen the project's `CONTEXT.md` glossary and ADRs; invoked by `grill docs`.
-- [tdd](./skills/engineering/tdd/SKILL.md) — the red → green loop, done so the tests are worth keeping; invoked by `spec-execution`.
-- [code-review](./skills/engineering/code-review/SKILL.md) — two-axis review (Standards + Spec) in parallel sub-agents; invoked by `spec-execution`.
+- [guide](./skills/productivity/guide/SKILL.md) — suggest the next step when the user asks which step to take; ordinary coding requests do not trigger a pipeline.
+- [domain-modeling](./skills/engineering/domain-modeling/SKILL.md) — refine vocabulary and record meaningful architectural trade-offs.
+- [tdd](./skills/engineering/tdd/SKILL.md) — red, green and useful refactoring with tests that observe behavior.
+- [code-review](./skills/engineering/code-review/SKILL.md) — review a fixed committed, staged or working-tree candidate against standards and requested behavior.
 
 ## Install
 
-### Codex
+Choose one primary discovery source per harness: the released plugin for normal use, or checkout links for development. Installing both can expose duplicate names or divergent versions. An update to one does not update the other; inspect provenance before changing links.
 
-Add the public specflow marketplace and install its plugin:
+### Codex
 
 ```bash
 codex plugin marketplace add assisjp/specflow --ref main
 codex plugin add specflow@specflow
 ```
 
-Start a new Codex session, then invoke a deliberate step with `$grill`, `$to-spec`, `$repo-hardening`, and so on; model-invoked utility skills can also be selected automatically from their descriptions. To update, run `codex plugin marketplace upgrade specflow`, then reinstall with `codex plugin add specflow@specflow` and start a new session.
-
-For development, Codex also discovers local skills in `~/.agents/skills` and follows symlinks. Clone the repository, then link the promoted skills:
-
-```bash
-git clone https://github.com/assisjp/specflow
-cd specflow
-./scripts/link-skills.sh
-```
-
-Restart Codex if the skills do not appear immediately.
-
-For a repository-wide installation that the team can commit, symlink or copy the promoted skill folders under `.agents/skills/` in that repository. Codex supports both layouts.
+Start a new session after installation. To update with the supported CLI, refresh the marketplace (`codex plugin marketplace upgrade specflow`), reinstall `specflow@specflow`, and restart if the running session still serves the earlier version. Confirm the installed version rather than assuming a disk update changed every active skill.
 
 ### Claude Code
 
-specflow is its own Claude Code marketplace (a single-plugin repo).
-
-```bash
-# add the marketplace, then install the plugin
+```text
 /plugin marketplace add assisjp/specflow
 /plugin install specflow@specflow
 ```
 
-The same development link command also links the skills into Claude Code's local directory:
+After updating the marketplace/plugin, reload plugins or start a fresh session so skills in one workflow use a consistent release.
+
+### Development links
 
 ```bash
 git clone https://github.com/assisjp/specflow
@@ -95,28 +60,37 @@ cd specflow
 ./scripts/link-skills.sh
 ```
 
-**After updating Claude Code, run `/reload-plugins`** — or start a fresh session. A `/plugin marketplace update` refreshes what is on disk, but an open session keeps serving the typed slash commands it resolved at start, while skills the model reaches for internally pick up the new version straight away; without a reload you are running two versions at once. That mix is worth avoiding here in particular: the second-failure marker has a setter and a clearer in different skills, and they must agree. Codex detects skill changes automatically; restart it if an update does not appear.
+The helper links promoted skills into `~/.claude/skills` and `~/.agents/skills`. Existing links to this exact checkout are left unchanged. Real files/directories and links to any other destination, including dangling links, are preserved and reported; replacement requires an explicit decision outside the helper. Optional positional target directories let you choose a project discovery directory or an isolated destination, for example `./scripts/link-skills.sh /path/to/project/.agents/skills`. It does not uninstall an existing plugin or delete stale links.
 
-## First feature, start to finish
+## Upgrading from 0.9.x
 
-The literal sequence, from fresh install to merged PR:
+Version 0.10.0 keeps skill names, invocation metadata, marketplace identity, the `returned` label and `Returned:` local marker. It replaces universal process gates with scoped verification, actual candidate snapshots, accepted-decision reuse and retained handoffs. See [CHANGELOG](./CHANGELOG.md), [ADR 0009](./docs/adr/0009-adaptive-execution-policy.md) and [ADR 0010](./docs/adr/0010-retain-handoff-checkpoints.md).
 
-1. `/repo-hardening` — once per repo. Installs the deterministic verification layer and writes the canonical commands into the agent-context file; `spec-execution` refuses to run without that block.
-2. `/grill docs` — interrogate the idea until it holds; `docs` also captures the glossary and ADRs. Out: a decision log.
-3. `/to-spec` — synthesise the decision log into a published spec (tracker issue, or `docs/specs/<slug>.md`).
-4. `/to-tickets` — only if the spec is too big for one PR. Slices it into dependency-ordered tickets.
-5. `/spec-execution <spec path or issue #>` — one spec/ticket → one reviewable PR: closed scope, evidence attached. Calls `tdd` and `code-review` internally.
-6. Review the PR and merge. specflow never merges.
+Previously generated `AGENTS.md`/`CLAUDE.md` blocks are still repository policy. Plugin updates do not rewrite them or silently relax stricter limits. Migrate a block only within an authorized instruction change, preserving local execution environments, security gates, deployment limits and rules outside the markers. No extra configuration engine or profile file is required.
 
-Have to stop mid-work? `/session-handoff`. Unsure which step you are on? `/guide`.
+## Verification and evidence
+
+Run the source checks in the environment authorized for the task:
+
+```bash
+npm run check
+npm run eval
+npm run test:links
+claude plugin validate . --strict
+```
+
+The first commands validate structure, marker contracts and the actual link helper. They do not prove that an agent follows every instruction. [Focused behavioral scenarios](./docs/validation-0.10.md) describe the remaining human/agent evaluation, including tracker behavior. Reuse successful checks for unchanged inputs; report unrun checks accurately.
 
 ## Design principles
 
-- **Quality and throughput are separate problems.** specflow buys quality (spec contract, small PR, tests alongside, evidence gate, human merge). It deliberately does not build the coordination layer (DAG, waves, parallel worktrees) — that buys wall-clock, which is the lowest priority here.
-- **The biggest lever is the deterministic layer.** Every error a linter catches is an agent cycle and a human review saved.
-- **Review once.** One verified diff with closed scope and attached evidence, reviewed once — not granular reviews that multiply rounds.
-- **Compose, don't fork.** These skills are original, self-contained work; they take inspiration widely and depend on nothing external.
+- A small useful check is better than a large ritual with no new signal. Broaden for affected consumers and concrete risks.
+- Do not change tests to conceal a regression; do update them when an accepted contract changes while retaining required coverage.
+- Review the same candidate you deliver. Revalidate only checks and evidence invalidated by later edits.
+- Delegate independent work where it helps, with clear ownership and integration responsibility. No fixed agent count or model generation.
+- Preserve work and decisions across sessions without creating documents for their own sake.
 
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+Repository contributors: follow [AGENTS.md](AGENTS.md). The Claude project rule points to the same source; these contributor instructions are not plugin runtime context. See [Claude project rules](https://code.claude.com/docs/en/memory#organize-rules-with-clauderules).

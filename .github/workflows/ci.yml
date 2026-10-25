@@ -17,6 +17,8 @@ jobs:
         run: node scripts/check.mjs
       - name: "Eval: returned-marker lifecycle (local backend)"
         run: node scripts/eval-marker-protocol.mjs
+      - name: Verify development links preserve existing entries
+        run: node scripts/test-link-skills.mjs
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
       - name: Validate plugin manifest

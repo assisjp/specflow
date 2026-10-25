@@ -7,73 +7,32 @@ argument-hint: "[spec path or issue #]"
 
 # To Tickets
 
-Break the work into **tickets** — tracer-bullet vertical slices, each declaring the tickets that **block** it. The dependency graph is explicit and declared, never inferred from titles.
-
-## Process
+Split work only when multiple reviewable deliverables make it easier to execute safely. Reuse an approved breakdown and settled conversation; do not replan a small task that already fits one change.
 
 ### Mode: healing a returned ticket
 
-**Check the input before anything else.** If it is a single ticket carrying a `returned` marker — a `returned` label on the issue, or a `Returned:` line in the local ticket file — you are in healing mode, not slicing mode. Skip steps 1–4 entirely. Rewrite only that one ticket, republish it to the **same** issue/file, and clear its marker as the "Clearing a `returned` marker" paragraph in step 5 directs. Do not touch any neighbouring ticket and do not re-derive the graph — the blocking edges of the other tickets are not yours to move. Otherwise — a whole spec, plan, or settled conversation to slice — run steps 1–5 as written.
+Read the `returned` label or `Returned:` line and its reason. Heal one ticket in place, without re-slicing the surrounding graph. Apply an accepted clarification, preserve identity/dependencies and concurrent edits, and verify that the specific defect is resolved. Remove the `returned` label with a correction record, or delete the `Returned:` line after saving the corrected local source. A changed body alone is insufficient. An authorized implementer may make this bounded correction too (ADR 0009). If the decision is still unknown, ask the focused question rather than blindly clearing the marker.
 
-### 1. Gather context
+## 1. Gather only missing context
 
-Work from what is in the conversation. If the user passes a reference (a spec path, an issue number or URL), fetch it and read the full body and comments.
+Use the source, comments and accepted decisions already available. Inspect relevant contracts, tests and consumers when needed. Respect the project's domain vocabulary; no full codebase reread is required.
 
-### 2. Explore the codebase (optional)
+## 2. Propose coherent deliverables
 
-If you have not already, explore to understand the current state. Ticket titles and descriptions use the project's `CONTEXT.md` glossary vocabulary, and respect ADRs in the area you touch. Look for prefactoring that makes the implementation easier — "make the change easy, then make the easy change."
+Each ticket should have a verifiable outcome, necessary context and explicit blocking edges. Prefer a complete behavioral slice; do not invent schema/API/UI work where the change does not need those layers. Prefactoring belongs only when it concretely reduces risk or effort, and should remain bounded.
 
-### 3. Draft vertical slices
+For a wide refactor, use expand → migrate → contract when incremental compatibility is necessary. Tests are consumers too: update expectations when the accepted contract changes, preserving invariants. Exact object assertions may be correct for an exact public contract; do not weaken them indiscriminately. If independently green batches are impossible, an explicitly agreed integration branch may collect the work, with the combined gate at the final integration step and intermediate limitations reported honestly.
 
-Break the work into **tracer-bullet** tickets:
+Estimate reviewability by complexity and dependencies, not a rigid line/context-window budget. Independent tickets may proceed concurrently with explicit file/responsibility ownership, communication and an integration owner. Dependent tickets need their prerequisites present in the actual base. Do not claim to clear a model's context; start a real fresh session/subagent when beneficial and available.
 
-- Each slice cuts a narrow but **complete** path through every layer (schema, API, UI, tests) — vertical, not a horizontal slice of one layer.
-- A completed slice is demoable or verifiable on its own.
-- Each slice fits in a single fresh context window.
-- Any prefactoring goes first.
+## 3. Resolve consequential choices once
 
-Give each ticket its **blocking edges** — the tickets that must complete before it can start. A ticket with no blockers can start immediately.
+Show title, outcome and blockers. Reuse approved granularity/edges; ask only about unresolved decisions that materially affect scope, risk or delivery. Ordinary ticket drafting does not require repeated quizzes.
 
-**Wide refactors are the exception.** A wide refactor is one mechanical change (rename a column, retype a shared symbol) whose blast radius fans across the whole codebase, so a single edit breaks thousands of call sites and no vertical slice can land green. Sequence it as **expand → migrate → contract**: first add the new form beside the old so nothing breaks; then migrate call sites in batches sized by blast radius (per package, per directory), each batch a ticket blocked by the expand, CI green batch to batch because the old form still exists; finally delete the old form in a ticket blocked by every migrate batch. If even the batches cannot stay green alone, share an integration branch that all block a final integrate-and-verify ticket — green is promised only there.
+## 4. Save or publish
 
-Two things keep the batches actually green, both learned the hard way: **tests are call sites too** — a test that reads the old field must migrate before contract, or contract goes red on the test suite; and expand is only non-breaking if the existing tests assert *behaviour, not exact object shape* (`tdd`'s rule) — a full-object `deepEqual` breaks on a merely additive field, so prefactor those into behaviour assertions first ("make the change easy, then make the easy change").
+Use the chosen tracker or repository convention and the task's authorization. Local defaults are `docs/tickets/<feature-slug>/<NN>-<slug>.md`, in dependency order, with outcome, acceptance criteria and blockers. Version durable tickets as part of the repo's delivery workflow; do not leave the only copy in scratch.
 
-### 4. Quiz the user
+For trackers, detect what the available connector/API/CLI supports. Use native dependencies when available; otherwise explicit `Blocked by #N` text is sufficient. Do not assume a platform capability is permanently absent based on an old CLI. Read freshly written state per issue where search indexes may lag. Do not close or rewrite a parent issue unless requested.
 
-Present the breakdown as a numbered list. Per ticket show: **Title**, **Blocked by**, **What it delivers** (the end-to-end behaviour it makes work). Ask:
-
-- Does the granularity feel right? (too coarse / too fine)
-- Are the blocking edges correct — does each ticket depend only on tickets that genuinely gate it?
-- Should any be merged or split further?
-
-Iterate until the user approves.
-
-### 5. Publish
-
-Publish the approved tickets in dependency order (blockers first). How depends on the tracker:
-
-- **Local files** → one file per ticket under `docs/tickets/<feature-slug>/<NN>-<slug>.md`, numbered from `01` in dependency order, and **commit them**. Tickets are the durable dependency graph a later session works from — they belong in version control, never in the ephemeral `.scratch/` (ADR 0006). Use the local template below — one ticket per file, never a combined file.
-- **A real tracker (GitHub, Linear)** → one issue per ticket in dependency order so blocking edges reference real identifiers. Use the platform's native blocking / sub-issue relationship **where the CLI actually exposes one** — Linear does; **GitHub via `gh` does not** (issue dependencies are a Projects/preview feature `gh issue` cannot set), so on GitHub the `Blocked by #N` text form in the body is the norm, not a degraded fallback. On GitHub, `gh issue create`; apply a `ready-for-agent` label if the project uses one. Right after bulk creation, verify with a per-issue `--json` query rather than a `--label` filter — GitHub's label index lags a few seconds behind creation.
-
-Work the **frontier**: any ticket whose blockers are all done. Do not close or modify a parent issue.
-
-**Clearing a `returned` marker (the second-failure gate's exit).** `spec-execution` runs tickets on the frontier, so when it sends one back as defective, the *ticket* is what carries the `returned` marker. `to-tickets` owns tickets (ADR 0006), so `to-tickets` is the one that clears it: when you republish a rewritten ticket to the same issue/file, remove the `returned` label and add a "rewritten" comment (tracker), or delete the `Returned:` line (local). `spec-execution` sets the marker, the republisher clears it (ADR 0008) — for a ticket that republisher is you, not `to-spec`. Republish to the **same** ticket so its blocking edges survive; do not mint a new one. The mode selector at the top of this process routes you here — a marked ticket means healing that one ticket, never re-slicing the spec.
-
-<local-ticket-template>
-
-# <NN> — <Ticket title>
-
-**What to build:** the end-to-end behaviour this ticket makes work, from the user's perspective — not a layer-by-layer implementation list.
-
-**Blocked by:** the numbers/titles of the tickets that gate this one, or "None — can start immediately".
-
-**Status:** ready-for-agent
-
-- [ ] Acceptance criterion 1
-- [ ] Acceptance criterion 2
-
-</local-ticket-template>
-
-In either form, avoid file paths and code snippets — they go stale fast. Exception: a prototype snippet that encodes a decision more precisely than prose can (a state machine, reducer, schema, type shape) — inline just the decision-rich part and note it came from a prototype.
-
-Work the frontier one ticket at a time with `spec-execution`, clearing context between tickets. The graph orders the work; it does not parallelise it.
+Work the ready frontier: prerequisite behavior must be integrated in the chosen base or covered by the agreed integration plan. Ticket checkboxes alone are not proof. Report the breakdown and saved links/paths; continue authorized execution without requiring the user to invoke every stage manually.

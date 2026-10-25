@@ -1,7 +1,7 @@
 {
   "name": "specflow",
-  "version": "0.9.19",
-  "description": "A self-contained, reliability-first agent development flow — grill a decision until it holds, turn it into a spec, and build it under deterministic gates. Plug-and-play skills, not vibe coding.",
+  "version": "0.10.0",
+  "description": "A self-contained development workflow: clarify consequential decisions, implement bounded changes, verify affected behavior and review the actual candidate under repository policy.",
   "author": {
     "name": "João Paulo Assis"
   },

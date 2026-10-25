@@ -4,7 +4,7 @@ The ubiquitous language of specflow. Glossary only — no implementation, no dec
 
 ## Grill
 
-A relentless interview that stress-tests a plan or decision before code exists — one question at a time, each with a recommended answer, walking the decision tree until nothing is ambiguous.
+An interview that resolves consequential uncertainty in a plan or decision, using discovered facts, recommended choices and the user's priorities.
 
 - **Relates to:** Decision Log, Spec, Domain Model
 
@@ -29,32 +29,32 @@ The project's canonical vocabulary (`CONTEXT.md`) plus its architectural decisio
 
 ## ADR
 
-Architecture Decision Record. A durable record of one decision that is hard to reverse, surprising without context, and the result of a real trade-off. The owner of durable "why".
+Architecture Decision Record. A durable record of one decision that is hard to reverse, surprising without context, and the result of a real trade-off. Ordinary rationale and temporary hypotheses do not automatically require an ADR.
 
 - **Not to be confused with:** Decision Log (ephemeral), Handoff (state)
 
 ## Handoff
 
-An ephemeral summary of a session's state — including git state — for the next session or tool to consume once and discard. Records state, not decisions.
+A session checkpoint containing scope, authorization, source state, evidence and the next action. Retained until safely superseded; references durable decisions without losing temporary reasoning needed to resume.
 
 - **Not to be confused with:** ADR, Spec, a durable project-state document
 - **Relates to:** ADR (where durable items get promoted)
 
 ## Deterministic Verification Layer
 
-The machine-checkable gate: formatter, linter, types, tests, git hooks, CI. Zero hallucination, zero per-run cost. Every error it catches is an agent cycle and a human review saved.
+The checks that observe specified properties of the code: formatting, lint, types, tests and any required hooks or CI. Their scope, cost, environment and limitations determine which evidence they provide.
 
 - **Relates to:** Evidence Gate, Canonical Commands
 
 ## Canonical Commands
 
-The one agreed set of verification commands for a repo, recorded in the repo's agent-context file (`AGENTS.md` or `CLAUDE.md`, whichever the harness auto-loads) so every agent and human runs the same checks.
+The repository's established verification commands and applicable scopes/environments, discoverable from its instructions, scripts and CI. A Specflow-generated marker is optional.
 
 - **Relates to:** Deterministic Verification Layer
 
 ## Evidence Gate
 
-The rule that a change with observable effect is accepted only with a real artifact — a screenshot of the flow running, actual output. A green test does not prove the feature appears.
+The requirement to support acceptance criteria with appropriate evidence tied to the actual candidate, such as real integration output, a meaningful test or a UI observation. Each proves only the behavior it observes.
 
 - **Relates to:** Deterministic Verification Layer
 

@@ -1,29 +1,19 @@
 # to-spec
 
-Turn a settled conversation — ideally a [`grill`](../productivity/grill.md) decision log — into a **spec** (a PRD) and publish it.
-
-`to-spec` does **not** interview you. That is `grill`'s job, and it should already have happened. This skill is pure synthesis: it encodes what was decided, and refuses to decide more.
+Save the smallest useful specification from accepted decisions and codebase facts.
 
 ## When to use it
 
-- Right after grilling reaches shared understanding.
-- Any time you say "write the spec" or "turn this into a spec" over an already-settled discussion.
+Use when the user requests a durable spec; a prior grill is optional.
 
-## How it runs
+## Behavior
 
-1. **Understands the code** — explores the repo, and uses the `CONTEXT.md` glossary vocabulary and respects existing ADRs.
-2. **Sketches the test seams** — prefers existing, high seams; the ideal is one. This is the single point where it pauses to check with you.
-3. **Writes and publishes** — fills a spec template (problem, solution, user stories, implementation decisions, testing decisions, out of scope) and publishes it: a GitHub/Linear issue if the project has a tracker, otherwise a committed `docs/specs/<slug>.md`. A spec is durable, so the local form is versioned, never left in `.scratch/` (ADR 0006).
+- Reuse decisions, existing source and verification seams. Ask only about unknown choices that materially change behavior, scope or cost.
+- Write observable acceptance criteria, constraints, verification and exclusions. Detail follows uncertainty; long story lists and path/snippet bans are not universal rules.
+- Trace claims to decisions or facts. An unresolved essential criterion means a draft or a focused question, not a ready implementation contract.
+- Save or publish to the existing destination within the task authorization. Preserve identity when correcting a returned spec; clear its marker only after the named defect is verified as resolved.
+- Use execution directly for one coherent change, tickets only for useful separate deliverables. No repeated approval solely for transitioning skills.
 
-## Traceability
+## Source
 
-Before publishing, `to-spec` re-reads the spec and checks every claim traces to a decision, a user statement, or a codebase fact. Anything tracing to none of those is invented — it gets cut or turned into an open question. A spec encodes what was decided; it does not quietly add scope.
-
-An open question that only records context is fine — noted, and the spec ships. One that leaves a user story with no verifiable acceptance criterion is not: that story cannot be built or tested, so the spec is not ready and the next step is `grill`, not execution. Recording it honestly in *Further Notes* does not make it publishable.
-
-It then names the next step, since it is the only thing that can judge the size of what it just wrote: one reviewable PR's worth goes to `spec-execution`, anything plainly larger goes to `to-tickets` first.
-
-## Related
-
-- [grill](../productivity/grill.md) — produces the decision log this skill consumes.
-- [domain-modeling](./domain-modeling.md) — owns the glossary the spec speaks in.
+The [skill instructions](../../skills/engineering/to-spec/SKILL.md) define the full contract. Repository policy and the user's authorization take precedence over the defaults.

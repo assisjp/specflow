@@ -1,6 +1,6 @@
 # 0002 — Handoff is ephemeral session state, not a durable project-state document
 
-- **Status:** Accepted
+- **Status:** Superseded by [0010](./0010-retain-handoff-checkpoints.md)
 - **Date:** 2026-07-24
 
 ## Context
