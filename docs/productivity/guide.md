@@ -8,7 +8,9 @@ Use for explicit routing questions; merely describing a coding task does not tri
 
 ## Behavior
 
-- Route to grill, domain-modeling, to-spec, to-tickets, repo-hardening, spec-execution, tdd, code-review or session-handoff according to the actual need.
+- Route to grill, domain-modeling, to-spec, to-tickets, repo-hardening, spec-execution, tdd, code-review, review-loop, takeover, file-pr, pr-maintenance or session-handoff according to the actual need.
+- Use review-loop only when a consequential change needs iterative reviewer convergence; ordinary diffs use the focused code-review pass.
+- Use takeover for inherited work, file-pr for authorized publication, and pr-maintenance for an existing PR that needs reassessment or monitoring.
 - A healthy repo without a marker can proceed using existing commands. Already accepted requirements do not need another interview or document.
 - A returned marker denotes an unresolved specification defect. Resolve missing decisions; otherwise an authorized correction can heal the same source and clear the state after verification.
 - Reuse scope and authorization. If continuing was requested, continue rather than requiring the user to invoke the whole chain.

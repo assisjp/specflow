@@ -1,6 +1,6 @@
 {
   "name": "specflow",
-  "version": "0.10.0",
+  "version": "0.12.0",
   "description": "A reliability-first development flow: decide, specify, verify, and review before merge.",
   "author": {
     "name": "João Paulo Assis",

@@ -1,0 +1,6 @@
+interface:
+  display_name: "PR Maintenance"
+  short_description: "Reassess or monitor an existing pull request"
+  default_prompt: "Use $pr-maintenance to assess and monitor this pull request."
+policy:
+  allow_implicit_invocation: false

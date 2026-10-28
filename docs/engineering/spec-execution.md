@@ -13,6 +13,8 @@ Use for an accepted spec, issue, ticket or written plan; a new spec ceremony is 
 - Check dependency readiness against the real base or an explicit integration plan. Parallelize independent work only with ownership and integration responsibility.
 - Use appropriate regression tests and real evidence. Execute within environment/resource authorization; reuse valid results and distinguish tests, builds and deployments.
 - Review a fixed commits/staged/working-tree snapshot, including relevant new files. Revalidate affected checks/evidence after review fixes and verify delivery matches the reviewed content.
+- For authorization, concurrency, data-integrity, or explicitly requested reviewer convergence, recommend the explicit [review-loop](./review-loop.md) after the initial review. Its fixed snapshot, finding ledger, and delta-only rounds remain proportionate rather than mandatory for ordinary changes.
+- For authorized PR publication, recommend [file-pr](./file-pr.md) to reconcile the final reviewed candidate and write its problem, solution, and evidence.
 - A returned source remains blocked while its defect is unresolved. An authorized implementer or publisher may correct it in place, verify the criterion, record why and clear the existing returned marker (ADR 0009).
 - Deliver only what was authorized: local diff, commit, PR or expressly requested merge/deploy. A local spec may produce a PR; use Closes linkage only for a real issue.
 

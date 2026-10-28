@@ -1,6 +1,6 @@
 {
   "name": "specflow",
-  "version": "0.10.0",
+  "version": "0.12.0",
   "private": true,
   "description": "A self-contained, reliability-first agent development flow for Claude Code and Codex.",
   "repository": {

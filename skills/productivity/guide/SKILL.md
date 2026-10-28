@@ -17,6 +17,10 @@ Use this router when the user asks which step to take. A plain coding request is
 | An accepted spec, ticket or written request is ready to implement | `spec-execution` |
 | Test-first development is requested or useful | `tdd` |
 | A candidate diff needs review | `code-review` |
+| A risky change needs iterative reviewer convergence | `review-loop` |
+| Continuing another agent's branch, PR, or handoff | `takeover` |
+| An authorized reviewed change needs a PR | `file-pr` |
+| An existing PR needs reassessment, rebase, or monitoring | `pr-maintenance` |
 | Work must survive closing this session | `session-handoff` |
 
 Name the smallest useful next step and why. Reuse accepted decisions and authorization; do not require the user to invoke the whole chain. If the request includes continuing, continue within that scope. Do not install tooling just because a verification marker is absent: discover the existing repo contract first.

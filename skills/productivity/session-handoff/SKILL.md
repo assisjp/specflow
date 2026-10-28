@@ -38,6 +38,10 @@ Reference durable specs, tickets, glossary and ADRs rather than copying them. Sh
 
 A dirty-file list and HEAD do not preserve the dirty contents on another machine. Say whether the handoff requires the same checkout; reference a saved patch/commit only if it actually exists. Do not claim source portability from path references alone. Record remote state only when measured, otherwise mark it unknown.
 
+For an active `review-loop`, also record its mode (review-only or review-and-fix), base and reviewed snapshot, round budget consumed/remaining, ledger location or unresolved IDs, reviewer/task state, and the exact delta or evidence needed next. A prior approval does not certify a later candidate.
+
+For a `takeover` or `pr-maintenance` handoff, also record the source PR/branch/worktree, observed head/base SHAs and time, disposition, contributor/ownership constraints, active monitor state, and whether the next session may modify or only assess the candidate.
+
 ## Resume and retention
 
 The receiving session first verifies checkout/source state and constraints, then reuses still-valid decisions and checks. Stale status must be reconciled with reality; a checkpoint is not authority to repeat a deployment or widen permissions. Do not rerun green checks for unchanged inputs merely because the session changed.

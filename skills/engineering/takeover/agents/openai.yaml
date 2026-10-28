@@ -1,0 +1,6 @@
+interface:
+  display_name: "Takeover"
+  short_description: "Safely continue a branch, PR, or agent handoff"
+  default_prompt: "Use $takeover to continue this existing implementation."
+policy:
+  allow_implicit_invocation: false

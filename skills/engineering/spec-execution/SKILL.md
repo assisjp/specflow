@@ -47,11 +47,13 @@ Call `code-review` with the resolved base SHA, explicit mode (`commits`, `staged
 
 Confirm each finding against the code. Fix demonstrated problems; record discarded hypotheses with a reason. Review style or smell suggestions only when they improve the requested change. If review fixes change behavior or inputs, rerun the affected checks, recapture affected evidence and review changed hunks as needed. Unchanged checks and review findings are reusable. Do not claim a pre-fix green result verifies a later patch.
 
+For a consequential change that needs iterative independent convergence — for example authorization, concurrency, data integrity, or a user-requested review loop — recommend the explicit `$review-loop` after the initial candidate review. When the user selects it, pass the resolved base, fixed snapshot, owned paths, source, evidence and findings. It is optional and proportionate; ordinary focused review remains sufficient for ordinary changes.
+
 ## 6. Deliver and report
 
 Inspect the final diff for accidental scope, sensitive artifacts and work belonging to others. Confirm the delivered content matches the reviewed snapshot; any later difference needs an explanation and affected validation. Keep unrelated mechanical edits separate.
 
-Stage only owned paths. Commit, push or open a PR only as authorized by the task and project workflow. Use `Closes #N` when there is an actual issue to close, not for an unrelated/local source. With no remote, deliver locally and report that fact. Do not merge or deploy unless expressly authorized; permission already given need not be requested again. Measure reported git/remote state at delivery time.
+Stage only owned paths. Commit, push or open a PR only as authorized by the task and project workflow. For an authorized PR, recommend the explicit `$file-pr` to reconcile the final reviewed candidate and write the reviewer-facing problem, solution, and evidence. Use `Closes #N` when there is an actual issue to close, not for an unrelated/local source. With no remote, deliver locally and report that fact. Do not merge or deploy unless expressly authorized; permission already given need not be requested again. Measure reported git/remote state at delivery time.
 
 Report what changed, source/decisions, important findings, checks and evidence with their source identity, unverified work and the delivered diff/commit/PR. A limitation or deployment still pending must remain visible.
 

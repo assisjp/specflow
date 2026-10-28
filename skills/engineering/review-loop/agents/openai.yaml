@@ -1,0 +1,6 @@
+interface:
+  display_name: "Review Loop"
+  short_description: "Converge independent reviews without scope creep"
+  default_prompt: "Use $review-loop to converge review feedback on this change."
+policy:
+  allow_implicit_invocation: false

@@ -18,6 +18,10 @@ These deliberate entry points retain their existing Claude/Codex invocation poli
 - [to-spec](./skills/engineering/to-spec/SKILL.md) — save a specification proportional to the change, without inventing requirements.
 - [repo-hardening](./skills/engineering/repo-hardening/SKILL.md) — adopt or improve scoped checks and record where/how they may run.
 - [spec-execution](./skills/engineering/spec-execution/SKILL.md) — implement accepted work, verify affected behavior and review the actual candidate.
+- [review-loop](./skills/engineering/review-loop/SKILL.md) — converge independent reviews of a consequential change through a bounded, evidence-backed loop.
+- [takeover](./skills/engineering/takeover/SKILL.md) — safely continue inherited branches, PRs, worktrees, or handoffs.
+- [file-pr](./skills/engineering/file-pr/SKILL.md) — publish an authorized PR with a concise problem, solution, and evidence.
+- [pr-maintenance](./skills/engineering/pr-maintenance/SKILL.md) — reassess, update, or monitor an existing PR without assuming it is still current.
 - [to-tickets](./skills/engineering/to-tickets/SKILL.md) — create coherent deliverables and explicit dependencies only when needed.
 - [session-handoff](./skills/productivity/session-handoff/SKILL.md) — save scope, source state, authorization, evidence and the next action before closing a session.
 

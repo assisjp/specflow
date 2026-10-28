@@ -1,6 +1,6 @@
 {
   "name": "specflow",
-  "version": "0.10.0",
+  "version": "0.12.0",
   "description": "A self-contained development workflow: clarify consequential decisions, implement bounded changes, verify affected behavior and review the actual candidate under repository policy.",
   "author": {
     "name": "João Paulo Assis"
@@ -22,6 +22,10 @@
     "./skills/engineering/spec-execution",
     "./skills/engineering/tdd",
     "./skills/engineering/code-review",
+    "./skills/engineering/review-loop",
+    "./skills/engineering/takeover",
+    "./skills/engineering/file-pr",
+    "./skills/engineering/pr-maintenance",
     "./skills/engineering/to-tickets",
     "./skills/productivity/grill",
     "./skills/productivity/guide",

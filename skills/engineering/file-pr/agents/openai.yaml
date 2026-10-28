@@ -1,0 +1,6 @@
+interface:
+  display_name: "File Pull Request"
+  short_description: "Publish an authorized PR with problem and evidence"
+  default_prompt: "Use $file-pr to open a pull request for this reviewed change."
+policy:
+  allow_implicit_invocation: false

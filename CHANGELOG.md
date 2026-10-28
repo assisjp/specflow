@@ -2,6 +2,24 @@
 
 All notable changes to specflow. Format based on [Keep a Changelog](https://keepachangelog.com); this project follows semantic versioning.
 
+## [0.12.0] — 2026-10-28
+
+### Added
+- **`takeover`** — continue inherited branches, pull requests, worktrees, and handoffs from measured repository state while preserving contributor credit and concurrent work.
+- **`file-pr`** — publish authorized PRs with a concise problem-first description, behavior-level solution, and evidence tied to the final head.
+- **`pr-maintenance`** — assess an existing PR as `CURRENT`, `REWORK`, or `SUPERSEDED`; update or monitor it only under explicit authorization and current-head evidence.
+
+### Changed
+- `guide`, `spec-execution`, and `session-handoff` now route and preserve the state required for inherited work, authorized PR publication, and current-head PR maintenance.
+
+## [0.11.0] — 2026-10-28
+
+### Added
+- **`review-loop`** — an explicit, bounded review-and-fix loop for consequential changes. It captures a shared candidate snapshot, coordinates read-only independent reviewers, keeps an evidence-backed finding ledger, and re-reviews only the delta until the final behavior diff converges or a real limitation remains visible.
+
+### Changed
+- `spec-execution` now recommends `review-loop` after initial review when authorization, concurrency, data integrity, or user-requested convergence merits it; ordinary changes retain the lightweight `code-review` path.
+
 ## [0.10.0] — 2026-10-25
 
 ### Changed

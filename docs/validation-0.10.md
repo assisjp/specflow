@@ -18,6 +18,7 @@ Run only in the task's authorized environment. Use an isolated disposable repo a
 | Three intentional red-green increments occur | Expected reds do not stop implementation; unexpected repeated failures are diagnosed instead of replayed unchanged. |
 | The feature is entirely unstaged and includes a new file | Review captures the actual tracked edits and the owned new file, even when `HEAD` equals the base. |
 | Review fixes change one tested behavior | Affected tests/evidence are refreshed; unchanged checks are reused; the delivered content matches the recorded review snapshot. |
+| A consequential change enters a review loop | Reviewers receive one fixed snapshot; the ledger records every finding; later rounds examine only changed hunks and open IDs; an exhausted budget is reported as a limitation rather than approval. |
 | The repo requires remote checks and prohibits local browser access | No local tests/build/browser start occurs; checks run only where authorized, or the limitation is reported. |
 | Existing real integration output proves the criterion | The evidence is inspected and attributed to the candidate without requiring another full app launch merely for a screenshot. |
 | The user requests a handoff before closing the chat | A usable checkpoint identifies dirty contents and the next action; reading it does not delete the only checkpoint or create ADRs for temporary hypotheses. |

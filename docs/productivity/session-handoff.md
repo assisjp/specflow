@@ -10,6 +10,8 @@ Use when asked to hand over or stop mid-work; do not restart a clarification int
 
 - Record objective, accepted scope, constraints, exact checkout, measured git state, dirty-work location, completed/remaining work, checks tied to source identity and the concrete next action.
 - Record owned active processes, remote actions and temporary recovery controls when relevant. Do not infer unknown remote state or repeat a deployment from stale notes.
+- For an active review loop, record its mode, reviewed snapshot, budget, unresolved ledger IDs, reviewer/task state, and the precise next verification or delta review.
+- For takeover or PR maintenance, record the source, observed head/base, disposition, ownership constraints, active monitor state, and whether the next session may assess or modify it.
 - Reference durable artifacts and exclude secrets. A dirty-file list and HEAD do not transport the dirty contents to another checkout; state that limitation.
 - Keep temporary reasoning in the checkpoint; only meaningful architectural decisions need ADRs.
 - Retain the last usable checkpoint until a successor exists or continuation is durably recorded. Reading does not authorize deletion. Follow user/project retention policy (ADR 0010).
